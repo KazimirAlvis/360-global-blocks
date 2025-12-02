@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 1.3.37
+Stable tag: 1.3.38
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,10 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.38 =
+* Standardized repository and folder naming to lowercase (360-global-blocks) for consistent plugin paths across all environments.
+* Updated manifest URL to match the renamed GitHub repository.
 
 = 1.3.37 =
 * Fixed a missing closing div tag in the Two Column Slider that caused all subsequent content blocks to be wrapped inside the slider container.

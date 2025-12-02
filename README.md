@@ -160,6 +160,11 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.38
+
+-   Standardized repository and folder naming to lowercase (`360-global-blocks`) to ensure consistent plugin paths across development and production environments.
+-   Updated manifest URL to point to the renamed GitHub repository.
+
 ### 1.3.37
 
 -   Fixed a missing closing `</div>` tag in the Two Column Slider render function that was causing all subsequent page content to be incorrectly wrapped inside the slider container.

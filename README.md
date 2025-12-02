@@ -160,6 +160,10 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.37
+
+-   Fixed a missing closing `</div>` tag in the Two Column Slider render function that was causing all subsequent page content to be incorrectly wrapped inside the slider container.
+
 ### 1.3.36
 
 -   Fixed the responsive flow for the Two Column layout toggle so right-aligned images stack above the copy on tablet/mobile viewports instead of fighting the desktop grid order.

@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.36
+ * Version: 1.3.37
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.36' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.37' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -894,6 +894,7 @@ function global360blocks_render_two_column_slider_block($attributes) {
     }
     
     $output .= '</div>';
+    $output .= '</div>'; // Close .wp-block-global360blocks-two-column-slider
     
     return $output;
 }

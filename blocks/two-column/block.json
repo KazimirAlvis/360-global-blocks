@@ -28,6 +28,14 @@
 			"type": "string",
 			"enum": ["image-left", "image-right"],
 			"default": "image-left"
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": ""
+		},
+		"headingColor": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"example": {},

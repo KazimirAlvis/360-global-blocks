@@ -1,6 +1,14 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
-import { useBlockProps, MediaUpload, MediaUploadCheck, RichText, InnerBlocks, InspectorControls } from '@wordpress/block-editor';
+import {
+	useBlockProps,
+	MediaUpload,
+	MediaUploadCheck,
+	RichText,
+	InnerBlocks,
+	InspectorControls,
+	PanelColorSettings,
+} from '@wordpress/block-editor';
 import '@wordpress/format-library';
 import { Button, PanelBody, RadioControl } from '@wordpress/components';
 import { registerBlockType, rawHandler, createBlock } from '@wordpress/blocks';
@@ -13,9 +21,13 @@ const BODY_TEMPLATE = [['core/paragraph', { placeholder: __('Add body content…
 const BODY_ALLOWED_BLOCKS = ['core/paragraph', 'core/list', 'core/heading', 'core/quote'];
 
 const Edit = ({ attributes, setAttributes, clientId }) => {
-	const { imageUrl, imageId, heading, bodyText, layout = 'image-left' } = attributes;
+	const { imageUrl, imageId, heading, bodyText, layout = 'image-left', backgroundColor, headingColor } = attributes;
 
 	const innerBlocks = useSelect((select) => select('core/block-editor').getBlocks(clientId), [clientId]);
+	const availableColors = useSelect((select) => {
+		const settings = select('core/block-editor')?.getSettings?.();
+		return settings?.colors || [];
+	}, []);
 	const hasInnerBlocks = innerBlocks.length > 0;
 
 	const { replaceInnerBlocks } = useDispatch('core/block-editor');
@@ -63,6 +75,9 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 
 	const blockProps = useBlockProps({
 		className: 'two-column-block',
+		style: {
+			backgroundColor: backgroundColor || undefined,
+		},
 	});
 
 	const renderImageColumn = () => (
@@ -119,16 +134,20 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 	);
 
 	const renderContentColumn = () => (
-		<div className="two-column-content">
+		<div
+			className="two-column-content"
+			style={backgroundColor ? { backgroundColor } : undefined}
+		>
 			<div className="two-column-content-inner">
 				<RichText
 					identifier="heading"
 					tagName="h2"
 					className="two-column-heading"
+					style={headingColor ? { color: headingColor } : undefined}
 					value={heading}
 					onChange={(value) => setAttributes({ heading: value })}
 					placeholder={__('Enter heading...', 'global360blocks')}
-					allowedFormats={['core/bold', 'core/italic']}
+					allowedFormats={['core/bold', 'core/italic', 'core/text-color', 'core/link']}
 				/>
 
 				<div className="two-column-body-field">
@@ -152,7 +171,10 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title={__('Layout', 'global360blocks')} initialOpen={true}>
+				<PanelBody
+					title={__('Layout', 'global360blocks')}
+					initialOpen={true}
+				>
 					<RadioControl
 						label={__('Media position', 'global360blocks')}
 						selected={layout}
@@ -163,6 +185,22 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 						]}
 					/>
 				</PanelBody>
+				<PanelColorSettings
+					title={__('Colors', 'global360blocks')}
+					colors={availableColors}
+					colorSettings={[
+						{
+							label: __('Heading color', 'global360blocks'),
+							value: headingColor,
+							onChange: (value) => setAttributes({ headingColor: value || '' }),
+						},
+						{
+							label: __('Content background', 'global360blocks'),
+							value: backgroundColor,
+							onChange: (value) => setAttributes({ backgroundColor: value || '' }),
+						},
+					]}
+				/>
 			</InspectorControls>
 			<div {...blockProps}>
 				<div className={`two-column-container layout-${layout}`}>

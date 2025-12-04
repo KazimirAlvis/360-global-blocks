@@ -167,6 +167,11 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.41
+
+-   Added palette-aware controls to the Two Column block so authors can pick standard background and heading colors without custom CSS.
+-   Synced server rendering so heading text and content panel colors on the frontend match the editor preview.
+
 ### 1.3.40
 
 -   Matched the Two Column CTA button styles (shape, hover, and default label) to the PatientReach360 assessment button.

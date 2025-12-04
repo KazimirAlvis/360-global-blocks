@@ -17,7 +17,6 @@ html :where(.wp-block) {
 	overflow: hidden;
 }
 
-
 .wp-block-global360blocks-two-column .two-column-image {
 	grid-area: image;
 	position: relative;

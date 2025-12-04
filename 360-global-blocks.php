@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.40
+ * Version: 1.3.41
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.40' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.41' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -1363,12 +1363,21 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
     $image_url = !empty($attributes['imageUrl']) ? esc_url($attributes['imageUrl']) : '';
     $heading = !empty($attributes['heading']) ? wp_kses_post($attributes['heading']) : '';
     $legacy_body_text = !empty($attributes['bodyText']) ? wp_kses_post($attributes['bodyText']) : '';
-    $layout = isset( $attributes['layout'] ) && 'image-right' === $attributes['layout'] ? 'image-right' : 'image-left';
+    $layout          = isset( $attributes['layout'] ) && 'image-right' === $attributes['layout'] ? 'image-right' : 'image-left';
+    $background_color = ! empty( $attributes['backgroundColor'] ) ? sanitize_hex_color( $attributes['backgroundColor'] ) : '';
+    $heading_color    = ! empty( $attributes['headingColor'] ) ? sanitize_hex_color( $attributes['headingColor'] ) : '';
+
+    $background_style = $background_color ? 'background-color: ' . $background_color . ';' : '';
     
     // Use block wrapper attributes so declared supports (e.g., align) are applied
+    $wrapper_args = array( 'class' => 'two-column-block' );
+    if ( $background_style ) {
+        $wrapper_args['style'] = $background_style;
+    }
+
     $wrapper_attributes = function_exists('get_block_wrapper_attributes')
-        ? get_block_wrapper_attributes( array( 'class' => 'two-column-block' ) )
-        : 'class="two-column-block"';
+        ? get_block_wrapper_attributes( $wrapper_args )
+        : 'class="two-column-block"' . ( $background_style ? ' style="' . esc_attr( $background_style ) . '"' : '' );
     $output = '<div ' . $wrapper_attributes . '>';
     $output .= '<div class="two-column-container layout-' . esc_attr( $layout ) . '">';
 
@@ -1378,10 +1387,11 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
     }
     $image_column .= '</div>';
 
-    $content_column = '<div class="two-column-content">';
+    $content_column = '<div class="two-column-content"' . ( $background_style ? ' style="' . esc_attr( $background_style ) . '"' : '' ) . '>';
     $content_column .= '<div class="two-column-content-inner">';
     if ( $heading ) {
-        $content_column .= '<h2 class="two-column-heading">' . $heading . '</h2>';
+        $heading_style_attr = $heading_color ? ' style="color: ' . esc_attr( $heading_color ) . ';"' : '';
+        $content_column .= '<h2 class="two-column-heading"' . $heading_style_attr . '>' . $heading . '</h2>';
     }
     $body_html = '';
     if (is_string($content) && trim($content) !== '') {

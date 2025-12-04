@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.38
+ * Version: 1.3.40
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.38' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.40' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -821,6 +821,44 @@ function global360blocks_render_popular_practices_block( $attributes, $content )
     return $output;
 }
 
+// Render callback for Two Column CTA block
+function global360blocks_render_two_column_cta_block($attributes, $content) {
+    global360blocks_enqueue_block_assets_from_manifest('global360blocks/two-column-cta');
+
+    $heading = !empty($attributes['heading']) ? wp_kses_post($attributes['heading']) : '';
+    $button_text = !empty($attributes['buttonText']) ? esc_html($attributes['buttonText']) : 'Take Risk Assessment Now';
+    $button_url = !empty($attributes['buttonUrl']) ? esc_url($attributes['buttonUrl']) : '';
+    $background_color = !empty($attributes['backgroundColor']) ? esc_attr($attributes['backgroundColor']) : '';
+
+    $wrapper_style = $background_color ? ' style="background-color: ' . $background_color . ';"' : '';
+
+    $output = '<div class="wp-block-global360blocks-two-column-cta"' . $wrapper_style . '>';
+    $output .= '<div class="two-column-cta__inner">';
+    $output .= '<div class="two-column-cta__content">';
+    
+    if ($heading) {
+        $output .= '<h2 class="two-column-cta__heading">' . $heading . '</h2>';
+    }
+    
+    $output .= '<div class="two-column-cta__body">';
+    $output .= $content;
+    $output .= '</div>';
+    $output .= '</div>';
+    
+    $output .= '<div class="two-column-cta__button-wrapper">';
+    if ($button_url) {
+        $output .= '<a href="' . $button_url . '" class="two-column-cta__button">' . $button_text . '</a>';
+    } else {
+        $output .= '<span class="two-column-cta__button">' . $button_text . '</span>';
+    }
+    $output .= '</div>';
+    
+    $output .= '</div>';
+    $output .= '</div>';
+
+    return $output;
+}
+
 // Render callback for Two Column Slider block
 function global360blocks_render_two_column_slider_block($attributes) {
     global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/two-column-slider' );
@@ -1249,6 +1287,13 @@ function global360blocks_register_blocks() {
     );
 
     register_block_type(
+        __DIR__ . '/blocks/two-column-cta',
+        array(
+            'render_callback' => 'global360blocks_render_two_column_cta_block',
+        )
+    );
+
+    register_block_type(
         __DIR__ . '/blocks/page-title-hero',
         array(
             'render_callback' => 'global360blocks_render_page_title_hero_block',
@@ -1502,6 +1547,12 @@ function global360blocks_get_frontend_asset_manifest() {
             'style' => array(
                 'handle' => 'global360blocks-two-column-style-frontend',
                 'file'   => 'blocks/two-column/build/style-index.css',
+            ),
+        ),
+        'global360blocks/two-column-cta'    => array(
+            'style' => array(
+                'handle' => 'global360blocks-two-column-cta-style-frontend',
+                'file'   => 'blocks/two-column-cta/build/style-index.css',
             ),
         ),
         'global360blocks/two-column-text'   => array(

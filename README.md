@@ -71,6 +71,13 @@ Streamlined editorial experience powered by native Gutenberg features:
 -   Dedicated color picker/text field per column for quick branded background accents
 -   Responsive layout that stacks gracefully on smaller breaks
 
+### 🔗 Two Column CTA Block
+
+-   1140px max-width split layout with an 800px content column and 300px CTA column
+-   Rich text left column supports headings, paragraphs, lists, quotes, and links via InnerBlocks
+-   Inspector controls for button label/URL along with a background color picker
+-   Centered grid automatically collapses to a stacked layout on tablet and mobile
+
 ## Medical Focus
 
 Built specifically for healthcare websites with features like:
@@ -160,6 +167,15 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.40
+
+-   Matched the Two Column CTA button styles (shape, hover, and default label) to the PatientReach360 assessment button.
+-   Removed the extra padding on the CTA heading and paragraph wrappers so copy aligns with the rest of the section.
+
+### 1.3.39
+
+-   Introduced the Two Column CTA block featuring a rich text left column, configurable button on the right, and adjustable background color inside a 1140px grid.
+
 ### 1.3.38
 
 -   Standardized repository and folder naming to lowercase (`360-global-blocks`) to ensure consistent plugin paths across development and production environments.
@@ -168,7 +184,6 @@ For support and feature requests, please create an issue on GitHub.
 ### 1.3.37
 
 -   Fixed a missing closing `</div>` tag in the Two Column Slider render function that was causing all subsequent page content to be incorrectly wrapped inside the slider container.
-
 ### 1.3.36
 
 -   Fixed the responsive flow for the Two Column layout toggle so right-aligned images stack above the copy on tablet/mobile viewports instead of fighting the desktop grid order.

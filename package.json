@@ -1,15 +1,16 @@
 {
 	"name": "360-global-blocks",
-	"version": "1.3.33",
+	"version": "1.3.40",
 	"description": "Custom blocks for 360 Global",
 	"main": "index.js",
 	"scripts": {
-		"build": "npm run build:simple-hero && npm run build:full-hero && npm run build:cta && npm run build:two-column && npm run build:two-column-text && npm run build:video-two-column && npm run build:find-doctor && npm run build:latest-articles && npm run build:popular-practices && npm run build:two-column-slider && npm run build:info-cards && npm run build:page-title-hero && npm run build:rich-text",
+		"build": "npm run build:simple-hero && npm run build:full-hero && npm run build:cta && npm run build:two-column && npm run build:two-column-text && npm run build:two-column-cta && npm run build:video-two-column && npm run build:find-doctor && npm run build:latest-articles && npm run build:popular-practices && npm run build:two-column-slider && npm run build:info-cards && npm run build:page-title-hero && npm run build:rich-text",
 		"build:simple-hero": "wp-scripts build blocks/simple-hero/src/index.js blocks/simple-hero/src/view.js --output-path=blocks/simple-hero/build",
 		"build:full-hero": "wp-scripts build blocks/full-hero/src/index.js blocks/full-hero/src/view.js --output-path=blocks/full-hero/build",
 		"build:cta": "wp-scripts build blocks/cta/src/index.js blocks/cta/src/view.js --output-path=blocks/cta/build",
 		"build:two-column": "wp-scripts build blocks/two-column/src/index.js blocks/two-column/src/view.js --output-path=blocks/two-column/build",
 		"build:two-column-text": "wp-scripts build blocks/two-column-text/src/index.js blocks/two-column-text/src/view.js --output-path=blocks/two-column-text/build",
+		"build:two-column-cta": "wp-scripts build blocks/two-column-cta/src/index.js --output-path=blocks/two-column-cta/build",
 		"build:video-two-column": "wp-scripts build blocks/video-two-column/src/index.js blocks/video-two-column/src/view.js --output-path=blocks/video-two-column/build",
 		"build:find-doctor": "wp-scripts build blocks/find-doctor/src/index.js blocks/find-doctor/src/view.js --output-path=blocks/find-doctor/build",
 		"build:latest-articles": "wp-scripts build blocks/latest-articles/src/index.js blocks/latest-articles/src/view.js --output-path=blocks/latest-articles/build",

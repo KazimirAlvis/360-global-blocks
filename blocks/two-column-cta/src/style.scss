@@ -1,0 +1,117 @@
+// Frontend styles for the Two Column CTA block
+.wp-block-global360blocks-two-column-cta {
+	padding: 40px 0;
+
+	@media (max-width: 1024px) {
+		padding: 40px 30px;
+	}
+
+	@media (max-width: 600px) {
+		padding: 40px 20px;
+	}
+
+	.two-column-cta__inner {
+		max-width: 1140px;
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: 800px 300px;
+		gap: 40px;
+		align-items: center;
+
+		@media (max-width: 1200px) {
+			grid-template-columns: 1fr 300px;
+		}
+
+		@media (max-width: 768px) {
+			grid-template-columns: 1fr;
+			gap: 30px;
+		}
+	}
+
+	.two-column-cta__content {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.two-column-cta__heading {
+		font-size: 2rem;
+		font-weight: 700;
+		margin: 0;
+		padding-left: 0;
+		font-family: var(--heading-font, inherit);
+		letter-spacing: var(--heading-letter-spacing, normal);
+	}
+
+	.two-column-cta__body {
+		margin: 0;
+		padding: 0;
+
+		> * {
+			margin-left: 0;
+			padding-left: 0;
+		}
+
+		p, ul, ol, blockquote {
+			margin-top: 0;
+			margin-bottom: 1em;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+
+		ul, ol {
+			padding-left: 1.5em;
+		}
+
+		a {
+			color: inherit;
+			text-decoration: underline;
+
+			&:hover {
+				text-decoration: none;
+			}
+		}
+	}
+
+	.two-column-cta__button-wrapper {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		@media (max-width: 768px) {
+			justify-content: flex-start;
+		}
+	}
+
+	.two-column-cta__button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 54px;
+		width: 100%;
+		max-width: 312px;
+		padding: 15px 30px;
+		background-color: var(--cpt360-primary, #007cba);
+		border: 1px solid var(--cpt360-primary, #007cba);
+		border-radius: 27px;
+		box-sizing: border-box;
+		color: #fff;
+		font-family: var(--body-font, var(--wp--preset--font-family--body, var(--wp--preset--font-family--base, 'Helvetica Neue', Arial, sans-serif)));
+		font-size: 18px;
+		font-weight: var(--body-font-weight, 400);
+		line-height: 22px;
+		text-align: center;
+		text-decoration: none;
+		transition: transform 0.2s ease, background-color 0.2s ease;
+		white-space: nowrap;
+
+		&:hover {
+			background-color: #fff;
+			border-color: #000;
+			color: #000;
+			transform: translateY(-2px);
+		}
+	}
+}

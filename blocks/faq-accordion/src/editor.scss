@@ -1,0 +1,31 @@
+.editor-styles-wrapper .faq-accordion-block,
+.faq-accordion-block {
+	.faq-item-actions {
+		border-bottom: 1px solid rgba(16, 32, 52, 0.08);
+		margin-bottom: 8px;
+	}
+
+	.faq-question {
+		font-size: 1rem;
+	}
+}
+
+.editor-styles-wrapper .faq-accordion-block {
+	.faq-answer-label {
+		display: block;
+		font-size: 0.85rem;
+		font-weight: 600;
+		color: #4b5563;
+		margin: 12px 24px 6px;
+		text-transform: uppercase;
+		letter-spacing: 0.02em;
+	}
+
+	.faq-answer-inner {
+		min-height: 72px;
+		padding: 12px 24px 24px;
+		border: 1px dashed rgba(15, 23, 42, 0.25);
+		border-radius: 12px;
+		background: #fff;
+	}
+}

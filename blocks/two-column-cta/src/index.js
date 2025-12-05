@@ -8,7 +8,7 @@ import './style.scss';
 registerBlockType('global360blocks/two-column-cta', {
 	edit: ({ attributes, setAttributes }) => {
 		const { heading, buttonText, buttonUrl, backgroundColor } = attributes;
-		
+
 		const blockProps = useBlockProps({
 			className: 'two-column-cta',
 			style: {
@@ -16,12 +16,7 @@ registerBlockType('global360blocks/two-column-cta', {
 			},
 		});
 
-		const ALLOWED_BLOCKS = [
-			'core/paragraph',
-			'core/heading',
-			'core/list',
-			'core/quote',
-		];
+		const ALLOWED_BLOCKS = ['core/paragraph', 'core/heading', 'core/list', 'core/quote'];
 
 		return (
 			<>
@@ -42,9 +37,7 @@ registerBlockType('global360blocks/two-column-cta', {
 					<PanelBody title={__('Background Color', '360-global-blocks')}>
 						<ColorPicker
 							color={backgroundColor}
-							onChangeComplete={(value) =>
-								setAttributes({ backgroundColor: value.hex })
-							}
+							onChangeComplete={(value) => setAttributes({ backgroundColor: value.hex })}
 							disableAlpha
 						/>
 						{backgroundColor && (
@@ -73,9 +66,7 @@ registerBlockType('global360blocks/two-column-cta', {
 							<div className="two-column-cta__body">
 								<InnerBlocks
 									allowedBlocks={ALLOWED_BLOCKS}
-									template={[
-										['core/paragraph', { placeholder: 'Add content...' }],
-									]}
+									template={[['core/paragraph', { placeholder: 'Add content...' }]]}
 								/>
 							</div>
 						</div>

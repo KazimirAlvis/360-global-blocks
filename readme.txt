@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.7
-Stable tag: 1.3.41
+Stable tag: 1.3.43
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,14 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.43 =
+* Kept the FAQ Accordion answer editors always visible with clear labels and modern RichText props so editing works cleanly in WordPress 6.9.
+* Increased line-height and padding on both the question prompt and expanded answer body to prevent multi-line copy from feeling cramped.
+
+= 1.3.42 =
+* Added a FAQ Accordion block with RichText-powered headings plus reorderable question/answer pairs so marketing teams can build SEO-friendly Q&A sections without custom code.
+* Included palette-based background and active-row color pickers along with a frontend script that animates the dropdowns and keeps only one item open at a time.
 
 = 1.3.41 =
 * Added palette-driven background and heading color controls to the Two Column block, ensuring selections pull from the site’s standard swatches.

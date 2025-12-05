@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.41
+ * Version: 1.3.43
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.41' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.43' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -1190,6 +1190,9 @@ add_filter('block_categories_all', function($categories, $post) {
 // Include page title hero render functions
 require_once plugin_dir_path(__FILE__) . 'blocks/page-title-hero/render.php';
 
+// FAQ accordion render callback
+require_once plugin_dir_path(__FILE__) . 'blocks/faq-accordion/render.php';
+
 // Block category is already registered above - removed duplicate
 
 // Register block
@@ -1297,6 +1300,13 @@ function global360blocks_register_blocks() {
         __DIR__ . '/blocks/page-title-hero',
         array(
             'render_callback' => 'global360blocks_render_page_title_hero_block',
+        )
+    );
+
+    register_block_type(
+        __DIR__ . '/blocks/faq-accordion',
+        array(
+            'render_callback' => 'global360blocks_render_faq_accordion_block',
         )
     );
 }

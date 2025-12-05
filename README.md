@@ -78,6 +78,12 @@ Streamlined editorial experience powered by native Gutenberg features:
 -   Inspector controls for button label/URL along with a background color picker
 -   Centered grid automatically collapses to a stacked layout on tablet and mobile
 
+### ❓ FAQ Accordion Block
+
+-   Drag-friendly list of questions with inline RichText editors for both prompts and answers
+-   Palette-aware color pickers let you set the overall section background plus a highlight for the open dropdown
+-   Accessible accordion markup keeps only one answer expanded at a time and mirrors the live animation inside Gutenberg
+
 ## Medical Focus
 
 Built specifically for healthcare websites with features like:
@@ -167,6 +173,16 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.43
+
+-   Smoothed out the FAQ Accordion editor so answer fields are always visible, properly labeled, and editable in WordPress 6.9 without deprecated multiline warnings.
+-   Relaxed the question and answer spacing on the frontend to keep multi-line prompts readable once dropdowns expand.
+
+### 1.3.42
+
+-   Introduced a dedicated FAQ Accordion block with reorderable question/answer pairs, inline RichText editing, and palette-aware controls for the section background plus the active dropdown state.
+-   Added a lightweight frontend script that animates the accordion, keeps only one item open at a time, and syncs the editor preview with the live behavior.
+
 ### 1.3.41
 
 -   Added palette-aware controls to the Two Column block so authors can pick standard background and heading colors without custom CSS.
@@ -189,6 +205,7 @@ For support and feature requests, please create an issue on GitHub.
 ### 1.3.37
 
 -   Fixed a missing closing `</div>` tag in the Two Column Slider render function that was causing all subsequent page content to be incorrectly wrapped inside the slider container.
+
 ### 1.3.36
 
 -   Fixed the responsive flow for the Two Column layout toggle so right-aligned images stack above the copy on tablet/mobile viewports instead of fighting the desktop grid order.

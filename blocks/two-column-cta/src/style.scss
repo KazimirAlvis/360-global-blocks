@@ -52,7 +52,10 @@
 			padding-left: 0;
 		}
 
-		p, ul, ol, blockquote {
+		p,
+		ul,
+		ol,
+		blockquote {
 			margin-top: 0;
 			margin-bottom: 1em;
 
@@ -61,7 +64,8 @@
 			}
 		}
 
-		ul, ol {
+		ul,
+		ol {
 			padding-left: 1.5em;
 		}
 
@@ -98,7 +102,13 @@
 		border-radius: 27px;
 		box-sizing: border-box;
 		color: #fff;
-		font-family: var(--body-font, var(--wp--preset--font-family--body, var(--wp--preset--font-family--base, 'Helvetica Neue', Arial, sans-serif)));
+		font-family: var(
+			--body-font,
+			var(
+				--wp--preset--font-family--body,
+				var(--wp--preset--font-family--base, 'Helvetica Neue', Arial, sans-serif)
+			)
+		);
 		font-size: 18px;
 		font-weight: var(--body-font-weight, 400);
 		line-height: 22px;

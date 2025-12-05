@@ -1,0 +1,126 @@
+.faq-accordion-block {
+	--faq-background: #f7f7f7;
+	--faq-active-background: #43a047;
+	background: var(--faq-background, #f7f7f7);
+	border-radius: 20px;
+	padding: clamp(24px, 4vw, 56px);
+	box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+	color: #1d2a39;
+
+	.faq-accordion-heading {
+		font-size: clamp(1.75rem, 3vw, 2.5rem);
+		text-align: center;
+		margin: 0;
+		color: #102034;
+	}
+
+	.faq-accordion-list {
+		margin-top: 28px;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.faq-accordion-item {
+		background: #fff;
+		border-radius: 16px;
+		border: 1px solid rgba(16, 32, 52, 0.08);
+		overflow: hidden;
+		transition: box-shadow 0.2s ease;
+
+		&.is-open {
+			box-shadow: 0 12px 24px rgba(16, 32, 52, 0.12);
+		}
+	}
+
+	.faq-item-actions {
+		display: flex;
+		gap: 8px;
+		padding: 12px 16px 0;
+		flex-wrap: wrap;
+	}
+
+	.faq-question {
+		width: 100%;
+		background: transparent;
+		border: none;
+		outline: none;
+		text-align: left;
+		padding: 20px 56px 20px 24px;
+		font-size: 1.1rem;
+		font-weight: 600;
+		line-height: 1.35;
+		color: inherit;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+		transition: background 0.2s ease, color 0.2s ease;
+
+		&:focus-visible {
+			box-shadow: 0 0 0 2px rgba(16, 90, 200, 0.35);
+		}
+	}
+
+	.faq-accordion-item.is-open .faq-question {
+		background: var(--faq-active-background, #43a047);
+		color: #fff;
+	}
+
+	.faq-question-text {
+		display: block;
+		flex: 1;
+		line-height: 1.45;
+	}
+
+	.faq-chevron {
+		flex-shrink: 0;
+		width: 20px;
+		height: 20px;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transform: rotate(-45deg);
+		transition: transform 0.2s ease;
+	}
+
+	.faq-accordion-item.is-open .faq-chevron {
+		transform: rotate(135deg);
+	}
+
+	.faq-answer {
+		border-top: 1px solid rgba(16, 32, 52, 0.08);
+		background: #fff;
+	}
+
+	.faq-answer[hidden] {
+		display: none;
+	}
+
+	.faq-answer-inner {
+		padding: 18px 28px 28px;
+		color: #4b5563;
+		line-height: 1.7;
+		font-size: 1rem;
+
+		p {
+			margin: 0 0 1.2em;
+		}
+
+		p:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.faq-answer-label {
+		display: none;
+	}
+
+	.faq-add-item {
+		margin-top: 24px;
+	}
+}
+
+.wp-block-global360blocks-faq-accordion.alignfull .faq-accordion-block {
+	border-radius: 0;
+}

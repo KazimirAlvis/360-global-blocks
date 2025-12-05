@@ -1,0 +1,70 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "global360blocks/faq-accordion",
+	"version": "0.1.0",
+	"title": "FAQ Accordion",
+	"category": "360-blocks",
+	"icon": "list-view",
+	"description": "Question-and-answer accordion with customizable colors.",
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": ["wide", "full"],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"heading": {
+			"type": "string",
+			"default": "After the Procedure"
+		},
+		"items": {
+			"type": "array",
+			"default": [
+				{
+					"question": "What can I expect immediately after GAE?",
+					"answer": "After GAE, patients typically remain in the medical facility for 2-4 hours for observation to monitor for immediate complications. Mild soreness around the incision site and potential knee discomfort are common. Most patients go home the same day, with pain medications prescribed if needed to manage mild to moderate discomfort."
+				},
+				{
+					"question": "When will I notice symptom relief after GAE?",
+					"answer": "Temporary bruising, minor swelling, or slight numbness at the access site may occur, and some patients may experience a brief increase in pain before symptoms improve."
+				},
+				{
+					"question": "How soon can I resume normal activities after GAE?",
+					"answer": "Light activity is often encouraged immediately, but strenuous exercise should be postponed until cleared by your care team."
+				},
+				{
+					"question": "What is the typical recovery time after GAE?",
+					"answer": "Most patients feel significantly better within a few weeks, with continued improvements over several months."
+				},
+				{
+					"question": "Will I need follow-up appointments after the procedure?",
+					"answer": "Yes. Follow-up visits help your care team monitor healing, adjust medications, and answer additional questions."
+				}
+			],
+			"items": {
+				"type": "object",
+				"properties": {
+					"question": { "type": "string" },
+					"answer": { "type": "string" }
+				}
+			}
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": ""
+		},
+		"activeItemColor": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"textdomain": "global360blocks",
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-index.css",
+	"viewScript": "file:./build/view.js"
+}

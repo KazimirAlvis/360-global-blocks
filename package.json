@@ -1,10 +1,10 @@
 {
 	"name": "360-global-blocks",
-	"version": "1.3.41",
+	"version": "1.3.43",
 	"description": "Custom blocks for 360 Global",
 	"main": "index.js",
 	"scripts": {
-		"build": "npm run build:simple-hero && npm run build:full-hero && npm run build:cta && npm run build:two-column && npm run build:two-column-text && npm run build:two-column-cta && npm run build:video-two-column && npm run build:find-doctor && npm run build:latest-articles && npm run build:popular-practices && npm run build:two-column-slider && npm run build:info-cards && npm run build:page-title-hero && npm run build:rich-text",
+		"build": "npm run build:simple-hero && npm run build:full-hero && npm run build:cta && npm run build:two-column && npm run build:two-column-text && npm run build:two-column-cta && npm run build:video-two-column && npm run build:find-doctor && npm run build:latest-articles && npm run build:popular-practices && npm run build:two-column-slider && npm run build:info-cards && npm run build:page-title-hero && npm run build:rich-text && npm run build:faq-accordion",
 		"build:simple-hero": "wp-scripts build blocks/simple-hero/src/index.js blocks/simple-hero/src/view.js --output-path=blocks/simple-hero/build",
 		"build:full-hero": "wp-scripts build blocks/full-hero/src/index.js blocks/full-hero/src/view.js --output-path=blocks/full-hero/build",
 		"build:cta": "wp-scripts build blocks/cta/src/index.js blocks/cta/src/view.js --output-path=blocks/cta/build",
@@ -19,6 +19,7 @@
 		"build:info-cards": "wp-scripts build blocks/info-cards/src/index.js blocks/info-cards/src/view.js --output-path=blocks/info-cards/build",
 		"build:page-title-hero": "wp-scripts build blocks/page-title-hero/src/index.js blocks/page-title-hero/src/view.js --output-path=blocks/page-title-hero/build",
 		"build:rich-text": "wp-scripts build blocks/rich-text/src/index.js --output-path=blocks/rich-text/build",
+		"build:faq-accordion": "wp-scripts build blocks/faq-accordion/src/index.js blocks/faq-accordion/src/view.js --output-path=blocks/faq-accordion/build",
 		"start": "wp-scripts start",
 		"dev": "wp-scripts start"
 	},

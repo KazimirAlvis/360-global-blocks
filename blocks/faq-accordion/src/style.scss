@@ -15,10 +15,12 @@
 	}
 
 	.faq-accordion-list {
-		margin-top: 28px;
+		margin: 28px auto 0;
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
+		max-width: 1140px;
+		padding: 0 20px;
 	}
 
 	.faq-accordion-item {

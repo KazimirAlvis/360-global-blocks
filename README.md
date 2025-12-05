@@ -173,6 +173,11 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.44
+
+-   Kept the FAQ Accordion background full bleed while constraining the dropdown list to a centered 1140px max width with 20px gutters.
+-   Rebuilt the FAQ bundle so the updated layout ships with GitHub updater installs.
+
 ### 1.3.43
 
 -   Smoothed out the FAQ Accordion editor so answer fields are always visible, properly labeled, and editable in WordPress 6.9 without deprecated multiline warnings.

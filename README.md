@@ -173,6 +173,21 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.47
+
+-   Upgraded the Video Two Column body field to use native Gutenberg blocks, so editors can drop in bullet or numbered lists without leaving the block.
+-   Automatically migrates existing body copy into the new InnerBlocks area while keeping the PHP render and frontend styles in sync for paragraphs and lists.
+
+### 1.3.46
+
+-   Added a palette-aware background color picker to the Video Two Column block so the entire section can align with branded surfaces without custom CSS.
+-   Updated the editor, frontend CSS, and PHP render wrapper so the selected color fills the full-width background rather than just the content column.
+
+### 1.3.45
+
+-   Added the same media position toggle from the standard Two Column block to the Video Two Column layout so editors can flip the video to either side without rebuilding content.
+-   Updated the editor, frontend CSS, and PHP render class to honor the toggle, mirroring padding and grid order so the new layout looks identical in Gutenberg and on the site.
+
 ### 1.3.44
 
 -   Kept the FAQ Accordion background full bleed while constraining the dropdown list to a centered 1140px max width with 20px gutters.

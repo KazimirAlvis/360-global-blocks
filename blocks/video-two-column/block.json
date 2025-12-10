@@ -23,6 +23,15 @@
 		"videoTitle": {
 			"type": "string",
 			"default": ""
+		},
+		"layout": {
+			"type": "string",
+			"enum": ["media-left", "media-right"],
+			"default": "media-left"
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"example": {},

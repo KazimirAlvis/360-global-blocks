@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.44
+Stable tag: 1.3.47
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,18 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.47 =
+* Swapped the Video Two Column body field to native Gutenberg blocks so editors can add bullets, numbered lists, quotes, and multi-paragraph copy inside the block.
+* Auto-migrates existing body text into the new InnerBlocks area and keeps the frontend render plus styles updated for the richer markup.
+
+= 1.3.46 =
+* Added a palette-aware background color picker to the Video Two Column block so marketing teams can tint the full-width section without writing CSS.
+* Synced the editor UI, frontend styles, and PHP renderer so the selected color blankets the entire block instead of only the content column.
+
+= 1.3.45 =
+* Added the familiar Media position toggle from the standard Two Column block to the Video Two Column layout so the video can sit on either side of the content without rebuilding the block.
+* Synced the editor/preview CSS and PHP render class with the new toggle so grid order and padding swap cleanly on both the front end and inside Gutenberg.
 
 = 1.3.44 =
 * Kept the FAQ Accordion background full-width while constraining the list of dropdowns to a centered 1140px max width with 20px side padding.

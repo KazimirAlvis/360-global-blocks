@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.44
+ * Version: 1.3.47
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.44' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.47' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -1045,9 +1045,21 @@ function global360blocks_render_video_two_column_block( $attributes, $content ) 
     $heading = !empty($attributes['heading']) ? wp_kses_post($attributes['heading']) : '';
     $legacy_body_text = !empty($attributes['bodyText']) ? wp_kses_post($attributes['bodyText']) : '';
     $video_title = !empty($attributes['videoTitle']) ? wp_kses_post($attributes['videoTitle']) : '';
-    
-    $output = '<div class="video-two-column-block">';
-    $output .= '<div class="video-two-column-container">';
+    $layout = !empty($attributes['layout']) && in_array($attributes['layout'], array('media-left', 'media-right'), true) ? $attributes['layout'] : 'media-left';
+    $background_color = ! empty( $attributes['backgroundColor'] ) ? sanitize_hex_color( $attributes['backgroundColor'] ) : '';
+
+    $background_style = $background_color ? 'background-color: ' . $background_color . ';' : '';
+    $wrapper_args = array( 'class' => 'video-two-column-block' );
+    if ( $background_style ) {
+        $wrapper_args['style'] = $background_style;
+    }
+
+    $wrapper_attributes = function_exists( 'get_block_wrapper_attributes' )
+        ? get_block_wrapper_attributes( $wrapper_args )
+        : 'class="video-two-column-block"' . ( $background_style ? ' style="' . esc_attr( $background_style ) . '"' : '' );
+
+    $output = '<div ' . $wrapper_attributes . '>';
+    $output .= '<div class="video-two-column-container layout-' . esc_attr($layout) . '">';
     
     // Left column - Video
     $output .= '<div class="video-two-column-video" style="display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:16px;">';

@@ -173,6 +173,11 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.48
+
+-   Locked the Page Title Hero heading to a centered 1140px max width with `margin: 0 auto` so long health system names no longer spill past the grid.
+-   Dialed the H1 line-height to 1.4 and rebuilt the block assets so both the editor preview and frontend hero share the same tightened typography.
+
 ### 1.3.47
 
 -   Upgraded the Video Two Column body field to use native Gutenberg blocks, so editors can drop in bullet or numbered lists without leaving the block.

@@ -1,12 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
-import {
-	useBlockProps,
-	RichText,
-	InspectorControls,
-	PanelColorSettings,
-	InnerBlocks,
-} from '@wordpress/block-editor';
+import { useBlockProps, RichText, InspectorControls, PanelColorSettings, InnerBlocks } from '@wordpress/block-editor';
 import { TextControl, Button, PanelBody, RadioControl } from '@wordpress/components';
 import { registerBlockType, rawHandler, createBlock } from '@wordpress/blocks';
 import { useSelect, useDispatch } from '@wordpress/data';
@@ -37,10 +31,10 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 		const nextBlocks = parsedBlocks.length
 			? parsedBlocks
 			: [
-				createBlock('core/paragraph', {
-					content: bodyText,
-				}),
-			];
+					createBlock('core/paragraph', {
+						content: bodyText,
+					}),
+			  ];
 
 		replaceInnerBlocks(clientId, nextBlocks, false);
 		setAttributes({ bodyText: '' });

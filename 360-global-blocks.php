@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.49
+ * Version: 1.3.50
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.49' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.50' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -222,6 +222,7 @@ function global360blocks_register_global_shared_styles() {
     $registered = true;
 }
 add_action( 'wp_enqueue_scripts', 'global360blocks_register_global_shared_styles', 1 );
+add_action( 'wp_enqueue_scripts', 'global360blocks_enqueue_global_shared_style', 5 );
 
 /**
  * Ensure shared frontend styles are queued when needed.

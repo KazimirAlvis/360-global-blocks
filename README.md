@@ -173,6 +173,11 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.50
+
+-   Always enqueues `global-shared.min.css` so blog templates that omit CTA-style blocks still load the centered Page Title Hero heading rules.
+-   Strengthened the shared `.sm_hero h1` declaration with `!important` values so theme typography resets can’t strip the 1140px width or 1.4 line-height.
+
 ### 1.3.49
 
 -   Forces the Page Title Hero `<h1>` to keep the centered 1140px max width even when a theme injects its own `.sm_hero h1` declarations.

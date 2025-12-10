@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.49
+Stable tag: 1.3.50
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,10 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.50 =
+* Always enqueues the shared `global-shared.min.css` bundle so blog templates without CTA blocks still receive the Page Title Hero heading constraints.
+* Hardened the shared `.sm_hero h1` rule with `!important` declarations so theme-level overrides can no longer strip the centered 1140px width or 1.4 line-height.
 
 = 1.3.49 =
 * Forces the Page Title Hero `<h1>` to inherit the centered 1140px max width even when a theme injects its own `.sm_hero h1` declarations.

@@ -36,3 +36,9 @@
 	color: #000 !important;
 	transform: translateY(-2px) !important;
 }
+
+.sm_hero h1 {
+	line-height: 1.4 !important;
+	margin: 0 auto !important;
+	max-width: 1140px !important;
+}

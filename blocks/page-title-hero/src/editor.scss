@@ -41,23 +41,6 @@
 			color: white;
 			text-align: inherit;
 
-			.hero-title {
-				margin: 0 auto;
-				font-size: 2.5rem;
-				font-weight: var(--heading-font-weight, 400);
-				line-height: 1.4;
-				max-width: 1140px;
-				letter-spacing: var(--heading-letter-spacing, normal);
-				text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-				font-family: var(
-					--heading-font,
-					var(
-						--wp--preset--font-family--heading-font,
-						var(--body-font, var(--wp--preset--font-family--body-font, 'Helvetica Neue', Arial, sans-serif))
-					)
-				);
-			}
-
 			.hero-subtitle {
 				margin: 0;
 				font-size: 1.2rem;
@@ -69,6 +52,24 @@
 					var(--wp--preset--font-family--body-font, 'Helvetica Neue', Arial, sans-serif)
 				);
 			}
+		}
+
+		h1,
+		.hero-title {
+			margin: 0 auto;
+			font-size: 2.5rem;
+			font-weight: var(--heading-font-weight, 400);
+			line-height: 1.4;
+			max-width: 1140px;
+			letter-spacing: var(--heading-letter-spacing, normal);
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+			font-family: var(
+				--heading-font,
+				var(
+					--wp--preset--font-family--heading-font,
+					var(--body-font, var(--wp--preset--font-family--body-font, 'Helvetica Neue', Arial, sans-serif))
+				)
+			);
 		}
 
 		// When no background image, use dark text
@@ -106,13 +107,34 @@
 			padding: 1.5rem;
 
 			.hero-content {
-				.hero-title {
-					font-size: 2rem;
-				}
-
 				.hero-subtitle {
 					font-size: 1rem;
 				}
+			}
+
+			h1,
+			.hero-title {
+				font-size: 2rem;
+			}
+		}
+	}
+}
+/* Responsive design */
+@media (max-width: 768px) {
+	.page-title-hero-editor {
+		.sm_hero {
+			min-height: 150px;
+			padding: 1.5rem;
+
+			.hero-content {
+				.hero-subtitle {
+					font-size: 1rem;
+				}
+			}
+
+			h1,
+			.hero-title {
+				font-size: 2rem;
 			}
 		}
 	}

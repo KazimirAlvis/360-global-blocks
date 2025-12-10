@@ -173,6 +173,11 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.49
+
+-   Forces the Page Title Hero `<h1>` to keep the centered 1140px max width even when a theme injects its own `.sm_hero h1` declarations.
+-   Rebuilt the block so both the editor preview and frontend CSS keep the 1.4 line-height and `margin: 0 auto` across every breakpoint.
+
 ### 1.3.48
 
 -   Locked the Page Title Hero heading to a centered 1140px max width with `margin: 0 auto` so long health system names no longer spill past the grid.

@@ -56,23 +56,6 @@
 			max-width: 1200px;
 			padding: 0 2rem;
 
-			.hero-title {
-				margin: 0 auto;
-				font-size: 3rem;
-				font-weight: var(--heading-font-weight, 400);
-				line-height: 1.4;
-				max-width: 1140px;
-				letter-spacing: var(--heading-letter-spacing, normal);
-				text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-				font-family: var(
-					--heading-font,
-					var(
-						--wp--preset--font-family--heading-font,
-						var(--body-font, var(--wp--preset--font-family--body-font, 'Helvetica Neue', Arial, sans-serif))
-					)
-				);
-			}
-
 			.hero-subtitle {
 				margin: 0;
 				font-size: 1.3rem;
@@ -85,6 +68,24 @@
 				);
 			}
 		}
+
+		h1,
+		.hero-title {
+			margin: 0 auto;
+			font-size: 3rem;
+			font-weight: var(--heading-font-weight, 400);
+			line-height: 1.4;
+			max-width: 1140px;
+			letter-spacing: var(--heading-letter-spacing, normal);
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+			font-family: var(
+				--heading-font,
+				var(
+					--wp--preset--font-family--heading-font,
+					var(--body-font, var(--wp--preset--font-family--body-font, 'Helvetica Neue', Arial, sans-serif))
+				)
+			);
+		}
 	}
 }
 
@@ -94,12 +95,15 @@
 		.sm_hero .hero-content {
 			padding: 0 1.5rem;
 
-			.hero-title {
-				font-size: 2.5rem;
-			}
-
 			.hero-subtitle {
 				font-size: 1.2rem;
+			}
+		}
+
+		.sm_hero {
+			h1,
+			.hero-title {
+				font-size: 2.5rem;
 			}
 		}
 	}
@@ -110,12 +114,15 @@
 		.sm_hero .hero-content {
 			padding: 0 1rem;
 
-			.hero-title {
-				font-size: 2rem;
-			}
-
 			.hero-subtitle {
 				font-size: 1rem;
+			}
+		}
+
+		.sm_hero {
+			h1,
+			.hero-title {
+				font-size: 2rem;
 			}
 		}
 	}
@@ -126,12 +133,15 @@
 		.sm_hero .hero-content {
 			padding: 0 0.5rem;
 
-			.hero-title {
-				font-size: 1.8rem;
-			}
-
 			.hero-subtitle {
 				font-size: 0.9rem;
+			}
+		}
+
+		.sm_hero {
+			h1,
+			.hero-title {
+				font-size: 1.8rem;
 			}
 		}
 	}

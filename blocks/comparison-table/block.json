@@ -1,0 +1,69 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "global360blocks/comparison-table",
+	"version": "0.1.0",
+	"title": "Comparison Table",
+	"category": "360-blocks",
+	"icon": "table-col-after",
+	"description": "Responsive comparison table with configurable rows and columns.",
+	"keywords": ["table", "comparison", "pricing"],
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": ["wide", "full"],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"heading": {
+			"type": "string",
+			"default": ""
+		},
+		"subheading": {
+			"type": "string",
+			"default": ""
+		},
+		"columns": {
+			"type": "array",
+			"default": ["", "", "", ""],
+			"items": {
+				"type": "string"
+			}
+		},
+		"rows": {
+			"type": "array",
+			"default": [
+				{ "cells": ["", "", "", ""] },
+				{ "cells": ["", "", "", ""] },
+				{ "cells": ["", "", "", ""] },
+				{ "cells": ["", "", "", ""] }
+			],
+			"items": {
+				"type": "object",
+				"properties": {
+					"cells": {
+						"type": "array",
+						"items": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"footnote": {
+			"type": "string",
+			"default": ""
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"textdomain": "global360blocks",
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-index.css"
+}

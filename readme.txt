@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.50
+Stable tag: 1.3.52
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,15 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.52 =
+* Stretches the Comparison Table background color across the full-width section while constraining the heading, table, and footnote to a centered 1140px inner wrapper so layouts stay aligned with the rest of the site.
+* Adds consistent vertical dividers across every Comparison Table column, keeps thead typography sentence-case, and removes the special row-heading treatment so each cell renders uniformly.
+* Removes the outer box shadow from the FAQ Accordion container so it blends cleanly into tinted landing page sections while individual accordion cards retain their own elevation cues.
+
+= 1.3.51 =
+* Added a Comparison Table block with adjustable columns and rows so editors can rebuild treatment matrices without hacking the Core table block.
+* Automatically paints the highlighted header row with the primary color stored in the 360 settings (falling back to `--cpt360-primary`) while shipping responsive zebra-striping styles for both the editor and frontend.
 
 = 1.3.50 =
 * Always enqueues the shared `global-shared.min.css` bundle so blog templates without CTA blocks still receive the Page Title Hero heading constraints.

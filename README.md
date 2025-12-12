@@ -173,6 +173,18 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.52
+
+-   Extended the Comparison Table background color picker to blanket the full-width section while keeping the table, heading, and footnote centered inside a 1140px inner wrapper for consistent layout alignment.
+-   Synced the table header/cell borders so every column shows subtle dividers and the header row typography stays sentence-case instead of forcing uppercase row labels.
+-   Removed the outer drop shadow from the FAQ Accordion wrapper so it can sit flush against tinted landing page backgrounds while retaining per-item elevation cues.
+
+### 1.3.51
+
+-   Added a Comparison Table block with adjustable column and row counts so marketers can recreate the treatment matrices shown on service-line pages without relying on Core tables.
+-   Synced the highlighted header row with the primary color stored in 360 settings (falling back to `--cpt360-primary`) so the hero row always matches the site palette.
+-   Shipped responsive frontend/editor styles plus manifest wiring so the new block renders semantic tables with accessible captions and zebra striping on every template.
+
 ### 1.3.50
 
 -   Always enqueues `global-shared.min.css` so blog templates that omit CTA-style blocks still load the centered Page Title Hero heading rules.

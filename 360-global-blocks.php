@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.50
+ * Version: 1.3.52
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.50' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.52' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -195,6 +195,58 @@ function global360blocks_enqueue_heading_letter_spacing_editor_styles() {
     wp_add_inline_style( $handle, $css );
 }
 add_action( 'enqueue_block_editor_assets', 'global360blocks_enqueue_heading_letter_spacing_editor_styles', 1 );
+
+/**
+ * Attempt to resolve the brand primary color configured in 360 settings.
+ *
+ * @return string Hex color string or empty string when unavailable.
+ */
+function global360blocks_get_brand_primary_color() {
+    static $resolved = null;
+
+    if ( null !== $resolved ) {
+        return $resolved;
+    }
+
+    $resolved = '';
+    $settings = get_option( '360_global_settings', array() );
+
+    if ( is_array( $settings ) ) {
+        $keys = array(
+            'primary_color',
+            'primaryColor',
+            'brand_primary_color',
+            'brandPrimaryColor',
+            'main_color',
+            'mainColor',
+            'primary_hex',
+            'primaryHex',
+        );
+
+        foreach ( $keys as $key ) {
+            if ( empty( $settings[ $key ] ) || ! is_string( $settings[ $key ] ) ) {
+                continue;
+            }
+
+            $maybe_color = sanitize_hex_color( $settings[ $key ] );
+
+            if ( $maybe_color ) {
+                $resolved = $maybe_color;
+                break;
+            }
+        }
+    }
+
+    /**
+     * Filter the detected brand color before it is used by frontend blocks.
+     *
+     * @param string $resolved Hex color string or empty string.
+     * @param array  $settings Raw 360 option array.
+     */
+    $resolved = apply_filters( 'global360blocks_brand_primary_color', $resolved, $settings );
+
+    return $resolved;
+}
 
 /**
  * Register shared frontend styles used across multiple blocks.
@@ -1206,6 +1258,9 @@ require_once plugin_dir_path(__FILE__) . 'blocks/page-title-hero/render.php';
 // FAQ accordion render callback
 require_once plugin_dir_path(__FILE__) . 'blocks/faq-accordion/render.php';
 
+// Comparison table render callback
+require_once plugin_dir_path(__FILE__) . 'blocks/comparison-table/render.php';
+
 // Block category is already registered above - removed duplicate
 
 // Register block
@@ -1320,6 +1375,13 @@ function global360blocks_register_blocks() {
         __DIR__ . '/blocks/faq-accordion',
         array(
             'render_callback' => 'global360blocks_render_faq_accordion_block',
+        )
+    );
+
+    register_block_type(
+        __DIR__ . '/blocks/comparison-table',
+        array(
+            'render_callback' => 'global360blocks_render_comparison_table_block',
         )
     );
 }
@@ -1654,6 +1716,12 @@ function global360blocks_get_frontend_asset_manifest() {
                 'handle' => 'global360blocks-two-column-slider-view',
                 'file'   => 'blocks/two-column-slider/build/view.js',
                 'asset'  => 'blocks/two-column-slider/build/view.asset.php',
+            ),
+        ),
+        'global360blocks/comparison-table'   => array(
+            'style' => array(
+                'handle' => 'global360blocks-comparison-table-style-frontend',
+                'file'   => 'blocks/comparison-table/build/style-index.css',
             ),
         ),
     );

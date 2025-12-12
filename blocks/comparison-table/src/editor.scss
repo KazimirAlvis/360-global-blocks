@@ -1,0 +1,22 @@
+.wp-block-global360blocks-comparison-table {
+	.comparison-table-block {
+		box-shadow: none;
+		border: 1px dashed rgba(16, 32, 52, 0.2);
+	}
+
+	.comparison-table-cell-input {
+		cursor: text;
+	}
+
+	table thead th,
+	table tbody th,
+	table tbody td {
+		position: relative;
+	}
+
+	table th:focus-within,
+	table td:focus-within {
+		outline: 2px solid var(--cpt360-primary, #1a73e8);
+		outline-offset: 2px;
+	}
+}

@@ -26,12 +26,18 @@ export default function Edit(props) {
 
 	const availableIcons = iconCatalog || {};
 
-	const iconOptions = Object.entries(availableIcons).map(([key, icon]) => ({
+	const iconOptions = [
+		{ label: __('None', 'global-360-theme'), value: '' },
+		...Object.entries(availableIcons).map(([key, icon]) => ({
 		label: `${icon.name} (${icon.category})`,
 		value: key,
-	}));
+		})),
+	];
 
 	const renderIconPreview = (iconKey) => {
+		if (!iconKey) {
+			return 'None';
+		}
 		// Simple icon preview for admin - just show the name
 		const iconData = availableIcons[iconKey];
 		if (iconData) {

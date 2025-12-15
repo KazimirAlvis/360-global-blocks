@@ -85,27 +85,33 @@ $wrapper_attributes = get_block_wrapper_attributes(array(
         <div class="info-cards-grid">
             <?php foreach ($cards as $card): ?>
                 <?php 
-                $icon_key = isset($card['icon']) ? $card['icon'] : 'body/heart';
+                $icon_key = isset($card['icon']) ? trim((string) $card['icon']) : '';
                 $card_title = isset($card['title']) ? $card['title'] : '';
                 $card_text = isset($card['text']) ? $card['text'] : '';
                 
-                // Get Health Icon SVG content
-                $svg_content = $health_icons_loader->getIcon($icon_key);
+                $svg_content = '';
+
+                // Get Health Icon SVG content (skip entirely when icon is unset / "None")
+                if ('' !== $icon_key) {
+                    $svg_content = $health_icons_loader->getIcon($icon_key);
+                }
                 
                 // Clean SVG for CSS styling
                 if ($svg_content) {
                     $svg_content = clean_svg_for_css($svg_content);
                 }
                 
-                // Fallback if icon not found
-                if (!$svg_content) {
+                // Fallback if icon not found (but only when an icon was requested)
+                if ('' !== $icon_key && !$svg_content) {
                     $svg_content = '<svg viewBox="0 0 48 48" fill="currentColor" class="info-card-icon"><circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="2"/><text x="24" y="30" text-anchor="middle" font-size="12" fill="currentColor">?</text></svg>';
                 }
                 ?>
                 <div class="info-card">
-                    <div class="info-card-icon-wrapper">
-                        <?php echo $svg_content; ?>
-                    </div>
+                    <?php if (!empty($svg_content)): ?>
+                        <div class="info-card-icon-wrapper">
+                            <?php echo $svg_content; ?>
+                        </div>
+                    <?php endif; ?>
                     
                     <?php if (!empty($card_title)): ?>
                         <h3 class="info-card-title"><?php echo wp_kses_post($card_title); ?></h3>

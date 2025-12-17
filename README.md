@@ -173,6 +173,10 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.54
+
+-   Removed extra padding on `.main-paragraph-con` inside the Video Two Column body.
+
 ### 1.3.53
 
 -   Added a “None” option to the Info Cards icon selector so cards can render without an icon.

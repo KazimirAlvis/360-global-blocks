@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.53
+ * Version: 1.3.54
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.53' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.54' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',

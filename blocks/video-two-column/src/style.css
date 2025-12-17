@@ -208,6 +208,10 @@
 	gap: 1rem;
 }
 
+.video-two-column-body .main-paragraph-con {
+	padding: 0;
+}
+
 .video-two-column-body p {
 	margin: 0;
 }

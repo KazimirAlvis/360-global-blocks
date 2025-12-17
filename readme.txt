@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.53
+Stable tag: 1.3.54
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,9 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.54 =
+* Removed extra padding on `.main-paragraph-con` inside the Video Two Column body.
 
 = 1.3.53 =
 * Added a “None” option to the Info Cards icon selector so cards can render without an icon.

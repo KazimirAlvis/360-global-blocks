@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.54
+ * Version: 1.3.55
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.54' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.55' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -1261,6 +1261,12 @@ require_once plugin_dir_path(__FILE__) . 'blocks/faq-accordion/render.php';
 // Comparison table render callback
 require_once plugin_dir_path(__FILE__) . 'blocks/comparison-table/render.php';
 
+// Patient reviews slider render callback
+require_once plugin_dir_path(__FILE__) . 'blocks/patient-reviews-slider/render.php';
+
+// One column video render callback
+require_once plugin_dir_path(__FILE__) . 'blocks/one-column-video/render.php';
+
 // Block category is already registered above - removed duplicate
 
 // Register block
@@ -1382,6 +1388,20 @@ function global360blocks_register_blocks() {
         __DIR__ . '/blocks/comparison-table',
         array(
             'render_callback' => 'global360blocks_render_comparison_table_block',
+        )
+    );
+
+    register_block_type(
+        __DIR__ . '/blocks/patient-reviews-slider',
+        array(
+            'render_callback' => 'global360blocks_render_patient_reviews_slider_block',
+        )
+    );
+
+    register_block_type(
+        __DIR__ . '/blocks/one-column-video',
+        array(
+            'render_callback' => 'global360blocks_render_one_column_video_block',
         )
     );
 }
@@ -1722,6 +1742,23 @@ function global360blocks_get_frontend_asset_manifest() {
             'style' => array(
                 'handle' => 'global360blocks-comparison-table-style-frontend',
                 'file'   => 'blocks/comparison-table/build/style-index.css',
+            ),
+        ),
+        'global360blocks/patient-reviews-slider'   => array(
+            'style' => array(
+                'handle' => 'global360blocks-patient-reviews-slider-style-frontend',
+                'file'   => 'blocks/patient-reviews-slider/build/style-index.css',
+            ),
+            'script' => array(
+                'handle' => 'global360blocks-patient-reviews-slider-view',
+                'file'   => 'blocks/patient-reviews-slider/build/view.js',
+                'asset'  => 'blocks/patient-reviews-slider/build/view.asset.php',
+            ),
+        ),
+        'global360blocks/one-column-video'   => array(
+            'style' => array(
+                'handle' => 'global360blocks-one-column-video-style-frontend',
+                'file'   => 'blocks/one-column-video/build/style-index.css',
             ),
         ),
     );

@@ -1,0 +1,37 @@
+.one-column-video {
+	background: var(--one-column-video-background, transparent);
+
+	.one-column-video-inner {
+		max-width: 1140px;
+		margin-left: auto;
+		margin-right: auto;
+		padding: 40px 20px;
+	}
+
+	.one-column-video-heading {
+		text-align: center;
+		font-size: clamp(32px, 4vw, 46px);
+		line-height: 1.2;
+	}
+
+	.one-column-video-placeholder {
+		border: 1px dashed rgba(0, 0, 0, 0.25);
+		padding: 24px;
+		text-align: center;
+	}
+
+	.one-column-video-embed {
+		position: relative;
+		width: 100%;
+		padding-top: 56.25%;
+		overflow: hidden;
+		background: #000;
+	}
+
+	.one-column-video-iframe {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+	}
+}

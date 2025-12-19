@@ -1,0 +1,61 @@
+.patient-reviews-slider {
+	background: var(--reviews-background, transparent);
+	padding: clamp(24px, 4vw, 56px);
+
+	.patient-reviews-slider-inner {
+		max-width: 1140px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.patient-reviews-slider-heading {
+		text-align: center;
+		max-width: 780px;
+		margin: 0 auto clamp(20px, 3vw, 40px);
+
+		h2 {
+			margin: 0;
+		}
+	}
+
+	.patient-review-editor-item {
+		background: var(--wp--preset--color--white, #fff);
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		border-radius: 12px;
+		padding: 12px;
+		margin-bottom: 12px;
+	}
+
+	.patient-review-editor-actions {
+		display: flex;
+		justify-content: flex-end;
+		margin-bottom: 8px;
+	}
+
+	.patient-review-editor-text {
+		margin: 0 0 12px;
+	}
+
+	.patient-review-editor-text::before {
+		content: '“';
+	}
+
+	.patient-review-editor-text::after {
+		content: '”';
+	}
+
+	.patient-review-editor-meta {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 6px;
+	}
+
+	.patient-review-editor-name,
+	.patient-review-editor-clinic {
+		margin: 0;
+	}
+
+	.patient-reviews-add {
+		margin-top: 8px;
+	}
+}

@@ -1,0 +1,63 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "global360blocks/patient-reviews-slider",
+	"version": "0.1.0",
+	"title": "Patient Reviews Slider",
+	"category": "360-blocks",
+	"icon": "format-quote",
+	"description": "Slider showing patient reviews (3 per slide).",
+	"keywords": ["reviews", "testimonials", "slider"],
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": ["wide", "full"],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"heading": {
+			"type": "string",
+			"default": ""
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": ""
+		},
+		"reviews": {
+			"type": "array",
+			"default": [
+				{
+					"name": "Jane D.",
+					"clinic": "Patient 360 Clinic",
+					"review": "The team was incredible and answered all of my questions."
+				},
+				{
+					"name": "Michael S.",
+					"clinic": "Patient 360 Clinic",
+					"review": "I felt supported through the entire process and the staff was very professional."
+				},
+				{
+					"name": "Alyssa R.",
+					"clinic": "Patient 360 Clinic",
+					"review": "From the first visit to follow-up care, everything was smooth and organized."
+				}
+			],
+			"items": {
+				"type": "object",
+				"properties": {
+					"name": { "type": "string" },
+					"clinic": { "type": "string" },
+					"review": { "type": "string" }
+				}
+			}
+		}
+	},
+	"textdomain": "global360blocks",
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-index.css",
+	"viewScript": "file:./build/view.js"
+}

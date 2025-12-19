@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "global360blocks/one-column-video",
+	"version": "0.1.0",
+	"title": "One Column Video",
+	"category": "360-blocks",
+	"icon": "video-alt3",
+	"description": "A single column YouTube video block with a heading.",
+	"attributes": {
+		"heading": {
+			"type": "string",
+			"default": ""
+		},
+		"videoUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": ["wide", "full"]
+	},
+	"textdomain": "global360blocks",
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-index.css"
+}

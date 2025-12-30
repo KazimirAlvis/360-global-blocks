@@ -48,7 +48,10 @@ export default function Edit({ attributes, setAttributes }) {
 	return (
 		<div {...blockProps}>
 			<InspectorControls>
-				<PanelBody title={__('Video', 'global360blocks')} initialOpen={true}>
+				<PanelBody
+					title={__('Video', 'global360blocks')}
+					initialOpen={true}
+				>
 					<TextControl
 						label={__('YouTube URL', 'global360blocks')}
 						value={videoUrl}
@@ -93,7 +96,9 @@ export default function Edit({ attributes, setAttributes }) {
 							/>
 						</div>
 					) : (
-						<div className="one-column-video-placeholder">{__('Video preview will appear here', 'global360blocks')}</div>
+						<div className="one-column-video-placeholder">
+							{__('Video preview will appear here', 'global360blocks')}
+						</div>
 					)}
 				</div>
 			</div>

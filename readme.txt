@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.55
+Stable tag: 1.3.56
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,10 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.56 =
+* Added a Yoast SEO editor bridge that surfaces the first Global Blocks image to Gutenberg so the SEO analysis no longer reports "No images appear on this page" when content relies on block imagery instead of core images.
+* Localizes the collector output through the block editor enqueue, dispatches `setContentImage()` in the `yoast-seo/editor` data store, and only loads the helper when Yoast plus a supported post type is in play.
 
 = 1.3.55 =
 * Added the Patient Reviews Slider block with palette-aware background color, brand-accented dots/arrows, rounded review cards that stay white over tinted sections, and working arrow/dot navigation.

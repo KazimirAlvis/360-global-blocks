@@ -59,59 +59,82 @@ export default function Edit({ attributes, setAttributes }) {
 			</InspectorControls>
 			<div {...blockProps}>
 				<div className="patient-reviews-slider-inner">
-				<div className="patient-reviews-slider-heading">
-					<RichText
-						tagName="h2"
-						value={heading}
-						onChange={(value) => setAttributes({ heading: value })}
-						placeholder={__('Add a header…', 'global360blocks')}
-						allowedFormats={['core/bold', 'core/italic', 'core/link', 'core/underline', 'core/text-color']}
-					/>
-				</div>
+					<div className="patient-reviews-slider-heading">
+						<RichText
+							tagName="h2"
+							value={heading}
+							onChange={(value) => setAttributes({ heading: value })}
+							placeholder={__('Add a header…', 'global360blocks')}
+							allowedFormats={[
+								'core/bold',
+								'core/italic',
+								'core/link',
+								'core/underline',
+								'core/text-color',
+							]}
+						/>
+					</div>
 
-				<div className="patient-reviews-slider-editor-list">
-					{reviews.map((item, index) => (
-						<div className="patient-review-editor-item" key={`patient-review-${index}`}>
-							<div className="patient-review-editor-actions">
-								<Button onClick={() => removeReview(index)} isSmall variant="link">
-									{__('Remove', 'global360blocks')}
-								</Button>
-							</div>
+					<div className="patient-reviews-slider-editor-list">
+						{reviews.map((item, index) => (
+							<div
+								className="patient-review-editor-item"
+								key={`patient-review-${index}`}
+							>
+								<div className="patient-review-editor-actions">
+									<Button
+										onClick={() => removeReview(index)}
+										isSmall
+										variant="link"
+									>
+										{__('Remove', 'global360blocks')}
+									</Button>
+								</div>
 
-							<RichText
-								tagName="div"
-								className="patient-review-editor-text"
-								value={item.review}
-								onChange={(value) => updateReview(index, 'review', value)}
-								placeholder={__('Review…', 'global360blocks')}
-								allowedFormats={['core/bold', 'core/italic', 'core/link', 'core/underline', 'core/text-color']}
-							/>
-
-							<div className="patient-review-editor-meta">
 								<RichText
-									tagName="p"
-									className="patient-review-editor-name"
-									value={item.name}
-									onChange={(value) => updateReview(index, 'name', value)}
-									placeholder={__('Patient name', 'global360blocks')}
-									allowedFormats={[]}
+									tagName="div"
+									className="patient-review-editor-text"
+									value={item.review}
+									onChange={(value) => updateReview(index, 'review', value)}
+									placeholder={__('Review…', 'global360blocks')}
+									allowedFormats={[
+										'core/bold',
+										'core/italic',
+										'core/link',
+										'core/underline',
+										'core/text-color',
+									]}
 								/>
-								<RichText
-									tagName="p"
-									className="patient-review-editor-clinic"
-									value={item.clinic}
-									onChange={(value) => updateReview(index, 'clinic', value)}
-									placeholder={__('Clinic name', 'global360blocks')}
-									allowedFormats={[]}
-								/>
-							</div>
-						</div>
-					))}
-				</div>
 
-				<Button onClick={addReview} variant="primary" className="patient-reviews-add">
-					{__('Add review', 'global360blocks')}
-				</Button>
+								<div className="patient-review-editor-meta">
+									<RichText
+										tagName="p"
+										className="patient-review-editor-name"
+										value={item.name}
+										onChange={(value) => updateReview(index, 'name', value)}
+										placeholder={__('Patient name', 'global360blocks')}
+										allowedFormats={[]}
+									/>
+									<RichText
+										tagName="p"
+										className="patient-review-editor-clinic"
+										value={item.clinic}
+										onChange={(value) => updateReview(index, 'clinic', value)}
+										placeholder={__('Clinic name', 'global360blocks')}
+										allowedFormats={[]}
+									/>
+								</div>
+							</div>
+						))}
+					</div>
+
+					<Button
+						onClick={addReview}
+						variant="primary"
+						className="patient-reviews-add"
+					>
+						{__('Add review', 'global360blocks')}
+					</Button>
 				</div>
 			</div>
 		</>

@@ -173,6 +173,16 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.56
+
+-   Added a Yoast SEO editor bridge that surfaces the first Global Blocks image to Gutenberg so Yoast's analysis no longer claims "No images appear on this page" when content relies on block-sourced media.
+-   Localizes the collector output through the block editor enqueue, dispatches `setContentImage()` in the `yoast-seo/editor` store, and only loads the helper when Yoast and a supported post type are present.
+
+### 1.3.55
+
+-   Added the Patient Reviews Slider block with palette-aware background colors, brand-accented dots/arrows, rounded review cards, and synchronized dot/arrow navigation.
+-   Added the One Column Video block (YouTube URL + heading) with a centered 1140px inner width, 46px max heading size, and editable background color.
+
 ### 1.3.54
 
 -   Removed extra padding on `.main-paragraph-con` inside the Video Two Column body.

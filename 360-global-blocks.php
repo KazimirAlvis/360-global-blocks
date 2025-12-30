@@ -16,6 +16,20 @@ define(
 );
 
 require_once plugin_dir_path( __FILE__ ) . 'inc/class-sb-global-blocks-updater.php';
+require_once plugin_dir_path( __FILE__ ) . 'inc/class-global360blocks-image-collector.php';
+
+/**
+ * Load the shared CSS bundle used by questionnaire buttons and hero utilities.
+ *
+ * The helper can be called from any render callback without worrying about
+ * duplicate `wp_enqueue_style()` calls.
+ */
+function global360blocks_enqueue_global_shared_style() {
+    global360blocks_enqueue_style_asset(
+        'global360blocks-shared-global',
+        'assets/css/global-shared.min.css'
+    );
+}
 
 /**
  * Resolve the font family currently assigned to heading typography.
@@ -52,240 +66,409 @@ function global360blocks_get_heading_font_family() {
         }
     }
 
-    if ( ! $font_family && function_exists( 'wp_get_global_settings' ) ) {
-        $maybe_root_font = wp_get_global_settings( array( 'typography', 'fontFamily' ) );
-        if ( is_string( $maybe_root_font ) && '' !== $maybe_root_font ) {
-            $font_family = $maybe_root_font;
-        }
+    if ( '' === $font_family ) {
+        $font_family = '"Montserrat", "Helvetica Neue", Arial, sans-serif';
     }
 
-    if ( ! $font_family ) {
-        $maybe_theme_mod = get_theme_mod( 'typography_heading_font_family', '' );
-        if ( is_string( $maybe_theme_mod ) ) {
-            $font_family = $maybe_theme_mod;
-        }
-    }
-
-    if ( is_string( $font_family ) && preg_match( '/var\(([^)]+)\)/', $font_family, $matches ) ) {
-        $preset_identifier = trim( $matches[1] );
-
-        if ( '' !== $preset_identifier && function_exists( 'wp_get_global_settings' ) ) {
-            $preset_identifier = explode( ',', $preset_identifier )[0];
-            $preset_identifier = trim( $preset_identifier );
-
-            if ( 0 === strpos( $preset_identifier, '--wp--preset--font-family--' ) ) {
-                $slug = str_replace( '--wp--preset--font-family--', '', $preset_identifier );
-                $font_collections = wp_get_global_settings( array( 'typography', 'fontFamilies' ) );
-
-                if ( is_array( $font_collections ) ) {
-                    foreach ( $font_collections as $collection ) {
-                        if ( ! is_array( $collection ) ) {
-                            continue;
-                        }
-
-                        foreach ( $collection as $font_entry ) {
-                            if ( isset( $font_entry['slug'], $font_entry['fontFamily'] ) && $slug === $font_entry['slug'] ) {
-                                $font_family = $font_entry['fontFamily'];
-                                break 2;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    $resolved = is_string( $font_family ) ? $font_family : '';
+    $resolved = $font_family;
 
     return $resolved;
 }
 
 /**
- * Determine the letter-spacing value for the heading font.
+ * Fetch the branded primary color stored in theme/plugin settings.
  *
- * Defaults to normal spacing unless the heading font resolves to Anton, in which case
- * the site uses the requested 0.5px spacing.
+ * Falls back to the shared CSS custom property so block accents always align
+ * with the site's palette even if options are unset.
  *
- * @return string CSS letter-spacing value.
+ * @return string CSS-ready color value.
  */
-function global360blocks_get_heading_letter_spacing_value() {
+function global360blocks_get_brand_primary_color() {
     static $cached = null;
 
     if ( null !== $cached ) {
         return $cached;
     }
 
-    $font_family = strtolower( global360blocks_get_heading_font_family() );
-    $is_anton = false;
-
-    if ( $font_family ) {
-    if ( false !== strpos( $font_family, 'anton' ) || false !== strpos( $font_family, 'wp--preset--font-family--anton' ) ) {
-            $is_anton = true;
-        }
-    }
-
-    $value = $is_anton ? '0.5px' : 'normal';
-
-    $cached = apply_filters( 'global360blocks_heading_letter_spacing_value', $value, $font_family );
-
-    return $cached;
-}
-
-/**
- * Build shared CSS for heading letter-spacing support.
- *
- * @param string $context Either 'frontend' or 'editor'.
- * @return string
- */
-function global360blocks_get_heading_letter_spacing_css( $context = 'frontend' ) {
-    $letter_spacing = global360blocks_get_heading_letter_spacing_value();
-
-    if ( ! $letter_spacing ) {
-        return '';
-    }
-
-    $root_selector = ':root{--heading-letter-spacing:' . esc_attr( $letter_spacing ) . ';}';
-    $heading_selector = ':where(h1,h2,h3,h4,h5,h6){letter-spacing:var(--heading-letter-spacing,normal);}';
-
-    if ( 'editor' === $context ) {
-        $heading_selector = '.editor-styles-wrapper ' . $heading_selector;
-    }
-
-    return $root_selector . $heading_selector;
-}
-
-/**
- * Enqueue heading letter-spacing support on the frontend.
- */
-function global360blocks_enqueue_heading_letter_spacing_styles() {
-    $css = global360blocks_get_heading_letter_spacing_css( 'frontend' );
-
-    if ( '' === $css ) {
-        return;
-    }
-
-    $handle = 'global360blocks-heading-typography';
-
-    if ( ! wp_style_is( $handle, 'enqueued' ) ) {
-        wp_register_style( $handle, false, array(), SB_GLOBAL_BLOCKS_VERSION );
-        wp_enqueue_style( $handle );
-    }
-
-    wp_add_inline_style( $handle, $css );
-}
-add_action( 'wp_enqueue_scripts', 'global360blocks_enqueue_heading_letter_spacing_styles', 1 );
-
-/**
- * Enqueue heading letter-spacing support for the block editor.
- */
-function global360blocks_enqueue_heading_letter_spacing_editor_styles() {
-    $css = global360blocks_get_heading_letter_spacing_css( 'editor' );
-
-    if ( '' === $css ) {
-        return;
-    }
-
-    $handle = 'global360blocks-heading-typography-editor';
-
-    if ( ! wp_style_is( $handle, 'enqueued' ) ) {
-        wp_register_style( $handle, false, array(), SB_GLOBAL_BLOCKS_VERSION );
-        wp_enqueue_style( $handle );
-    }
-
-    wp_add_inline_style( $handle, $css );
-}
-add_action( 'enqueue_block_editor_assets', 'global360blocks_enqueue_heading_letter_spacing_editor_styles', 1 );
-
-/**
- * Attempt to resolve the brand primary color configured in 360 settings.
- *
- * @return string Hex color string or empty string when unavailable.
- */
-function global360blocks_get_brand_primary_color() {
-    static $resolved = null;
-
-    if ( null !== $resolved ) {
-        return $resolved;
-    }
-
-    $resolved = '';
+    $color    = '';
     $settings = get_option( '360_global_settings', array() );
 
     if ( is_array( $settings ) ) {
-        $keys = array(
-            'primary_color',
-            'primaryColor',
+        $candidates = array(
             'brand_primary_color',
             'brandPrimaryColor',
-            'main_color',
-            'mainColor',
-            'primary_hex',
-            'primaryHex',
+            'primary_color',
+            'primaryColor',
         );
 
-        foreach ( $keys as $key ) {
-            if ( empty( $settings[ $key ] ) || ! is_string( $settings[ $key ] ) ) {
+        foreach ( $candidates as $key ) {
+            if ( empty( $settings[ $key ] ) ) {
                 continue;
             }
 
-            $maybe_color = sanitize_hex_color( $settings[ $key ] );
+            $raw   = is_scalar( $settings[ $key ] ) ? (string) $settings[ $key ] : '';
+            $maybe = sanitize_hex_color( $raw );
 
-            if ( $maybe_color ) {
-                $resolved = $maybe_color;
+            if ( $maybe ) {
+                $color = $maybe;
+                break;
+            }
+
+            $fallback = sanitize_text_field( $raw );
+            if ( '' !== $fallback ) {
+                $color = $fallback;
                 break;
             }
         }
     }
 
-    /**
-     * Filter the detected brand color before it is used by frontend blocks.
-     *
-     * @param string $resolved Hex color string or empty string.
-     * @param array  $settings Raw 360 option array.
-     */
-    $resolved = apply_filters( 'global360blocks_brand_primary_color', $resolved, $settings );
+    if ( '' === $color ) {
+        $color = 'var(--cpt360-primary, #007cba)';
+    }
 
-    return $resolved;
+    $cached = apply_filters( 'global360blocks_brand_primary_color', $color );
+
+    return $cached;
+}
+/**
+ * Attempt to resolve a WP_Post object from mixed input.
+ *
+ * @param mixed $post Post object, ID, array, or null.
+ *
+ * @return WP_Post|null
+ */
+function global360blocks_resolve_post_object( $post ) {
+    if ( $post instanceof WP_Post ) {
+        return $post;
+    }
+
+    if ( is_numeric( $post ) ) {
+        $resolved = get_post( (int) $post );
+        return $resolved instanceof WP_Post ? $resolved : null;
+    }
+
+    if ( is_array( $post ) && isset( $post['ID'] ) ) {
+        $resolved = get_post( (int) $post['ID'] );
+        return $resolved instanceof WP_Post ? $resolved : null;
+    }
+
+    if ( isset( $GLOBALS['post'] ) && $GLOBALS['post'] instanceof WP_Post ) {
+        return $GLOBALS['post'];
+    }
+
+    return null;
 }
 
 /**
- * Register shared frontend styles used across multiple blocks.
+ * Retrieve collected block images for a given post.
+ *
+ * @param mixed $post  Post context.
+ * @param int   $limit Maximum number of images.
+ *
+ * @return array[]
  */
-function global360blocks_register_global_shared_styles() {
-    static $registered = false;
+function global360blocks_get_block_images_for_post( $post = null, $limit = 20 ) {
+    return Global360Blocks_Image_Collector::instance()->get_images_for_post( $post, $limit );
+}
 
-    if ( $registered ) {
+/**
+ * Convenience helper for the first available block image.
+ *
+ * @param mixed $post Post context.
+ * @return array|null
+ */
+function global360blocks_get_primary_block_image( $post = null ) {
+    $images = global360blocks_get_block_images_for_post( $post, 1 );
+
+    return empty( $images ) ? null : $images[0];
+}
+
+/**
+ * Determine whether Yoast integrations should run for a given post.
+ *
+ * @param WP_Post $post Post object.
+ * @return bool
+ */
+function global360blocks_post_supports_yoast_images( $post ) {
+    if ( ! $post instanceof WP_Post ) {
+        return false;
+    }
+
+    $allowed_types = apply_filters( 'global360blocks_yoast_supported_post_types', array( 'post', 'page' ) );
+    if ( empty( $allowed_types ) ) {
+        return true;
+    }
+
+    return in_array( $post->post_type, $allowed_types, true );
+}
+
+/**
+ * Extract a WP_Post instance from the available Yoast context.
+ *
+ * @param mixed $context Presentation/context object.
+ * @return WP_Post|null
+ */
+function global360blocks_extract_post_from_yoast_context( $context = null ) {
+    if ( $context && is_object( $context ) ) {
+        if ( isset( $context->model ) && isset( $context->model->object_id ) ) {
+            $post = get_post( (int) $context->model->object_id );
+            if ( $post instanceof WP_Post ) {
+                return $post;
+            }
+        }
+
+        if ( isset( $context->context ) && isset( $context->context->post_id ) ) {
+            $post = get_post( (int) $context->context->post_id );
+            if ( $post instanceof WP_Post ) {
+                return $post;
+            }
+        }
+
+        if ( isset( $context->post_id ) ) {
+            $post = get_post( (int) $context->post_id );
+            if ( $post instanceof WP_Post ) {
+                return $post;
+            }
+        }
+    }
+
+    $post = global360blocks_resolve_post_object( null );
+    return $post instanceof WP_Post ? $post : null;
+}
+
+/**
+ * Determine whether Yoast SEO is active before adding analysis helpers.
+ *
+ * @return bool
+ */
+function global360blocks_is_yoast_active() {
+    return defined( 'WPSEO_VERSION' ) || function_exists( 'wpseo_init' );
+}
+
+/**
+ * Append Global Blocks imagery to Yoast's Open Graph payload.
+ *
+ * @param array $images       Existing image arrays.
+ * @param mixed $presentation Yoast presentation data.
+ * @return array
+ */
+function global360blocks_extend_yoast_opengraph_images( $images, $presentation ) {
+    $post = global360blocks_extract_post_from_yoast_context( $presentation );
+    if ( ! $post || ! global360blocks_post_supports_yoast_images( $post ) ) {
+        return $images;
+    }
+
+    $existing = array();
+    foreach ( (array) $images as $image ) {
+        if ( is_array( $image ) && ! empty( $image['url'] ) ) {
+            $existing[ $image['url'] ] = true;
+        }
+    }
+
+    $limit = apply_filters( 'global360blocks_yoast_opengraph_limit', 5, $post );
+    foreach ( global360blocks_get_block_images_for_post( $post, $limit ) as $image_data ) {
+        if ( empty( $image_data['url'] ) || isset( $existing[ $image_data['url'] ] ) ) {
+            continue;
+        }
+
+        $images[] = array(
+            'url'    => $image_data['url'],
+            'width'  => $image_data['width'] ?: null,
+            'height' => $image_data['height'] ?: null,
+            'alt'    => $image_data['alt'],
+        );
+        $existing[ $image_data['url'] ] = true;
+    }
+
+    return $images;
+}
+
+/**
+ * Supply a fallback Twitter image when Yoast hasn't found one.
+ *
+ * @param string $image_url   Current image URL.
+ * @param mixed  $presentation Yoast presentation data.
+ * @return string
+ */
+function global360blocks_filter_yoast_twitter_image( $image_url, $presentation ) {
+    if ( ! empty( $image_url ) ) {
+        return $image_url;
+    }
+
+    $post = global360blocks_extract_post_from_yoast_context( $presentation );
+    if ( ! $post || ! global360blocks_post_supports_yoast_images( $post ) ) {
+        return $image_url;
+    }
+
+    $image = global360blocks_get_primary_block_image( $post );
+    if ( $image && ! empty( $image['url'] ) ) {
+        return $image['url'];
+    }
+
+    return $image_url;
+}
+
+/**
+ * Provide schema main image ID if Yoast did not resolve one.
+ *
+ * @param int|null $image_id Current image ID.
+ * @return int|null
+ */
+function global360blocks_filter_schema_main_image_id( $image_id ) {
+    if ( $image_id ) {
+        return $image_id;
+    }
+
+    $post = global360blocks_resolve_post_object( null );
+    if ( ! $post || ! global360blocks_post_supports_yoast_images( $post ) ) {
+        return $image_id;
+    }
+
+    $image = global360blocks_get_primary_block_image( $post );
+    if ( $image && ! empty( $image['attachment_id'] ) ) {
+        return (int) $image['attachment_id'];
+    }
+
+    return $image_id;
+}
+
+/**
+ * Provide schema main image URL if Yoast did not resolve one.
+ *
+ * @param string|null $image_url Current image URL.
+ * @return string|null
+ */
+function global360blocks_filter_schema_main_image_url( $image_url ) {
+    if ( ! empty( $image_url ) ) {
+        return $image_url;
+    }
+
+    $post = global360blocks_resolve_post_object( null );
+    if ( ! $post || ! global360blocks_post_supports_yoast_images( $post ) ) {
+        return $image_url;
+    }
+
+    $image = global360blocks_get_primary_block_image( $post );
+    if ( $image && ! empty( $image['url'] ) ) {
+        return $image['url'];
+    }
+
+    return $image_url;
+}
+
+/**
+ * Ensure XML sitemaps include Global Blocks imagery.
+ *
+ * @param array $images  Existing sitemap payload.
+ * @param int   $post_id Post ID being exported.
+ * @return array
+ */
+function global360blocks_filter_sitemap_images( $images, $post_id ) {
+    $post = get_post( (int) $post_id );
+    if ( ! $post || ! global360blocks_post_supports_yoast_images( $post ) ) {
+        return $images;
+    }
+
+    $existing = array();
+    foreach ( (array) $images as $image ) {
+        if ( isset( $image['src'] ) && ! empty( $image['src'] ) ) {
+            $existing[ $image['src'] ] = true;
+        }
+    }
+
+    foreach ( global360blocks_get_block_images_for_post( $post ) as $image_data ) {
+        if ( empty( $image_data['url'] ) || isset( $existing[ $image_data['url'] ] ) ) {
+            continue;
+        }
+
+        $images[] = array(
+            'src'   => $image_data['url'],
+            'alt'   => $image_data['alt'],
+            'title' => '',
+        );
+        $existing[ $image_data['url'] ] = true;
+    }
+
+    return $images;
+}
+
+/**
+ * Register Yoast-facing integrations.
+ */
+function global360blocks_register_yoast_integrations() {
+    if ( ! global360blocks_is_yoast_active() ) {
         return;
     }
 
-    $handle        = 'global360blocks-global-shared-style';
-    $relative_file = 'assets/css/global-shared.min.css';
-    $absolute_path = plugin_dir_path( __FILE__ ) . $relative_file;
-
-    if ( file_exists( $absolute_path ) ) {
-        wp_register_style(
-            $handle,
-            plugins_url( $relative_file, __FILE__ ),
-            array(),
-            filemtime( $absolute_path )
-        );
-    }
-
-    $registered = true;
+    add_filter( 'wpseo_add_opengraph_images', 'global360blocks_extend_yoast_opengraph_images', 10, 2 );
+    add_filter( 'wpseo_twitter_image', 'global360blocks_filter_yoast_twitter_image', 10, 2 );
+    add_filter( 'wpseo_schema_main_image_id', 'global360blocks_filter_schema_main_image_id' );
+    add_filter( 'wpseo_schema_main_image_url', 'global360blocks_filter_schema_main_image_url' );
+    add_filter( 'wpseo_sitemap_urlimages', 'global360blocks_filter_sitemap_images', 10, 2 );
 }
-add_action( 'wp_enqueue_scripts', 'global360blocks_register_global_shared_styles', 1 );
-add_action( 'wp_enqueue_scripts', 'global360blocks_enqueue_global_shared_style', 5 );
+add_action( 'init', 'global360blocks_register_yoast_integrations', 20 );
 
 /**
- * Ensure shared frontend styles are queued when needed.
+ * Surface the primary block image inside the block editor so Yoast can analyze it.
  */
-function global360blocks_enqueue_global_shared_style() {
-    global360blocks_register_global_shared_styles();
-
-    if ( wp_style_is( 'global360blocks-global-shared-style', 'registered' ) ) {
-        wp_enqueue_style( 'global360blocks-global-shared-style' );
+function global360blocks_enqueue_yoast_editor_bridge() {
+    if ( ! is_admin() || ! global360blocks_is_yoast_active() ) {
+        return;
     }
+
+    $screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+    if ( ! $screen || 'post' !== $screen->base ) {
+        return;
+    }
+
+    $post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only context.
+    if ( ! $post_id ) {
+        return;
+    }
+
+    $post = get_post( $post_id );
+    if ( ! $post instanceof WP_Post ) {
+        return;
+    }
+
+    if ( function_exists( 'use_block_editor_for_post_type' ) && ! use_block_editor_for_post_type( $post->post_type ) ) {
+        return;
+    }
+
+    if ( ! global360blocks_post_supports_yoast_images( $post ) ) {
+        return;
+    }
+
+    $image = global360blocks_get_primary_block_image( $post );
+    if ( ! $image || empty( $image['url'] ) ) {
+        return;
+    }
+
+    $handle          = 'global360blocks-yoast-editor-bridge';
+    $relative_script = 'assets/js/yoast-editor-integration.js';
+    $script_path     = plugin_dir_path( __FILE__ ) . $relative_script;
+
+    wp_enqueue_script(
+        $handle,
+        plugins_url( $relative_script, __FILE__ ),
+        array( 'wp-data' ),
+        file_exists( $script_path ) ? filemtime( $script_path ) : SB_GLOBAL_BLOCKS_VERSION,
+        true
+    );
+
+    $payload = array(
+        'postId' => $post->ID,
+        'image'  => array(
+            'url'    => $image['url'],
+            'alt'    => isset( $image['alt'] ) ? sanitize_text_field( $image['alt'] ) : '',
+            'width'  => isset( $image['width'] ) ? (int) $image['width'] : 0,
+            'height' => isset( $image['height'] ) ? (int) $image['height'] : 0,
+        ),
+    );
+
+    wp_localize_script( $handle, 'global360blocksYoastEditorData', $payload );
 }
+add_action( 'enqueue_block_editor_assets', 'global360blocks_enqueue_yoast_editor_bridge' );
 
 /**
  * Wrap common trademark symbols in a superscript span for consistent sizing.

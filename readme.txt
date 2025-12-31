@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.56
+Stable tag: 1.3.57
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,10 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.57 =
+* Added an editor-facing image alt text field to the Two Column block that auto-fills from the media library and renders on the frontend so layout imagery is always descriptive.
+* Video Two Column’s lite YouTube thumbnail now inherits the video title (or block heading) for its `alt` attribute, keeping the autoplay placeholder accessible when the iframe is deferred.
 
 = 1.3.56 =
 * Added a Yoast SEO editor bridge that surfaces the first Global Blocks image to Gutenberg so the SEO analysis no longer reports "No images appear on this page" when content relies on block imagery instead of core images.

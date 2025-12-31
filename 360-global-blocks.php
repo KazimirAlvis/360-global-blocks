@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.56
+ * Version: 1.3.57
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.56' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.57' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -1283,6 +1283,13 @@ function global360blocks_render_video_two_column_block( $attributes, $content ) 
     $video_title = !empty($attributes['videoTitle']) ? wp_kses_post($attributes['videoTitle']) : '';
     $layout = !empty($attributes['layout']) && in_array($attributes['layout'], array('media-left', 'media-right'), true) ? $attributes['layout'] : 'media-left';
     $background_color = ! empty( $attributes['backgroundColor'] ) ? sanitize_hex_color( $attributes['backgroundColor'] ) : '';
+    $video_alt_text = $video_title ? wp_strip_all_tags( $video_title ) : '';
+    if ( ! $video_alt_text && $heading ) {
+        $video_alt_text = wp_strip_all_tags( $heading );
+    }
+    if ( ! $video_alt_text ) {
+        $video_alt_text = __( 'Video thumbnail', 'global360blocks' );
+    }
 
     $background_style = $background_color ? 'background-color: ' . $background_color . ';' : '';
     $wrapper_args = array( 'class' => 'video-two-column-block' );
@@ -1316,7 +1323,7 @@ function global360blocks_render_video_two_column_block( $attributes, $content ) 
 
             $output .= '<div class="video-wrapper lite-yt" data-embed-url="' . esc_url( $embed_url ) . '" data-video-id="' . esc_attr( $youtube_id ) . '" data-title="' . esc_attr( $iframe_title ) . '">';
             if ( $thumbnail_url ) {
-                $output .= '<img class="lite-yt-thumb" src="' . esc_url( $thumbnail_url ) . '" alt="" loading="lazy" decoding="async" />';
+                $output .= '<img class="lite-yt-thumb" src="' . esc_url( $thumbnail_url ) . '" alt="' . esc_attr( $video_alt_text ) . '" loading="lazy" decoding="async" />';
             }
             $output .= '<button type="button" class="lite-yt-play" aria-label="' . esc_attr( $play_label ) . '">';
             $output .= '<span class="lite-yt-play-icon" aria-hidden="true"></span>';
@@ -1651,9 +1658,22 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
     $image_url = !empty($attributes['imageUrl']) ? esc_url($attributes['imageUrl']) : '';
     $heading = !empty($attributes['heading']) ? wp_kses_post($attributes['heading']) : '';
     $legacy_body_text = !empty($attributes['bodyText']) ? wp_kses_post($attributes['bodyText']) : '';
+    $image_id        = isset( $attributes['imageId'] ) ? absint( $attributes['imageId'] ) : 0;
+    $image_alt       = isset( $attributes['imageAlt'] ) ? sanitize_text_field( $attributes['imageAlt'] ) : '';
     $layout          = isset( $attributes['layout'] ) && 'image-right' === $attributes['layout'] ? 'image-right' : 'image-left';
     $background_color = ! empty( $attributes['backgroundColor'] ) ? sanitize_hex_color( $attributes['backgroundColor'] ) : '';
     $heading_color    = ! empty( $attributes['headingColor'] ) ? sanitize_hex_color( $attributes['headingColor'] ) : '';
+
+    if ( ! $image_alt && $image_id ) {
+        $maybe_attachment_alt = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
+        if ( is_string( $maybe_attachment_alt ) && '' !== trim( $maybe_attachment_alt ) ) {
+            $image_alt = sanitize_text_field( $maybe_attachment_alt );
+        }
+    }
+
+    if ( ! $image_alt && $heading ) {
+        $image_alt = wp_strip_all_tags( $heading );
+    }
 
     $background_style = $background_color ? 'background-color: ' . $background_color . ';' : '';
     
@@ -1671,7 +1691,7 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
 
     $image_column = '<div class="two-column-image">';
     if ( $image_url ) {
-        $image_column .= '<img src="' . $image_url . '" alt="" class="column-image" />';
+        $image_column .= '<img src="' . $image_url . '" alt="' . esc_attr( $image_alt ) . '" class="column-image" />';
     }
     $image_column .= '</div>';
 

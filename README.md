@@ -173,6 +173,11 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.57
+
+-   Added an explicit alt-text control to the Two Column block that auto-seeds from the media library and renders on the frontend, keeping layout imagery descriptive instead of shipping empty `alt` attributes.
+-   Ensured Video Two Column lite YouTube thumbnails reuse the video title (or block heading) for their `alt` text so autoplay placeholders meet accessibility expectations.
+
 ### 1.3.56
 
 -   Added a Yoast SEO editor bridge that surfaces the first Global Blocks image to Gutenberg so Yoast's analysis no longer claims "No images appear on this page" when content relies on block-sourced media.

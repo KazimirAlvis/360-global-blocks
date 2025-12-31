@@ -10,7 +10,7 @@ import {
 	PanelColorSettings,
 } from '@wordpress/block-editor';
 import '@wordpress/format-library';
-import { Button, PanelBody, RadioControl } from '@wordpress/components';
+import { Button, PanelBody, RadioControl, TextControl } from '@wordpress/components';
 import { registerBlockType, rawHandler, createBlock } from '@wordpress/blocks';
 import { useSelect, useDispatch } from '@wordpress/data';
 import './style.css';
@@ -21,7 +21,7 @@ const BODY_TEMPLATE = [['core/paragraph', { placeholder: __('Add body content…
 const BODY_ALLOWED_BLOCKS = ['core/paragraph', 'core/list', 'core/heading', 'core/quote'];
 
 const Edit = ({ attributes, setAttributes, clientId }) => {
-	const { imageUrl, imageId, heading, bodyText, layout = 'image-left', backgroundColor, headingColor } = attributes;
+	const { imageUrl, imageId, imageAlt = '', heading, bodyText, layout = 'image-left', backgroundColor, headingColor } = attributes;
 
 	const innerBlocks = useSelect((select) => select('core/block-editor').getBlocks(clientId), [clientId]);
 	const availableColors = useSelect((select) => {
@@ -59,10 +59,27 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 		}
 	}, [hasInnerBlocks, bodyText, replaceInnerBlocks, clientId, setAttributes]);
 
+	const getDefaultAltText = (media) => {
+		if (!media) {
+			return '';
+		}
+
+		const candidates = [
+			typeof media.alt === 'string' ? media.alt : '',
+			typeof media.alt_text === 'string' ? media.alt_text : '',
+			typeof media?.title?.rendered === 'string' ? media.title.rendered : '',
+			typeof media.title === 'string' ? media.title : '',
+		];
+
+		const match = candidates.find((candidate) => candidate && candidate.trim());
+		return match ? match.trim() : '';
+	};
+
 	const onSelectImage = (media) => {
 		setAttributes({
 			imageUrl: media.url,
 			imageId: media.id,
+			imageAlt: getDefaultAltText(media),
 		});
 	};
 
@@ -70,6 +87,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 		setAttributes({
 			imageUrl: '',
 			imageId: 0,
+			imageAlt: '',
 		});
 	};
 
@@ -85,7 +103,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 			{imageUrl ? (
 				<img
 					src={imageUrl}
-					alt=""
+					alt={imageAlt || ''}
 					className="column-image"
 				/>
 			) : (
@@ -129,6 +147,14 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 						)}
 					/>
 				</MediaUploadCheck>
+				{imageUrl && (
+					<TextControl
+						label={__('Alt text', 'global360blocks')}
+						help={__('Describe this image for screen readers.', 'global360blocks')}
+						value={imageAlt}
+						onChange={(value) => setAttributes({ imageAlt: value })}
+					/>
+				)}
 			</div>
 		</div>
 	);

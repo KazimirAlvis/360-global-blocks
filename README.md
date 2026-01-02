@@ -173,6 +173,11 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.58
+
+-   The Two Column block now automatically pulls WordPress media alt text inside the editor and ditches the redundant manual field, so preview copy always mirrors the media library entry.
+-   Server rendering now prefers the attachment alt text (and falls back to the attachment title or block heading), guaranteeing descriptive `alt` copy even if legacy attributes are empty.
+
 ### 1.3.57
 
 -   Added an explicit alt-text control to the Two Column block that auto-seeds from the media library and renders on the frontend, keeping layout imagery descriptive instead of shipping empty `alt` attributes.

@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.57
+Stable tag: 1.3.58
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,10 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.58 =
+* The Two Column block now always mirrors the selected media item's WordPress alt text inside Gutenberg, removing the redundant manual field and keeping preview copy in sync with the media library.
+* Frontend rendering now prefers the attachment alt text (with fallbacks to the attachment title or block heading), so the live markup stays accessible even if legacy attributes are missing.
 
 = 1.3.57 =
 * Added an editor-facing image alt text field to the Two Column block that auto-fills from the media library and renders on the frontend so layout imagery is always descriptive.

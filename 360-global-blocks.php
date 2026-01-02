@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.57
+ * Version: 1.3.58
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.57' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.58' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -1659,16 +1659,27 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
     $heading = !empty($attributes['heading']) ? wp_kses_post($attributes['heading']) : '';
     $legacy_body_text = !empty($attributes['bodyText']) ? wp_kses_post($attributes['bodyText']) : '';
     $image_id        = isset( $attributes['imageId'] ) ? absint( $attributes['imageId'] ) : 0;
-    $image_alt       = isset( $attributes['imageAlt'] ) ? sanitize_text_field( $attributes['imageAlt'] ) : '';
+    $image_alt       = '';
     $layout          = isset( $attributes['layout'] ) && 'image-right' === $attributes['layout'] ? 'image-right' : 'image-left';
     $background_color = ! empty( $attributes['backgroundColor'] ) ? sanitize_hex_color( $attributes['backgroundColor'] ) : '';
     $heading_color    = ! empty( $attributes['headingColor'] ) ? sanitize_hex_color( $attributes['headingColor'] ) : '';
 
-    if ( ! $image_alt && $image_id ) {
+    if ( $image_id ) {
         $maybe_attachment_alt = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
         if ( is_string( $maybe_attachment_alt ) && '' !== trim( $maybe_attachment_alt ) ) {
             $image_alt = sanitize_text_field( $maybe_attachment_alt );
         }
+
+        if ( ! $image_alt ) {
+            $attachment_post = get_post( $image_id );
+            if ( $attachment_post && ! empty( $attachment_post->post_title ) ) {
+                $image_alt = sanitize_text_field( $attachment_post->post_title );
+            }
+        }
+    }
+
+    if ( ! $image_alt && ! empty( $attributes['imageAlt'] ) ) {
+        $image_alt = sanitize_text_field( $attributes['imageAlt'] );
     }
 
     if ( ! $image_alt && $heading ) {

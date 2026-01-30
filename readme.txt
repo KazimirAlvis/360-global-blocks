@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.62
+Stable tag: 1.3.63
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,9 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.63 =
+* Restore the main-list-con wrapper around Two Column block lists so the max-width container and theme styling apply consistently across the editor and frontend renders.
 
 = 1.3.62 =
 * Restore Two Column body content on the frontend by serializing the editor InnerBlocks and prioritizing migrated markup inside the PHP render callback.

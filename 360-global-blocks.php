@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.62
+ * Version: 1.3.63
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.62' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.63' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -1769,6 +1769,19 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
 
     if ( $body_html ) {
         $body_html = global360blocks_filter_two_column_body( $body_html, $heading );
+
+        if ( false !== strpos( $body_html, 'wp-block-list' ) ) {
+            if ( false === strpos( $body_html, 'main-list-con' ) ) {
+                $body_html = '<div class="main-list-con max_width_content">' . $body_html . '</div>';
+            } elseif ( false === strpos( $body_html, 'max_width_content' ) ) {
+                $body_html = preg_replace(
+                    '/(<[^>]*class=["\"])((?:[^"\\]*\s)?main-list-con)([^"\\]*)(["\"][^>]*>)/i',
+                    '$1$2 max_width_content$3$4',
+                    $body_html
+                );
+            }
+        }
+
         $content_column .= '<div class="two-column-body">' . $body_html . '</div>';
     }
 

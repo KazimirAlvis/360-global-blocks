@@ -222,11 +222,13 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 				<div className="two-column-body-field">
 					<span className="two-column-field-label">{__('Body content', 'global360blocks')}</span>
 					<div className="two-column-body">
-						<InnerBlocks
-							allowedBlocks={BODY_ALLOWED_BLOCKS}
-							template={BODY_TEMPLATE}
-							templateLock={false}
-						/>
+						<div className="main-list-con max_width_content">
+							<InnerBlocks
+								allowedBlocks={BODY_ALLOWED_BLOCKS}
+								template={BODY_TEMPLATE}
+								templateLock={false}
+							/>
+						</div>
 					</div>
 				</div>
 

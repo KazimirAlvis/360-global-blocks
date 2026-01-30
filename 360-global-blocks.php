@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.58
+ * Version: 1.3.59
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.58' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.59' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -1655,14 +1655,22 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
     $global_settings = get_option('360_global_settings', []);
     $assess_id = isset($global_settings['assessment_id']) ? $global_settings['assessment_id'] : '';
     
-    $image_url = !empty($attributes['imageUrl']) ? esc_url($attributes['imageUrl']) : '';
-    $heading = !empty($attributes['heading']) ? wp_kses_post($attributes['heading']) : '';
-    $legacy_body_text = !empty($attributes['bodyText']) ? wp_kses_post($attributes['bodyText']) : '';
-    $image_id        = isset( $attributes['imageId'] ) ? absint( $attributes['imageId'] ) : 0;
-    $image_alt       = '';
-    $layout          = isset( $attributes['layout'] ) && 'image-right' === $attributes['layout'] ? 'image-right' : 'image-left';
+    $raw_image_url    = ! empty( $attributes['imageUrl'] ) ? esc_url_raw( $attributes['imageUrl'] ) : '';
+    $heading          = ! empty( $attributes['heading'] ) ? wp_kses_post( $attributes['heading'] ) : '';
+    $legacy_body_text = ! empty( $attributes['bodyText'] ) ? wp_kses_post( $attributes['bodyText'] ) : '';
+    $image_id         = isset( $attributes['imageId'] ) ? absint( $attributes['imageId'] ) : 0;
+    $image_alt        = '';
+    $layout           = isset( $attributes['layout'] ) && 'image-right' === $attributes['layout'] ? 'image-right' : 'image-left';
     $background_color = ! empty( $attributes['backgroundColor'] ) ? sanitize_hex_color( $attributes['backgroundColor'] ) : '';
     $heading_color    = ! empty( $attributes['headingColor'] ) ? sanitize_hex_color( $attributes['headingColor'] ) : '';
+
+    if ( ! $image_id && $raw_image_url ) {
+        // Backfill legacy entries that may only have stored a URL.
+        $resolved_id = attachment_url_to_postid( $raw_image_url );
+        if ( $resolved_id ) {
+            $image_id = $resolved_id;
+        }
+    }
 
     if ( $image_id ) {
         $maybe_attachment_alt = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
@@ -1701,9 +1709,29 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
     $output .= '<div class="two-column-container layout-' . esc_attr( $layout ) . '">';
 
     $image_column = '<div class="two-column-image">';
-    if ( $image_url ) {
-        $image_column .= '<img src="' . $image_url . '" alt="' . esc_attr( $image_alt ) . '" class="column-image" />';
+    $image_html   = '';
+
+    if ( $image_id ) {
+        $image_html = wp_get_attachment_image(
+            $image_id,
+            'full',
+            false,
+            array(
+                'class'         => 'column-image',
+                'alt'           => $image_alt,
+                'loading'       => 'eager',
+                'fetchpriority' => 'high',
+                'decoding'      => 'async',
+                // Encourage responsive delivery while prioritising the hero LCP element.
+                'sizes'         => '(max-width: 781px) 100vw, 50vw',
+            )
+        );
     }
+
+    if ( $image_html ) {
+        $image_column .= $image_html;
+    }
+
     $image_column .= '</div>';
 
     $content_column = '<div class="two-column-content"' . ( $background_style ? ' style="' . esc_attr( $background_style ) . '"' : '' ) . '>';

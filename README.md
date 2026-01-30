@@ -173,6 +173,11 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.59
+
+-   Converted the Two Column block to a dynamic render that outputs `wp_get_attachment_image()` markup, so WordPress now generates responsive `srcset`/`sizes` attributes directly from the stored attachment ID.
+-   Added Largest Contentful Paint hints (`loading="eager"`, `fetchpriority="high"`, `decoding="async"`) plus a mobile-first `sizes` rule to prioritize the hero image while keeping it responsive.
+
 ### 1.3.58
 
 -   The Two Column block now automatically pulls WordPress media alt text inside the editor and ditches the redundant manual field, so preview copy always mirrors the media library entry.

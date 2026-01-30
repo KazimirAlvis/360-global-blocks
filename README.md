@@ -173,6 +173,11 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.61
+
+-   Preserve legacy HTML when migrating Two Column body copy to InnerBlocks by falling back to a core HTML block, so existing list wrappers and custom classes remain intact.
+-   Allow core HTML blocks inside the editor body area to keep bespoke layouts editable without stripping structural markup.
+
 ### 1.3.60
 
 -   Added an opt-in "High priority image" toggle to the Two Column block so authors can selectively elevate hero imagery with `loading="eager"` and `fetchpriority="high"` while keeping the default lazy behaviour intact for most layouts.

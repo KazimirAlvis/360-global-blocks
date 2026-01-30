@@ -19,7 +19,7 @@ import './editor.css';
 
 const BODY_TEMPLATE = [['core/paragraph', { placeholder: __('Add body content…', 'global360blocks') }]];
 
-const BODY_ALLOWED_BLOCKS = ['core/paragraph', 'core/list', 'core/heading', 'core/quote'];
+const BODY_ALLOWED_BLOCKS = ['core/paragraph', 'core/list', 'core/heading', 'core/quote', 'core/html'];
 
 const stripTags = (value = '') => (typeof value === 'string' ? value.replace(/<[^>]*>?/gm, '') : '');
 
@@ -49,7 +49,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 			const parsedBlocks = rawHandler({ HTML: bodyText });
 			let nextBlocks = parsedBlocks.length
 				? parsedBlocks
-				: [createBlock('core/paragraph', { content: bodyText })];
+				: [createBlock('core/html', { content: bodyText })];
 
 			if (
 				parsedBlocks.length > 1 &&

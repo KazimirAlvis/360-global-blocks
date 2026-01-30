@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.61
+ * Version: 1.3.62
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.61' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.62' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -1745,19 +1745,29 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
         $content_column .= '<h2 class="two-column-heading"' . $heading_style_attr . '>' . $heading . '</h2>';
     }
     $body_html = '';
-    if (is_string($content) && trim($content) !== '') {
-        $body_html = trim($content);
-    } elseif (is_object($block) && property_exists($block, 'inner_blocks') && !empty($block->inner_blocks)) {
-        foreach ($block->inner_blocks as $inner_block) {
-            if (is_object($inner_block) && method_exists($inner_block, 'render')) {
-                $body_html .= $inner_block->render();
-            }
-        }
-    } elseif (!empty($legacy_body_text)) {
-        $body_html = wpautop($legacy_body_text);
+
+    if ( ! empty( $legacy_body_text ) ) {
+        $has_markup = false !== strpos( $legacy_body_text, '<' );
+        $body_html  = $has_markup ? $legacy_body_text : wpautop( $legacy_body_text );
     }
 
-    if ($body_html) {
+    if ( ! $body_html && is_string( $content ) && trim( $content ) !== '' ) {
+        $body_html = trim( function_exists( 'do_blocks' ) ? do_blocks( $content ) : $content );
+    }
+
+    if ( ! $body_html && is_object( $block ) && property_exists( $block, 'inner_blocks' ) && ! empty( $block->inner_blocks ) ) {
+        foreach ( $block->inner_blocks as $inner_block ) {
+            if ( is_object( $inner_block ) ) {
+                if ( method_exists( $inner_block, 'render' ) ) {
+                    $body_html .= $inner_block->render();
+                } elseif ( property_exists( $inner_block, 'parsed_block' ) && function_exists( 'render_block' ) ) {
+                    $body_html .= render_block( $inner_block->parsed_block );
+                }
+            }
+        }
+    }
+
+    if ( $body_html ) {
         $body_html = global360blocks_filter_two_column_body( $body_html, $heading );
         $content_column .= '<div class="two-column-body">' . $body_html . '</div>';
     }

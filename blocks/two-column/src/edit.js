@@ -11,7 +11,7 @@ import {
 } from '@wordpress/block-editor';
 import '@wordpress/format-library';
 import { Button, PanelBody, RadioControl, ToggleControl } from '@wordpress/components';
-import { registerBlockType, rawHandler, createBlock } from '@wordpress/blocks';
+import { registerBlockType, rawHandler, createBlock, serialize } from '@wordpress/blocks';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { decodeEntities } from '@wordpress/html-entities';
 import './style.css';
@@ -51,6 +51,14 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 				? parsedBlocks
 				: [createBlock('core/html', { content: bodyText })];
 
+			const containsUnsupportedMarkup = parsedBlocks.some(
+				(block) => !block?.name || block?.name === 'core/freeform'
+			);
+
+			if (parsedBlocks.length && containsUnsupportedMarkup) {
+				nextBlocks = [createBlock('core/html', { content: bodyText })];
+			}
+
 			if (
 				parsedBlocks.length > 1 &&
 				parsedBlocks.every(
@@ -68,9 +76,16 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 			}
 
 			replaceInnerBlocks(clientId, nextBlocks, false);
-			setAttributes({ bodyText: '' });
 		}
 	}, [hasInnerBlocks, bodyText, replaceInnerBlocks, clientId, setAttributes]);
+
+	useEffect(() => {
+		const serialized = serialize(innerBlocks);
+		const normalizedBody = bodyText || '';
+		if (serialized !== normalizedBody) {
+			setAttributes({ bodyText: serialized });
+		}
+	}, [innerBlocks, bodyText, setAttributes]);
 
 	const onSelectImage = (media) => {
 		setAttributes({
@@ -274,7 +289,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 };
 
 // Dynamic block – frontend rendering happens in PHP for responsive images.
-const Save = () => null;
+const Save = () => <InnerBlocks.Content />;
 
 registerBlockType('global360blocks/two-column', {
 	edit: Edit,

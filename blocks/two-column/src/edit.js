@@ -10,7 +10,7 @@ import {
 	PanelColorSettings,
 } from '@wordpress/block-editor';
 import '@wordpress/format-library';
-import { Button, PanelBody, RadioControl } from '@wordpress/components';
+import { Button, PanelBody, RadioControl, ToggleControl } from '@wordpress/components';
 import { registerBlockType, rawHandler, createBlock } from '@wordpress/blocks';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { decodeEntities } from '@wordpress/html-entities';
@@ -24,7 +24,16 @@ const BODY_ALLOWED_BLOCKS = ['core/paragraph', 'core/list', 'core/heading', 'cor
 const stripTags = (value = '') => (typeof value === 'string' ? value.replace(/<[^>]*>?/gm, '') : '');
 
 const Edit = ({ attributes, setAttributes, clientId }) => {
-	const { imageUrl, imageId, heading, bodyText, layout = 'image-left', backgroundColor, headingColor } = attributes;
+	const {
+		imageUrl,
+		imageId,
+		heading,
+		bodyText,
+		layout = 'image-left',
+		backgroundColor,
+		headingColor,
+		highPriorityImage = false,
+	} = attributes;
 
 	const innerBlocks = useSelect((select) => select('core/block-editor').getBlocks(clientId), [clientId]);
 	const availableColors = useSelect((select) => {
@@ -130,6 +139,8 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 					src={previewUrl}
 					alt={derivedImageAlt}
 					className="column-image"
+					loading={highPriorityImage ? 'eager' : 'lazy'}
+					fetchpriority={highPriorityImage ? 'high' : 'auto'}
 				/>
 			) : (
 				<div className="image-placeholder">
@@ -226,6 +237,13 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 							{ label: __('Image on left', 'global360blocks'), value: 'image-left' },
 							{ label: __('Image on right', 'global360blocks'), value: 'image-right' },
 						]}
+					/>
+				</PanelBody>
+				<PanelBody title={__('Performance', 'global360blocks')}>
+					<ToggleControl
+						label={__('High priority image (hero / above the fold)', 'global360blocks')}
+						checked={!!highPriorityImage}
+						onChange={(value) => setAttributes({ highPriorityImage: !!value })}
 					/>
 				</PanelBody>
 				<PanelColorSettings

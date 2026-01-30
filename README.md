@@ -173,6 +173,11 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.60
+
+-   Added an opt-in "High priority image" toggle to the Two Column block so authors can selectively elevate hero imagery with `loading="eager"` and `fetchpriority="high"` while keeping the default lazy behaviour intact for most layouts.
+-   Synced the block editor preview and PHP render callback to honour the new toggle, ensuring responsive markup still flows through `wp_get_attachment_image()` with consistent fallbacks.
+
 ### 1.3.59
 
 -   Converted the Two Column block to a dynamic render that outputs `wp_get_attachment_image()` markup, so WordPress now generates responsive `srcset`/`sizes` attributes directly from the stored attachment ID.

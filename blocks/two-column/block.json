@@ -40,6 +40,10 @@
 		"headingColor": {
 			"type": "string",
 			"default": ""
+		},
+		"highPriorityImage": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"example": {},

@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.59
+ * Version: 1.3.60
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.59' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.60' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -1660,9 +1660,10 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
     $legacy_body_text = ! empty( $attributes['bodyText'] ) ? wp_kses_post( $attributes['bodyText'] ) : '';
     $image_id         = isset( $attributes['imageId'] ) ? absint( $attributes['imageId'] ) : 0;
     $image_alt        = '';
-    $layout           = isset( $attributes['layout'] ) && 'image-right' === $attributes['layout'] ? 'image-right' : 'image-left';
-    $background_color = ! empty( $attributes['backgroundColor'] ) ? sanitize_hex_color( $attributes['backgroundColor'] ) : '';
-    $heading_color    = ! empty( $attributes['headingColor'] ) ? sanitize_hex_color( $attributes['headingColor'] ) : '';
+    $layout            = isset( $attributes['layout'] ) && 'image-right' === $attributes['layout'] ? 'image-right' : 'image-left';
+    $background_color  = ! empty( $attributes['backgroundColor'] ) ? sanitize_hex_color( $attributes['backgroundColor'] ) : '';
+    $heading_color     = ! empty( $attributes['headingColor'] ) ? sanitize_hex_color( $attributes['headingColor'] ) : '';
+    $high_priority_img = ! empty( $attributes['highPriorityImage'] );
 
     if ( ! $image_id && $raw_image_url ) {
         // Backfill legacy entries that may only have stored a URL.
@@ -1711,6 +1712,9 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
     $image_column = '<div class="two-column-image">';
     $image_html   = '';
 
+    $loading_attr       = $high_priority_img ? 'eager' : 'lazy';
+    $fetchpriority_attr = $high_priority_img ? 'high' : 'auto';
+
     if ( $image_id ) {
         $image_html = wp_get_attachment_image(
             $image_id,
@@ -1719,10 +1723,10 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
             array(
                 'class'         => 'column-image',
                 'alt'           => $image_alt,
-                'loading'       => 'eager',
-                'fetchpriority' => 'high',
+                'loading'       => $loading_attr,
+                'fetchpriority' => $fetchpriority_attr,
                 'decoding'      => 'async',
-                // Encourage responsive delivery while prioritising the hero LCP element.
+                // Maintain responsive delivery; authors opt into LCP prioritisation per block.
                 'sizes'         => '(max-width: 781px) 100vw, 50vw',
             )
         );

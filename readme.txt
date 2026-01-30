@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.59
+Stable tag: 1.3.60
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,10 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.60 =
+* Added an opt-in "High priority image" toggle to the Two Column block so editors can selectively ship `loading="eager"` and `fetchpriority="high"` on above-the-fold imagery while keeping the block lazy by default.
+* Synced the Gutenberg preview and PHP render callback to honour the new toggle, preserving the responsive `wp_get_attachment_image()` markup and existing fallbacks.
 
 = 1.3.59 =
 * Converted the Two Column block to a dynamic render that emits `wp_get_attachment_image()` markup so WordPress automatically supplies responsive `srcset`/`sizes` data from the saved attachment ID.

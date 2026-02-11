@@ -9,7 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! function_exists( 'global360blocks_render_comparison_table_block' ) ) {
 	function global360blocks_render_comparison_table_block( $attributes ) {
-		global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/comparison-table' );
+		global360blocks_enqueue_block_assets_from_manifest(
+			'global360blocks/comparison-table',
+			array( 'style' => false )
+		);
 
 		$heading           = isset( $attributes['heading'] ) ? $attributes['heading'] : '';
 		$subheading        = isset( $attributes['subheading'] ) ? $attributes['subheading'] : '';

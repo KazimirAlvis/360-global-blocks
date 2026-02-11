@@ -37,7 +37,6 @@
 		"lock": false
 	},
 	"editorScript": "file:./build/index.js",
-	"viewScript": "file:./build/view.js",
 	"editorStyle": "file:./build/index.css",
 	"style": "file:./build/style-index.css"
 }

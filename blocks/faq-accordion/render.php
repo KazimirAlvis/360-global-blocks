@@ -9,7 +9,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! function_exists( 'global360blocks_render_faq_accordion_block' ) ) {
 	function global360blocks_render_faq_accordion_block( $attributes ) {
-		global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/faq-accordion' );
+		global360blocks_enqueue_block_assets_from_manifest(
+			'global360blocks/faq-accordion',
+			array( 'style' => false )
+		);
 
 		$heading = isset( $attributes['heading'] ) ? $attributes['heading'] : '';
 		$items   = isset( $attributes['items'] ) && is_array( $attributes['items'] ) ? $attributes['items'] : array();

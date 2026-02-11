@@ -47,12 +47,10 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 	useEffect(() => {
 		if (!hasInnerBlocks && bodyText) {
 			const parsedBlocks = rawHandler({ HTML: bodyText });
-			let nextBlocks = parsedBlocks.length
-				? parsedBlocks
-				: [createBlock('core/html', { content: bodyText })];
+			let nextBlocks = parsedBlocks.length ? parsedBlocks : [createBlock('core/html', { content: bodyText })];
 
 			const containsUnsupportedMarkup = parsedBlocks.some(
-				(block) => !block?.name || block?.name === 'core/freeform'
+				(block) => !block?.name || block?.name === 'core/freeform',
 			);
 
 			if (parsedBlocks.length && containsUnsupportedMarkup) {
@@ -62,7 +60,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 			if (
 				parsedBlocks.length > 1 &&
 				parsedBlocks.every(
-					(block) => block?.name === 'core/paragraph' && typeof block?.attributes?.content === 'string'
+					(block) => block?.name === 'core/paragraph' && typeof block?.attributes?.content === 'string',
 				)
 			) {
 				const combinedContent = parsedBlocks

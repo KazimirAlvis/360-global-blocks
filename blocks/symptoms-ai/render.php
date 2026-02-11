@@ -3,7 +3,10 @@
  * Render callback for Symptoms AI block
  */
 function global360blocks_render_symptoms_ai_block($attributes) {
-    global360blocks_enqueue_block_assets_from_manifest('global360blocks/symptoms-ai');
+    global360blocks_enqueue_block_assets_from_manifest(
+        'global360blocks/symptoms-ai',
+        array( 'style' => false )
+    );
 
     $symptom = isset($attributes['symptom']) ? esc_html($attributes['symptom']) : '';
     $ai_content = isset($attributes['ai_content']) ? $attributes['ai_content'] : '';

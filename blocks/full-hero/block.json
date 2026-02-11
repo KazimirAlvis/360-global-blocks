@@ -28,6 +28,10 @@
 		"assessmentId": {
 			"type": "string",
 			"default": ""
+		},
+		"highPriorityImage": {
+			"type": "boolean",
+			"default": true
 		}
 	},
 	"supports": {
@@ -42,6 +46,5 @@
 	},
 	"editorScript": "file:./build/index.js",
 	"editorStyle": "file:./build/index.css",
-	"style": "file:./build/style-index.css",
-	"viewScript": "file:./build/view.js"
+	"style": "file:./build/style-index.css"
 }

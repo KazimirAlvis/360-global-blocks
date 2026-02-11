@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.63
+ * Version: 1.3.64
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.63' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.64' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -914,7 +914,10 @@ if ( ! function_exists( 'global360blocks_get_youtube_thumbnail_url' ) ) {
 }
 
 function global360blocks_render_popular_practices_block( $attributes, $content ) {
-    global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/popular-practices' );
+    global360blocks_enqueue_block_assets_from_manifest(
+        'global360blocks/popular-practices',
+        array( 'style' => false )
+    );
 
     $title = !empty($attributes['title']) ? esc_html($attributes['title']) : 'Popular Practices';
     $clinics = !empty($attributes['clinics']) ? $attributes['clinics'] : [];
@@ -1059,7 +1062,10 @@ function global360blocks_render_popular_practices_block( $attributes, $content )
 
 // Render callback for Two Column CTA block
 function global360blocks_render_two_column_cta_block($attributes, $content) {
-    global360blocks_enqueue_block_assets_from_manifest('global360blocks/two-column-cta');
+    global360blocks_enqueue_block_assets_from_manifest(
+        'global360blocks/two-column-cta',
+        array( 'style' => false )
+    );
 
     $heading = !empty($attributes['heading']) ? wp_kses_post($attributes['heading']) : '';
     $button_text = !empty($attributes['buttonText']) ? esc_html($attributes['buttonText']) : 'Take Risk Assessment Now';
@@ -1097,79 +1103,89 @@ function global360blocks_render_two_column_cta_block($attributes, $content) {
 
 // Render callback for Two Column Slider block
 function global360blocks_render_two_column_slider_block($attributes) {
-    global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/two-column-slider' );
+    global360blocks_enqueue_block_assets_from_manifest(
+        'global360blocks/two-column-slider',
+        array( 'style' => false )
+    );
 
-    $slides = !empty($attributes['slides']) ? $attributes['slides'] : [];
-    $autoplay = !empty($attributes['autoplay']) ? $attributes['autoplay'] : true;
-    $autoplay_speed = !empty($attributes['autoplaySpeed']) ? intval($attributes['autoplaySpeed']) : 5000;
-    $show_dots = !empty($attributes['showDots']) ? $attributes['showDots'] : true;
-    $show_arrows = !empty($attributes['showArrows']) ? $attributes['showArrows'] : true;
-        if (empty($slides)) {
+    $slides        = ! empty( $attributes['slides'] ) ? $attributes['slides'] : array();
+    $autoplay      = ! empty( $attributes['autoplay'] ) ? $attributes['autoplay'] : true;
+    $autoplay_speed = ! empty( $attributes['autoplaySpeed'] ) ? intval( $attributes['autoplaySpeed'] ) : 5000;
+    $show_dots     = ! empty( $attributes['showDots'] ) ? $attributes['showDots'] : true;
+    $show_arrows   = ! empty( $attributes['showArrows'] ) ? $attributes['showArrows'] : true;
+
+    if ( empty( $slides ) ) {
         return '';
     }
-    
-    $output = '<div class="wp-block-global360blocks-two-column-slider">';
+
+    $output  = '<div class="wp-block-global360blocks-two-column-slider">';
     $output .= '<div class="two-column-slider-container">';
     $output .= '<div class="slider-wrapper">';
-    
-    if ($show_arrows) {
+
+    if ( $show_arrows ) {
         $output .= '<button class="slider-nav prev" onclick="previousSlide(this)" aria-label="Previous slide"><span class="screen-reader-text">Previous slide</span></button>';
     }
-    
-    $output .= '<div class="slide-container" data-current-slide="0" data-autoplay="' . ($autoplay ? 'true' : 'false') . '">';
+
+    $output .= '<div class="slide-container" data-current-slide="0" data-autoplay="' . ( $autoplay ? 'true' : 'false' ) . '">';
     $output .= '<div class="slide-track">';
 
-    foreach ($slides as $index => $slide) {
-    $heading       = !empty($slide['heading']) ? wp_kses_post($slide['heading']) : '';
-    $text          = !empty($slide['text']) ? wp_kses_post($slide['text']) : '';
-    $image_url     = !empty($slide['imageUrl']) ? esc_url($slide['imageUrl']) : '';
-    $background    = !empty($slide['contentBackground']) ? sanitize_text_field($slide['contentBackground']) : '';
-        $heading_attr  = !empty($slide['heading']) ? esc_attr( wp_strip_all_tags( $slide['heading'] ) ) : '';
-		
-        $active_class      = $index === 0 ? 'active' : '';
-        $image_state_class = $image_url ? 'has-image' : 'no-image';
-    $content_style     = $background ? ' style="background-color: ' . esc_attr( $background ) . ';"' : '';
+    foreach ( $slides as $index => $slide ) {
+        $heading      = ! empty( $slide['heading'] ) ? wp_kses_post( $slide['heading'] ) : '';
+        $text         = ! empty( $slide['text'] ) ? wp_kses_post( $slide['text'] ) : '';
+        $image_url    = ! empty( $slide['imageUrl'] ) ? esc_url( $slide['imageUrl'] ) : '';
+        $background   = ! empty( $slide['contentBackground'] ) ? sanitize_text_field( $slide['contentBackground'] ) : '';
+        $heading_attr = ! empty( $slide['heading'] ) ? esc_attr( wp_strip_all_tags( $slide['heading'] ) ) : '';
 
-    $output .= '<div class="slide ' . $active_class . ' ' . $image_state_class . '" data-slide="' . $index . '">';
-    $output .= '<div class="slide-content"' . $content_style . '>';
-        $output .= '<span class="slide-index">' . ($index + 1) . '</span>';
-        if ($heading) {
+        $active_class      = 0 === $index ? 'active' : '';
+        $image_state_class = $image_url ? 'has-image' : 'no-image';
+        $content_style     = $background ? ' style="background-color: ' . esc_attr( $background ) . ';"' : '';
+
+        $output .= '<div class="slide ' . $active_class . ' ' . $image_state_class . '" data-slide="' . $index . '">';
+        $output .= '<div class="slide-content"' . $content_style . '>';
+        $output .= '<span class="slide-index">' . ( $index + 1 ) . '</span>';
+
+        if ( $heading ) {
             $output .= '<h2 class="slide-heading">' . $heading . '</h2>';
         }
-        if ($text) {
+
+        if ( $text ) {
             $output .= '<p class="slide-text">' . $text . '</p>';
         }
+
         $output .= '</div>';
-        
-        if ($image_url) {
+
+        if ( $image_url ) {
             $output .= '<div class="slide-image">';
             $output .= '<img src="' . $image_url . '" alt="' . $heading_attr . '" />';
             $output .= '</div>';
         }
+
         $output .= '</div>';
     }
 
     $output .= '</div>';
     $output .= '</div>';
-    
-    if ($show_arrows) {
+
+    if ( $show_arrows ) {
         $output .= '<button class="slider-nav next" onclick="nextSlide(this)" aria-label="Next slide"><span class="screen-reader-text">Next slide</span></button>';
     }
-    
+
     $output .= '</div>';
-    
-    if ($show_dots) {
+
+    if ( $show_dots ) {
         $output .= '<div class="slider-dots">';
-        foreach ($slides as $index => $slide) {
-            $active_class = $index === 0 ? 'active' : '';
-            $output .= '<button class="dot ' . $active_class . '" onclick="goToSlide(this, ' . $index . ')" aria-label="Go to slide ' . ($index + 1) . '"></button>';
+
+        foreach ( $slides as $index => $slide ) {
+            $active_class = 0 === $index ? 'active' : '';
+            $output      .= '<button class="dot ' . $active_class . '" onclick="goToSlide(this, ' . $index . ')" aria-label="Go to slide ' . ( $index + 1 ) . '"></button>';
         }
+
         $output .= '</div>';
     }
-    
+
     $output .= '</div>';
     $output .= '</div>'; // Close .wp-block-global360blocks-two-column-slider
-    
+
     return $output;
 }
 
@@ -1203,7 +1219,10 @@ if (!function_exists('global360blocks_is_youtube_url')) {
 
 // Render callback for Latest Articles block
 function global360blocks_render_latest_articles_block( $attributes, $content ) {
-    global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/latest-articles' );
+    global360blocks_enqueue_block_assets_from_manifest(
+        'global360blocks/latest-articles',
+        array( 'style' => false )
+    );
 
     $number_of_posts = isset($attributes['numberOfPosts']) ? (int) $attributes['numberOfPosts'] : 3;
     $show_excerpt = isset($attributes['showExcerpt']) ? $attributes['showExcerpt'] : true;
@@ -1271,7 +1290,10 @@ function global360blocks_render_latest_articles_block( $attributes, $content ) {
 
 // Render callback for Video Two Column block
 function global360blocks_render_video_two_column_block( $attributes, $content ) {
-    global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/video-two-column' );
+    global360blocks_enqueue_block_assets_from_manifest(
+        'global360blocks/video-two-column',
+        array( 'style' => false )
+    );
 
     // Get Assessment ID from theme settings (360_global_settings array)
     $global_settings = get_option('360_global_settings', []);
@@ -1383,7 +1405,10 @@ function global360blocks_render_video_two_column_block( $attributes, $content ) 
 
 // Render callback for Find Doctor block
 function global360blocks_render_find_doctor_block($attributes) {
-    global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/find-doctor' );
+    global360blocks_enqueue_block_assets_from_manifest(
+        'global360blocks/find-doctor',
+        array( 'style' => false )
+    );
 
     $image_url = isset($attributes['imageUrl']) ? $attributes['imageUrl'] : '';
     $image_id = isset($attributes['imageId']) ? $attributes['imageId'] : 0;
@@ -1598,7 +1623,10 @@ function global360blocks_register_blocks() {
 
 // Render callback for CTA block
 function global360blocks_render_cta_block( $attributes, $content ) {
-    global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/cta' );
+    global360blocks_enqueue_block_assets_from_manifest(
+        'global360blocks/cta',
+        array( 'style' => false )
+    );
 
     // Get Assessment ID from theme settings (360_global_settings array)
     $global_settings = get_option('360_global_settings', []);
@@ -1648,7 +1676,10 @@ if ( ! function_exists( 'global360blocks_filter_two_column_body' ) ) {
 
 // Render callback for Two Column block
 function global360blocks_render_two_column_block( $attributes, $content, $block = null ) {
-    global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/two-column' );
+    global360blocks_enqueue_block_assets_from_manifest(
+        'global360blocks/two-column',
+        array( 'style' => false )
+    );
     global360blocks_enqueue_global_shared_style();
 
     // Get Assessment ID from theme settings (360_global_settings array)
@@ -1798,14 +1829,20 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
 }
 
 function global360blocks_render_two_column_text_block( $attributes, $content ) {
-    global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/two-column-text' );
+    global360blocks_enqueue_block_assets_from_manifest(
+        'global360blocks/two-column-text',
+        array( 'style' => false )
+    );
 
     return $content;
 }
 
 // Render callback for Full Page Hero block
 function global360blocks_render_full_hero_block( $attributes, $content ) {
-    global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/full-hero' );
+    global360blocks_enqueue_block_assets_from_manifest(
+        'global360blocks/full-hero',
+        array( 'style' => false )
+    );
 
     // Get Assessment ID from theme settings (360_global_settings array)
     $global_settings = get_option('360_global_settings', []);
@@ -1836,9 +1873,17 @@ function global360blocks_render_full_hero_block( $attributes, $content ) {
         $raw_image = $attributes['bgImageUrl'];
     }
 
-    $image_url = $raw_image ? esc_url( $raw_image ) : '';
-    $heading = !empty($attributes['heading']) ? wp_kses_post($attributes['heading']) : '';
-    $subheading = !empty($attributes['subheading']) ? wp_kses_post($attributes['subheading']) : '';
+    $image_url            = $raw_image ? esc_url( $raw_image ) : '';
+    $heading              = ! empty( $attributes['heading'] ) ? wp_kses_post( $attributes['heading'] ) : '';
+    $subheading           = ! empty( $attributes['subheading'] ) ? wp_kses_post( $attributes['subheading'] ) : '';
+    $high_priority_image  = array_key_exists( 'highPriorityImage', $attributes ) ? (bool) $attributes['highPriorityImage'] : true;
+
+    if ( ! $image_alt && $heading ) {
+        $image_alt = wp_strip_all_tags( $heading );
+    }
+
+    $loading_attr       = $high_priority_image ? 'eager' : 'lazy';
+    $fetchpriority_attr = $high_priority_image ? 'high' : 'auto';
 
     $heading = global360blocks_wrap_trademark_symbols( $heading );
     $subheading = global360blocks_wrap_trademark_symbols( $subheading );
@@ -1852,8 +1897,8 @@ function global360blocks_render_full_hero_block( $attributes, $content ) {
             false,
             array(
                 'class'         => 'full-hero-image',
-                'fetchpriority' => 'high',
-                'loading'       => 'eager',
+                'fetchpriority' => $fetchpriority_attr,
+                'loading'       => $loading_attr,
                 'decoding'      => 'async',
             )
         );
@@ -1862,7 +1907,13 @@ function global360blocks_render_full_hero_block( $attributes, $content ) {
             $output .= $image_html;
         } else {
             // Fallback for when wp_get_attachment_image fails but we have a URL
-            $output .= sprintf( '<img src="%s" alt="%s" class="full-hero-image" fetchpriority="high" loading="eager" decoding="async" />', esc_url( $image_url ), esc_attr( $image_alt ) );
+            $output .= sprintf(
+                '<img src="%s" alt="%s" class="full-hero-image" fetchpriority="%s" loading="%s" decoding="async" />',
+                esc_url( $image_url ),
+                esc_attr( $image_alt ),
+                esc_attr( $fetchpriority_attr ),
+                esc_attr( $loading_attr )
+            );
         }
         $output .= '</div>';
     }
@@ -1881,7 +1932,10 @@ function global360blocks_render_full_hero_block( $attributes, $content ) {
 
 // Render callback for Simple Hero block
 function global360blocks_render_simple_hero_block( $attributes, $content ) {
-    global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/test-hero' );
+    global360blocks_enqueue_block_assets_from_manifest(
+        'global360blocks/test-hero',
+        array( 'style' => false )
+    );
 
     $page_title = get_the_title();
     
@@ -1977,11 +2031,6 @@ function global360blocks_get_frontend_asset_manifest() {
             'style' => array(
                 'handle' => 'info-cards-block-css',
                 'file'   => 'blocks/info-cards/build/style-index.css',
-            ),
-            'script' => array(
-                'handle' => 'info-cards-block-frontend',
-                'file'   => 'blocks/info-cards/build/view.js',
-                'asset'  => 'blocks/info-cards/build/view.asset.php',
             ),
         ),
         'global360blocks/popular-practices' => array(
@@ -2125,7 +2174,15 @@ function global360blocks_enqueue_script_asset( $handle, $relative_file, $asset_f
  *
  * @param string $block_name Block name from the manifest.
  */
-function global360blocks_enqueue_block_assets_from_manifest( $block_name ) {
+function global360blocks_enqueue_block_assets_from_manifest( $block_name, $args = array() ) {
+    $args = wp_parse_args(
+        $args,
+        array(
+            'style'  => true,
+            'script' => true,
+        )
+    );
+
     $manifest = global360blocks_get_frontend_asset_manifest();
 
     if ( ! isset( $manifest[ $block_name ] ) ) {
@@ -2134,13 +2191,13 @@ function global360blocks_enqueue_block_assets_from_manifest( $block_name ) {
 
     $definition = $manifest[ $block_name ];
 
-    if ( isset( $definition['style'] ) ) {
+    if ( $args['style'] && isset( $definition['style'] ) ) {
         $style = $definition['style'];
         $deps  = isset( $style['deps'] ) ? $style['deps'] : array();
         global360blocks_enqueue_style_asset( $style['handle'], $style['file'], $deps );
     }
 
-    if ( isset( $definition['script'] ) ) {
+    if ( $args['script'] && isset( $definition['script'] ) ) {
         $script     = $definition['script'];
         $asset_file = isset( $script['asset'] ) ? $script['asset'] : null;
         global360blocks_enqueue_script_asset( $script['handle'], $script['file'], $asset_file );
@@ -2148,13 +2205,186 @@ function global360blocks_enqueue_block_assets_from_manifest( $block_name ) {
 }
 
 /**
- * Force-load asset bundles for templates that rely on plugin CSS without blocks.
+ * Recursively inspect a parsed block to record matching block usage.
+ *
+ * @param array  $block                Parsed block array.
+ * @param array  $found                Map of discovered block names.
+ * @param array  $targets              Target block names to detect.
+ * @param array  $seen_reusable        Collection of already inspected reusable block IDs.
+ * @param array  $seen_template_parts  Collection of already inspected template-part identifiers.
+ * @param array  $inspected_content    Collection of already hashed content strings.
  */
-function global360blocks_enqueue_forced_assets() {
-    if ( is_admin() ) {
+function global360blocks_track_block_usage( $block, array &$found, array $targets, array &$seen_reusable, array &$seen_template_parts, array &$inspected_content ) {
+    if ( empty( $targets ) || ! is_array( $block ) ) {
         return;
     }
 
+    $block_name = isset( $block['blockName'] ) ? $block['blockName'] : null;
+
+    if ( $block_name && in_array( $block_name, $targets, true ) ) {
+        $found[ $block_name ] = true;
+    }
+
+    if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+        foreach ( $block['innerBlocks'] as $inner_block ) {
+            global360blocks_track_block_usage( $inner_block, $found, $targets, $seen_reusable, $seen_template_parts, $inspected_content );
+
+            if ( count( $found ) === count( $targets ) ) {
+                return;
+            }
+        }
+    }
+
+    if ( 'core/block' === $block_name && ! empty( $block['attrs']['ref'] ) ) {
+        $ref = absint( $block['attrs']['ref'] );
+
+        if ( $ref && empty( $seen_reusable[ $ref ] ) ) {
+            $seen_reusable[ $ref ] = true;
+            $reusable              = get_post( $ref );
+
+            if ( $reusable instanceof WP_Post && 'wp_block' === $reusable->post_type ) {
+                global360blocks_collect_block_usage_from_content( $reusable->post_content, $found, $targets, $seen_reusable, $seen_template_parts, $inspected_content );
+            }
+        }
+    }
+
+    if ( 'core/template-part' === $block_name && ! empty( $block['attrs']['slug'] ) && function_exists( 'get_block_template' ) ) {
+        $slug  = $block['attrs']['slug'];
+        $theme = ! empty( $block['attrs']['theme'] ) ? $block['attrs']['theme'] : wp_get_theme()->get_stylesheet();
+
+        $template_part_id = $theme . '//' . $slug;
+
+        if ( empty( $seen_template_parts[ $template_part_id ] ) ) {
+            $seen_template_parts[ $template_part_id ] = true;
+            $template_part                           = get_block_template( $template_part_id, 'wp_template_part' );
+
+            if ( $template_part && ! empty( $template_part->content ) ) {
+                global360blocks_collect_block_usage_from_content( $template_part->content, $found, $targets, $seen_reusable, $seen_template_parts, $inspected_content );
+            }
+        }
+    }
+}
+
+/**
+ * Parse block markup and record occurrences of target blocks.
+ *
+ * @param string $content             Block content to inspect.
+ * @param array  $found               Map of discovered block names.
+ * @param array  $targets             Target block names to detect.
+ * @param array  $seen_reusable       Collection of already inspected reusable block IDs.
+ * @param array  $seen_template_parts Collection of already inspected template-part identifiers.
+ * @param array  $inspected_content   Collection of already hashed content strings.
+ */
+function global360blocks_collect_block_usage_from_content( $content, array &$found, array $targets, array &$seen_reusable, array &$seen_template_parts, array &$inspected_content ) {
+    if ( empty( $targets ) || ! function_exists( 'parse_blocks' ) ) {
+        return;
+    }
+
+    if ( ! is_string( $content ) ) {
+        $content = (string) $content;
+    }
+
+    $content = trim( $content );
+
+    if ( '' === $content ) {
+        return;
+    }
+
+    $hash = md5( $content );
+
+    if ( isset( $inspected_content[ $hash ] ) ) {
+        return;
+    }
+
+    $inspected_content[ $hash ] = true;
+
+    $blocks = parse_blocks( $content );
+
+    if ( empty( $blocks ) ) {
+        return;
+    }
+
+    foreach ( $blocks as $block ) {
+        global360blocks_track_block_usage( $block, $found, $targets, $seen_reusable, $seen_template_parts, $inspected_content );
+
+        if ( count( $found ) === count( $targets ) ) {
+            return;
+        }
+    }
+}
+
+/**
+ * Determine which target blocks are present on the current request.
+ *
+ * @param array $targets Target block names.
+ *
+ * @return array List of discovered block names.
+ */
+function global360blocks_discover_blocks_for_request( array $targets ) {
+    $targets = array_values( array_unique( array_filter( $targets ) ) );
+
+    if ( empty( $targets ) ) {
+        return array();
+    }
+
+    $found               = array();
+    $seen_reusable       = array();
+    $seen_template_parts = array();
+    $inspected_content   = array();
+
+    $inspect = static function( $content ) use ( &$found, $targets, &$seen_reusable, &$seen_template_parts, &$inspected_content ) {
+        if ( count( $found ) === count( $targets ) ) {
+            return;
+        }
+
+        global360blocks_collect_block_usage_from_content( $content, $found, $targets, $seen_reusable, $seen_template_parts, $inspected_content );
+    };
+
+    $queried = get_queried_object();
+
+    if ( $queried instanceof WP_Post ) {
+        $inspect( $queried->post_content );
+    }
+
+    if ( count( $found ) !== count( $targets ) ) {
+        global $wp_query;
+
+        if ( $wp_query instanceof WP_Query && ! empty( $wp_query->posts ) ) {
+            foreach ( $wp_query->posts as $post_obj ) {
+                if ( $post_obj instanceof WP_Post ) {
+                    $inspect( $post_obj->post_content );
+                } elseif ( is_object( $post_obj ) && isset( $post_obj->post_content ) ) {
+                    $inspect( $post_obj->post_content );
+                }
+
+                if ( count( $found ) === count( $targets ) ) {
+                    break;
+                }
+            }
+        }
+    }
+
+    if ( count( $found ) !== count( $targets ) && isset( $GLOBALS['wp_current_template'] ) ) {
+        $maybe_template = $GLOBALS['wp_current_template'];
+
+        if ( $maybe_template instanceof WP_Block_Template && ! empty( $maybe_template->content ) ) {
+            $inspect( $maybe_template->content );
+        }
+    }
+
+    if ( count( $found ) !== count( $targets ) && isset( $GLOBALS['_wp_current_template_content'] ) && is_string( $GLOBALS['_wp_current_template_content'] ) ) {
+        $inspect( $GLOBALS['_wp_current_template_content'] );
+    }
+
+    return array_keys( $found );
+}
+
+/**
+ * Identify blocks that should always load, even without matching markup.
+ *
+ * @return array Forced block names.
+ */
+function global360blocks_get_forced_blocks_for_request() {
     $block_names = array();
 
     $posts_page_id   = (int) get_option( 'page_for_posts' );
@@ -2163,8 +2393,10 @@ function global360blocks_enqueue_forced_assets() {
 
     if ( ! $is_blog_context ) {
         $queried = get_queried_object();
+
         if ( $queried instanceof WP_Post && 'page' === $queried->post_type ) {
             $slug = $queried->post_name;
+
             if ( in_array( $slug, array( 'blog', 'news' ), true ) ) {
                 $is_blog_context = true;
             }
@@ -2175,17 +2407,55 @@ function global360blocks_enqueue_forced_assets() {
         $block_names[] = 'global360blocks/latest-articles';
     }
 
-    $block_names = apply_filters( 'global360blocks_forced_asset_blocks', $block_names );
+    return apply_filters( 'global360blocks_forced_asset_blocks', array_unique( $block_names ) );
+}
 
-    if ( empty( $block_names ) ) {
+/**
+ * Conditionally enqueue block styles for the current request.
+ */
+function global360blocks_enqueue_block_styles_for_request() {
+    if ( is_admin() ) {
         return;
     }
 
-    foreach ( array_unique( $block_names ) as $block_name ) {
-        global360blocks_enqueue_block_assets_from_manifest( $block_name );
+    $manifest = global360blocks_get_frontend_asset_manifest();
+
+    if ( empty( $manifest ) ) {
+        return;
+    }
+
+    $style_targets = array();
+
+    foreach ( $manifest as $block_name => $definition ) {
+        if ( isset( $definition['style'] ) ) {
+            $style_targets[] = $block_name;
+        }
+    }
+
+    $style_targets = array_unique( $style_targets );
+
+    if ( empty( $style_targets ) ) {
+        return;
+    }
+
+    $discovered_blocks = global360blocks_discover_blocks_for_request( $style_targets );
+    $forced_blocks      = global360blocks_get_forced_blocks_for_request();
+
+    $blocks_to_enqueue = array_unique( array_merge( $discovered_blocks, $forced_blocks ) );
+
+    if ( empty( $blocks_to_enqueue ) ) {
+        return;
+    }
+
+    foreach ( $blocks_to_enqueue as $block_name ) {
+        if ( isset( $manifest[ $block_name ]['style'] ) ) {
+            $style = $manifest[ $block_name ]['style'];
+            $deps  = isset( $style['deps'] ) ? $style['deps'] : array();
+            global360blocks_enqueue_style_asset( $style['handle'], $style['file'], $deps );
+        }
     }
 }
-add_action( 'wp_enqueue_scripts', 'global360blocks_enqueue_forced_assets', 30 );
+add_action( 'wp_enqueue_scripts', 'global360blocks_enqueue_block_styles_for_request', 20 );
 
 /**
  * Preload critical hero block assets before markup renders to avoid FOUC.
@@ -2212,7 +2482,13 @@ function global360blocks_preload_above_fold_assets() {
 
     foreach ( $critical_blocks as $block_name ) {
         if ( has_block( $block_name, $post_id ) ) {
-            global360blocks_enqueue_block_assets_from_manifest( $block_name );
+            global360blocks_enqueue_block_assets_from_manifest(
+                $block_name,
+                array(
+                    'style'  => false,
+                    'script' => true,
+                )
+            );
         }
     }
 }

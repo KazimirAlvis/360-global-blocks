@@ -13,6 +13,5 @@
 	},
 	"textdomain": "global360blocks",
 	"editorScript": "file:./build/index.js",
-	"editorStyle": "file:./build/index.css",
-	"viewScript": "file:./build/view.js"
+	"editorStyle": "file:./build/index.css"
 }

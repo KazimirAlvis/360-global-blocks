@@ -1,10 +1,16 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls, MediaUpload, MediaUploadCheck, RichText } from '@wordpress/block-editor';
-import { PanelBody, Button } from '@wordpress/components';
+import { PanelBody, Button, ToggleControl } from '@wordpress/components';
 import './editor.css';
 
 export default function Edit({ attributes, setAttributes }) {
-	const { bgImageUrl, bgImageId, heading, subheading } = attributes;
+	const {
+		bgImageUrl,
+		bgImageId,
+		heading,
+		subheading,
+		highPriorityImage = true,
+	} = attributes;
 	const blockProps = useBlockProps({ className: 'full-hero-block' });
 
 	return (
@@ -28,6 +34,11 @@ export default function Edit({ attributes, setAttributes }) {
 							)}
 						/>
 					</MediaUploadCheck>
+					<ToggleControl
+						label={__('High priority image (hero / above the fold)', 'global360blocks')}
+						checked={!!highPriorityImage}
+						onChange={(value) => setAttributes({ highPriorityImage: !!value })}
+					/>
 				</PanelBody>
 			</InspectorControls>
 			<div {...blockProps}>
@@ -36,6 +47,8 @@ export default function Edit({ attributes, setAttributes }) {
 						<img
 							src={bgImageUrl}
 							alt=""
+							loading={highPriorityImage ? 'eager' : 'lazy'}
+							fetchpriority={highPriorityImage ? 'high' : 'auto'}
 							decoding="async"
 						/>
 					</div>

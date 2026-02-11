@@ -60,7 +60,10 @@ if ( ! function_exists( 'global360blocks_one_column_video_get_youtube_embed_url'
 
 if ( ! function_exists( 'global360blocks_render_one_column_video_block' ) ) {
 	function global360blocks_render_one_column_video_block( $attributes ) {
-		global360blocks_enqueue_block_assets_from_manifest( 'global360blocks/one-column-video' );
+		global360blocks_enqueue_block_assets_from_manifest(
+			'global360blocks/one-column-video',
+			array( 'style' => false )
+		);
 
 		$heading = isset( $attributes['heading'] ) ? (string) $attributes['heading'] : '';
 		$video_url = isset( $attributes['videoUrl'] ) ? (string) $attributes['videoUrl'] : '';

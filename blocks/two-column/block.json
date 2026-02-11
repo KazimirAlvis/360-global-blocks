@@ -53,6 +53,5 @@
 	"textdomain": "global360blocks",
 	"render": "global360blocks_render_two_column_block",
 	"editorScript": "file:./build/index.js",
-	"editorStyle": "file:./build/index.css",
-	"viewScript": "file:./build/view.js"
+	"editorStyle": "file:./build/index.css"
 }

@@ -40,7 +40,16 @@ const normalizeRows = (rows, columnCount, targetLength) => {
 };
 
 const Edit = ({ attributes, setAttributes }) => {
-	const { heading, subheading, columns = [], rows = [], footnote, backgroundColor } = attributes;
+	const {
+		heading,
+		subheading,
+		columns = [],
+		rows = [],
+		footnote,
+		backgroundColor,
+		headerBackgroundColor,
+		headerFontSize,
+	} = attributes;
 	const columnCount = columns.length ? columns.length : DEFAULT_COLUMNS;
 	const rowCount = rows.length ? rows.length : DEFAULT_ROWS;
 
@@ -67,9 +76,15 @@ const Edit = ({ attributes, setAttributes }) => {
 		setAttributes({ rows: nextRows });
 	}, [rows, columnCount, setAttributes]);
 
+	const blockStyle = {
+		...(backgroundColor ? { '--comparison-background': backgroundColor } : null),
+		...(headerBackgroundColor ? { '--comparison-header-background': headerBackgroundColor } : null),
+		...(headerFontSize ? { '--comparison-header-font-size': `${headerFontSize}px` } : null),
+	};
+
 	const blockProps = useBlockProps({
 		className: 'comparison-table-block',
-		style: backgroundColor ? { '--comparison-background': backgroundColor } : undefined,
+		style: Object.keys(blockStyle).length ? blockStyle : undefined,
 	});
 
 	const handleColumnCountChange = (nextCount) => {
@@ -127,6 +142,16 @@ const Edit = ({ attributes, setAttributes }) => {
 						help={__('Add or remove comparison rows as needed.', 'global360blocks')}
 					/>
 				</PanelBody>
+				<PanelBody title={__('Header Row', 'global360blocks')} initialOpen={false}>
+					<RangeControl
+						label={__('Header font size (px)', 'global360blocks')}
+						min={12}
+						max={28}
+						value={headerFontSize || 0}
+						onChange={(value) => setAttributes({ headerFontSize: value || 0 })}
+						help={__('Controls the font size of the top header row (column headings).', 'global360blocks')}
+					/>
+				</PanelBody>
 				<PanelColorSettings
 					title={__('Background color', 'global360blocks')}
 					initialOpen={false}
@@ -135,6 +160,11 @@ const Edit = ({ attributes, setAttributes }) => {
 							label: __('Background color', 'global360blocks'),
 							value: backgroundColor,
 							onChange: (value) => setAttributes({ backgroundColor: value || '' }),
+						},
+						{
+							label: __('Header row background', 'global360blocks'),
+							value: headerBackgroundColor,
+							onChange: (value) => setAttributes({ headerBackgroundColor: value || '' }),
 						},
 					]}
 				/>

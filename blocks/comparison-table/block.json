@@ -60,6 +60,14 @@
 		"backgroundColor": {
 			"type": "string",
 			"default": ""
+		},
+		"headerBackgroundColor": {
+			"type": "string",
+			"default": ""
+		},
+		"headerFontSize": {
+			"type": "number",
+			"default": 0
 		}
 	},
 	"textdomain": "global360blocks",

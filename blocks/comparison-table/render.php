@@ -20,6 +20,8 @@ if ( ! function_exists( 'global360blocks_render_comparison_table_block' ) ) {
 		$rows              = isset( $attributes['rows'] ) && is_array( $attributes['rows'] ) ? $attributes['rows'] : array();
 		$footnote          = isset( $attributes['footnote'] ) ? $attributes['footnote'] : '';
 		$background_color  = isset( $attributes['backgroundColor'] ) ? $attributes['backgroundColor'] : '';
+		$header_background = isset( $attributes['headerBackgroundColor'] ) ? $attributes['headerBackgroundColor'] : '';
+		$header_font_size  = isset( $attributes['headerFontSize'] ) ? $attributes['headerFontSize'] : 0;
 
 		$column_count = count( $columns );
 
@@ -67,6 +69,7 @@ if ( ! function_exists( 'global360blocks_render_comparison_table_block' ) ) {
 		$style_tokens = array();
 		$brand_color  = global360blocks_get_brand_primary_color();
 		$bg_color     = sanitize_hex_color( $background_color );
+		$header_bg    = sanitize_hex_color( $header_background );
 
 		if ( $brand_color ) {
 			$style_tokens[] = '--comparison-accent:' . esc_attr( $brand_color );
@@ -76,8 +79,24 @@ if ( ! function_exists( 'global360blocks_render_comparison_table_block' ) ) {
 			$bg_color = sanitize_text_field( $background_color );
 		}
 
+		if ( $header_background && ! $header_bg ) {
+			$header_bg = sanitize_text_field( $header_background );
+		}
+
 		if ( $bg_color ) {
 			$style_tokens[] = '--comparison-background:' . esc_attr( $bg_color );
+		}
+
+		if ( $header_bg ) {
+			$style_tokens[] = '--comparison-header-background:' . esc_attr( $header_bg );
+		}
+
+		if ( is_numeric( $header_font_size ) ) {
+			$header_font_size = (int) $header_font_size;
+		}
+
+		if ( $header_font_size > 0 ) {
+			$style_tokens[] = '--comparison-header-font-size:' . esc_attr( $header_font_size ) . 'px';
 		}
 
 		if ( ! empty( $style_tokens ) ) {

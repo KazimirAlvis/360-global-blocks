@@ -56,9 +56,9 @@
 	}
 
 	thead th {
-		background: var(--comparison-accent, var(--cpt360-primary, #007cba));
+		background: var(--comparison-header-background, var(--comparison-accent, var(--cpt360-primary, #007cba)));
 		color: #fff;
-		font-size: 0.95rem;
+		font-size: var(--comparison-header-font-size, 0.95rem);
 		font-weight: 600;
 		padding: 18px 20px;
 		border-right: 1px solid rgba(255, 255, 255, 0.35);

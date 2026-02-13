@@ -29,13 +29,13 @@
 	background-color: var(--two-column-text-column-bg, #f6f7fb);
 	display: flex;
 	flex-direction: column;
-	gap: 18px;
+	gap: 14px;
 }
 
 .two-column-text .two-column-text__column-inner {
 	display: flex;
 	flex-direction: column;
-	gap: 18px;
+	gap: 14px;
 	max-width: 645px;
 	width: 100%;
 	margin: 0 auto;
@@ -58,7 +58,20 @@
 
 .two-column-text .two-column-text__column-inner ul,
 .two-column-text .two-column-text__column-inner ol {
+	margin: 0;
 	padding-left: 1.25em;
+}
+
+.two-column-text .two-column-text__column-inner li {
+	margin: 0;
+}
+
+.two-column-text .two-column-text__column-inner li + li {
+	margin-top: 0.65rem;
+}
+
+.two-column-text .two-column-text__column-inner li p {
+	margin: 0;
 }
 
 @media (max-width: 1024px) {

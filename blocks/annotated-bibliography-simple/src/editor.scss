@@ -1,0 +1,20 @@
+.annotated-bibliography {
+	width: 100%;
+	max-width: 1140px;
+	margin-left: auto;
+	margin-right: auto;
+
+	.bibliography-heading {
+		margin-top: 0;
+		text-align: center;
+	}
+
+	.bibliography-list {
+		p {
+			margin: 0 0 0px;
+			padding-left: 0;
+			text-indent: 0;
+			font-size: 12px;
+		}
+	}
+}

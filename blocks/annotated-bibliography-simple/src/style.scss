@@ -1,0 +1,61 @@
+.annotated-bibliography {
+	width: 100%;
+	max-width: 1140px;
+	margin: 60px auto 0;
+	padding-top: 0;
+	border-top: 0;
+
+	.bibliography-heading {
+		margin: 0 0 30px;
+		text-align: center;
+	}
+
+	.bibliography-list {
+		font-size: 1rem;
+		line-height: 1.8;
+		color: inherit;
+
+		p {
+			margin: 0 0 0px;
+			padding-left: 0;
+			text-indent: 0;
+			font-size: 12px;
+		}
+
+		p:last-child {
+			margin-bottom: 0;
+		}
+
+		a {
+			color: #1a73e8;
+			text-decoration: underline;
+			text-decoration-thickness: 1px;
+			text-underline-offset: 2px;
+			overflow-wrap: anywhere;
+			word-break: break-word;
+			hyphens: auto;
+		}
+
+		a:hover {
+			text-decoration: none;
+		}
+
+		a:focus-visible {
+			outline: 2px solid currentColor;
+			outline-offset: 2px;
+			border-radius: 2px;
+		}
+	}
+}
+
+@media (max-width: 600px) {
+	.annotated-bibliography {
+		margin-top: 40px;
+
+		.bibliography-heading {
+			margin-bottom: 22px;
+		}
+
+		// Paragraph spacing/indent is already neutralized above.
+	}
+}

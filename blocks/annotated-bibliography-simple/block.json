@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "global360blocks/annotated-bibliography-simple",
+	"title": "Annotated Bibliography (Simple)",
+	"category": "360-blocks",
+	"icon": "book",
+	"description": "A simple annotated bibliography block with an editable heading and a single rich text field.",
+	"keywords": ["bibliography", "annotated", "references"],
+	"textdomain": "global360blocks",
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": ["wide", "full"]
+	},
+	"attributes": {
+		"heading": {
+			"type": "string",
+			"source": "html",
+			"selector": "h2.bibliography-heading",
+			"default": "Annotated Bibliography"
+		},
+		"content": {
+			"type": "string",
+			"source": "html",
+			"selector": ".bibliography-list",
+			"default": ""
+		}
+	},
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"style": "file:./build/style-index.css"
+}

@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.66
+ * Version: 1.3.67
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.66' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.67' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -1619,6 +1619,8 @@ function global360blocks_register_blocks() {
             'render_callback' => 'global360blocks_render_one_column_video_block',
         )
     );
+
+    register_block_type( __DIR__ . '/blocks/annotated-bibliography-simple' );
 }
 
 // Render callback for CTA block

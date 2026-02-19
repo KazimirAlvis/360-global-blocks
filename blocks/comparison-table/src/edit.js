@@ -27,8 +27,8 @@ const createRow = (columnCount) => ({
 const normalizeRows = (rows, columnCount, targetLength) => {
 	const safeRows = Array.isArray(rows)
 		? rows.map((row = {}) => ({
-			cells: resizeArray(row.cells, columnCount, ''),
-		}))
+				cells: resizeArray(row.cells, columnCount, ''),
+		  }))
 		: [];
 
 	const trimmed = safeRows.slice(0, targetLength);
@@ -142,7 +142,10 @@ const Edit = ({ attributes, setAttributes }) => {
 						help={__('Add or remove comparison rows as needed.', 'global360blocks')}
 					/>
 				</PanelBody>
-				<PanelBody title={__('Header Row', 'global360blocks')} initialOpen={false}>
+				<PanelBody
+					title={__('Header Row', 'global360blocks')}
+					initialOpen={false}
+				>
 					<RangeControl
 						label={__('Header font size (px)', 'global360blocks')}
 						min={12}
@@ -178,7 +181,7 @@ const Edit = ({ attributes, setAttributes }) => {
 							value={heading}
 							onChange={(value) => setAttributes({ heading: value })}
 							placeholder={__('Comparison title…', 'global360blocks')}
-							allowedFormats={["core/bold", "core/italic", "core/link", "core/text-color"]}
+							allowedFormats={['core/bold', 'core/italic', 'core/link', 'core/text-color']}
 						/>
 						<RichText
 							tagName="p"
@@ -186,47 +189,60 @@ const Edit = ({ attributes, setAttributes }) => {
 							value={subheading}
 							onChange={(value) => setAttributes({ subheading: value })}
 							placeholder={__('Optional supporting copy…', 'global360blocks')}
-							allowedFormats={["core/bold", "core/italic", "core/link", "core/text-color"]}
+							allowedFormats={['core/bold', 'core/italic', 'core/link', 'core/text-color']}
 						/>
 					</div>
 
 					<div className="comparison-table-wrapper">
-						<table className="comparison-table" role="grid">
-						<thead>
-							<tr>
-								{columnLabels.map((label, index) => (
-									<th key={`column-${index}`}>
-										<RichText
-											tagName="span"
-											className="comparison-table-cell-input"
-											value={label}
-											onChange={(value) => updateColumn(index, value)}
-											placeholder={__('Column heading', 'global360blocks')}
-											allowedFormats={["core/bold", "core/italic", "core/link", "core/text-color"]}
-										/>
-									</th>
-								))}
-							</tr>
-						</thead>
-						<tbody>
-							{tableRows.map((row, rowIndex) => (
-								<tr key={`row-${rowIndex}`}>
-									{columnLabels.map((_, columnIndex) => (
-										<td key={`cell-${rowIndex}-${columnIndex}`}>
+						<table
+							className="comparison-table"
+							role="grid"
+						>
+							<thead>
+								<tr>
+									{columnLabels.map((label, index) => (
+										<th key={`column-${index}`}>
 											<RichText
 												tagName="span"
 												className="comparison-table-cell-input"
-												value={row.cells?.[columnIndex] || ''}
-												onChange={(value) => updateCell(rowIndex, columnIndex, value)}
-												placeholder={__('Cell detail', 'global360blocks')}
-												allowedFormats={["core/bold", "core/italic", "core/link", "core/text-color"]}
+												value={label}
+												onChange={(value) => updateColumn(index, value)}
+												placeholder={__('Column heading', 'global360blocks')}
+												allowedFormats={[
+													'core/bold',
+													'core/italic',
+													'core/link',
+													'core/text-color',
+												]}
 											/>
-										</td>
+										</th>
 									))}
 								</tr>
-							))}
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								{tableRows.map((row, rowIndex) => (
+									<tr key={`row-${rowIndex}`}>
+										{columnLabels.map((_, columnIndex) => (
+											<td key={`cell-${rowIndex}-${columnIndex}`}>
+												<RichText
+													tagName="span"
+													className="comparison-table-cell-input"
+													value={row.cells?.[columnIndex] || ''}
+													onChange={(value) => updateCell(rowIndex, columnIndex, value)}
+													placeholder={__('Cell detail', 'global360blocks')}
+													allowedFormats={[
+														'core/bold',
+														'core/italic',
+														'core/link',
+														'core/text-color',
+													]}
+												/>
+											</td>
+										))}
+									</tr>
+								))}
+							</tbody>
+						</table>
 					</div>
 
 					<RichText
@@ -235,7 +251,7 @@ const Edit = ({ attributes, setAttributes }) => {
 						value={footnote}
 						onChange={(value) => setAttributes({ footnote: value })}
 						placeholder={__('Optional footnote or disclaimer…', 'global360blocks')}
-						allowedFormats={["core/bold", "core/italic", "core/link", "core/text-color"]}
+						allowedFormats={['core/bold', 'core/italic', 'core/link', 'core/text-color']}
 					/>
 				</div>
 			</div>

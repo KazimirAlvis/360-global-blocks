@@ -146,15 +146,9 @@ function linkifyHtmlPreservingAnchors(html) {
 function Edit({ attributes, setAttributes }) {
 	const { heading, content } = attributes;
 
-	const onChangeHeading = useCallback(
-		(nextValue) => setAttributes({ heading: nextValue }),
-		[setAttributes]
-	);
+	const onChangeHeading = useCallback((nextValue) => setAttributes({ heading: nextValue }), [setAttributes]);
 
-	const onChangeContent = useCallback(
-		(nextValue) => setAttributes({ content: nextValue }),
-		[setAttributes]
-	);
+	const onChangeContent = useCallback((nextValue) => setAttributes({ content: nextValue }), [setAttributes]);
 
 	const blockProps = useBlockProps({ className: 'annotated-bibliography' });
 

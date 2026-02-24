@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.69
+ * Version: 1.3.70
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.69' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.70' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -62,7 +62,55 @@ function global360blocks_use_sitewide_style_bundle() {
 }
 
 add_action( 'wp_enqueue_scripts', 'global360blocks_enqueue_sitewide_style_bundle', 5 );
-add_action( 'enqueue_block_editor_assets', 'global360blocks_enqueue_sitewide_style_bundle', 5 );
+// Use enqueue_block_assets so styles load inside the block editor iframe.
+add_action( 'enqueue_block_assets', 'global360blocks_enqueue_sitewide_style_bundle', 5 );
+
+/**
+ * Ensure the site-wide CSS bundle loads inside the block editor iframe.
+ *
+ * Some WordPress versions/themes do not reliably reflect plugin-enqueued styles
+ * inside the editor canvas. Adding an @import via the editor settings is a
+ * robust way to guarantee the bundle is present for block previews.
+ *
+ * @param array $settings Editor settings array.
+ * @return array
+ */
+function global360blocks_add_style_bundle_to_editor_iframe( $settings ) {
+    $bundle_rel  = 'assets/css/360-blocks-bundle.css';
+    $bundle_path = plugin_dir_path( __FILE__ ) . $bundle_rel;
+
+    if ( ! file_exists( $bundle_path ) ) {
+        return $settings;
+    }
+
+    if ( empty( $settings['styles'] ) || ! is_array( $settings['styles'] ) ) {
+        $settings['styles'] = array();
+    }
+
+    $bundle_base_url = plugins_url( $bundle_rel, __FILE__ );
+    $bundle_version  = @filemtime( $bundle_path );
+    $bundle_url      = $bundle_base_url;
+
+    if ( $bundle_version ) {
+        $bundle_url = add_query_arg( 'ver', (string) $bundle_version, $bundle_url );
+    }
+
+    $import_css = sprintf( '@import url("%s");', esc_url_raw( $bundle_url ) );
+
+    foreach ( $settings['styles'] as $style ) {
+        if ( is_array( $style ) && isset( $style['css'] ) && false !== strpos( (string) $style['css'], $bundle_base_url ) ) {
+            return $settings;
+        }
+    }
+
+    $settings['styles'][] = array(
+        'css' => $import_css,
+    );
+
+    return $settings;
+}
+
+add_filter( 'block_editor_settings_all', 'global360blocks_add_style_bundle_to_editor_iframe', 11 );
 
 /**
  * Resolve the font family currently assigned to heading typography.

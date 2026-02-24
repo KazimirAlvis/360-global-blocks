@@ -2029,12 +2029,6 @@ function global360blocks_get_frontend_asset_manifest() {
                 'file'   => 'blocks/latest-articles/build/style-index.css',
             ),
         ),
-        'global360blocks/info-cards'        => array(
-            'style' => array(
-                'handle' => 'info-cards-block-css',
-                'file'   => 'blocks/info-cards/build/style-index.css',
-            ),
-        ),
         'global360blocks/popular-practices' => array(
             'style' => array(
                 'handle' => 'popular-practices-block-css',
@@ -2185,6 +2179,32 @@ function global360blocks_enqueue_block_assets_from_manifest( $block_name, $args 
         )
     );
 
+    $block_type = null;
+    if ( class_exists( 'WP_Block_Type_Registry' ) ) {
+        $block_type = WP_Block_Type_Registry::get_instance()->get_registered( $block_name );
+    }
+
+    $block_declares_styles  = false;
+    $block_declares_scripts = false;
+
+    if ( $block_type ) {
+        $style_props = array( 'style_handles', 'view_style_handles' );
+        foreach ( $style_props as $prop ) {
+            if ( property_exists( $block_type, $prop ) && ! empty( $block_type->{$prop} ) ) {
+                $block_declares_styles = true;
+                break;
+            }
+        }
+
+        $script_props = array( 'script_handles', 'view_script_handles' );
+        foreach ( $script_props as $prop ) {
+            if ( property_exists( $block_type, $prop ) && ! empty( $block_type->{$prop} ) ) {
+                $block_declares_scripts = true;
+                break;
+            }
+        }
+    }
+
     $manifest = global360blocks_get_frontend_asset_manifest();
 
     if ( ! isset( $manifest[ $block_name ] ) ) {
@@ -2193,13 +2213,15 @@ function global360blocks_enqueue_block_assets_from_manifest( $block_name, $args 
 
     $definition = $manifest[ $block_name ];
 
-    if ( $args['style'] && isset( $definition['style'] ) ) {
+    // If block.json already declares styles, let WordPress enqueue them to avoid duplicates.
+    if ( $args['style'] && isset( $definition['style'] ) && ! $block_declares_styles ) {
         $style = $definition['style'];
         $deps  = isset( $style['deps'] ) ? $style['deps'] : array();
         global360blocks_enqueue_style_asset( $style['handle'], $style['file'], $deps );
     }
 
-    if ( $args['script'] && isset( $definition['script'] ) ) {
+    // If block.json already declares scripts/viewScripts, let WordPress enqueue them to avoid duplicates.
+    if ( $args['script'] && isset( $definition['script'] ) && ! $block_declares_scripts ) {
         $script     = $definition['script'];
         $asset_file = isset( $script['asset'] ) ? $script['asset'] : null;
         global360blocks_enqueue_script_asset( $script['handle'], $script['file'], $asset_file );

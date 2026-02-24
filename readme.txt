@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.68
+Stable tag: 1.3.69
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,10 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.69 =
+* Removed legacy Test Hero and Symptoms AI blocks.
+* Bundled all 360 Global Blocks frontend CSS into a single site-wide stylesheet to reduce requests.
 
 = 1.3.68 =
 * Prevent duplicate block CSS/JS enqueues when assets are already declared in `block.json`.

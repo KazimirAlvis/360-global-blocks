@@ -1,11 +1,11 @@
 {
 	"name": "360-global-blocks",
-	"version": "1.3.68",
+	"version": "1.3.69",
 	"description": "Custom blocks for 360 Global",
 	"main": "index.js",
 	"scripts": {
-		"build": "npm run build:simple-hero && npm run build:full-hero && npm run build:cta && npm run build:two-column && npm run build:two-column-text && npm run build:two-column-cta && npm run build:video-two-column && npm run build:find-doctor && npm run build:latest-articles && npm run build:popular-practices && npm run build:two-column-slider && npm run build:info-cards && npm run build:page-title-hero && npm run build:rich-text && npm run build:faq-accordion && npm run build:comparison-table && npm run build:patient-reviews-slider && npm run build:one-column-video && npm run build:annotated-bibliography-simple",
-		"build:simple-hero": "wp-scripts build blocks/simple-hero/src/index.js blocks/simple-hero/src/view.js --output-path=blocks/simple-hero/build",
+		"build": "npm run build:full-hero && npm run build:cta && npm run build:two-column && npm run build:two-column-text && npm run build:two-column-cta && npm run build:video-two-column && npm run build:find-doctor && npm run build:latest-articles && npm run build:popular-practices && npm run build:two-column-slider && npm run build:info-cards && npm run build:page-title-hero && npm run build:rich-text && npm run build:faq-accordion && npm run build:comparison-table && npm run build:patient-reviews-slider && npm run build:one-column-video && npm run build:annotated-bibliography-simple && npm run build:styles-bundle",
+		"build:styles-bundle": "node scripts/build-styles-bundle.mjs",
 		"build:full-hero": "wp-scripts build blocks/full-hero/src/index.js blocks/full-hero/src/view.js --output-path=blocks/full-hero/build",
 		"build:cta": "wp-scripts build blocks/cta/src/index.js blocks/cta/src/view.js --output-path=blocks/cta/build",
 		"build:two-column": "wp-scripts build blocks/two-column/src/index.js blocks/two-column/src/view.js --output-path=blocks/two-column/build",

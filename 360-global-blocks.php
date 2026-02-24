@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.68
+ * Version: 1.3.69
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.68' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.69' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -25,11 +25,44 @@ require_once plugin_dir_path( __FILE__ ) . 'inc/class-global360blocks-image-coll
  * duplicate `wp_enqueue_style()` calls.
  */
 function global360blocks_enqueue_global_shared_style() {
+    global360blocks_enqueue_sitewide_style_bundle();
+}
+
+/**
+ * Enqueue the site-wide frontend CSS bundle.
+ *
+ * This bundle replaces per-block frontend style enqueues to reduce request count.
+ */
+function global360blocks_enqueue_sitewide_style_bundle() {
     global360blocks_enqueue_style_asset(
-        'global360blocks-shared-global',
-        'assets/css/global-shared.min.css'
+        'global360blocks-style-bundle',
+        'assets/css/360-blocks-bundle.css'
     );
 }
+
+/**
+ * Determine whether the plugin should rely on the site-wide CSS bundle.
+ *
+ * When enabled, per-block frontend styles from the legacy manifest loader are skipped
+ * to avoid extra stylesheet requests.
+ *
+ * @return bool
+ */
+function global360blocks_use_sitewide_style_bundle() {
+    $bundle_path = plugin_dir_path( __FILE__ ) . 'assets/css/360-blocks-bundle.css';
+
+    $enabled = file_exists( $bundle_path );
+
+    /**
+     * Filter whether the site-wide CSS bundle should be used.
+     *
+     * @param bool $enabled True if bundle should be used.
+     */
+    return (bool) apply_filters( 'global360blocks_use_sitewide_style_bundle', $enabled );
+}
+
+add_action( 'wp_enqueue_scripts', 'global360blocks_enqueue_sitewide_style_bundle', 5 );
+add_action( 'enqueue_block_editor_assets', 'global360blocks_enqueue_sitewide_style_bundle', 5 );
 
 /**
  * Resolve the font family currently assigned to heading typography.
@@ -1464,9 +1497,6 @@ add_filter('block_categories_all', function($categories, $post) {
     );
 }, 10, 2);
 
-// Include symptoms AI render functions
-// require_once plugin_dir_path(__FILE__) . 'blocks/symptoms-ai/render.php';
-
 // Include page title hero render functions
 require_once plugin_dir_path(__FILE__) . 'blocks/page-title-hero/render.php';
 
@@ -1486,13 +1516,6 @@ require_once plugin_dir_path(__FILE__) . 'blocks/one-column-video/render.php';
 
 // Register block
 function global360blocks_register_blocks() {
-    register_block_type(
-        __DIR__ . '/blocks/simple-hero',
-        array(
-            'render_callback' => 'global360blocks_render_simple_hero_block',
-        )
-    );
-
     register_block_type(
         __DIR__ . '/blocks/full-hero',
         array(
@@ -1932,24 +1955,6 @@ function global360blocks_render_full_hero_block( $attributes, $content ) {
     return $output;
 }
 
-// Render callback for Simple Hero block
-function global360blocks_render_simple_hero_block( $attributes, $content ) {
-    global360blocks_enqueue_block_assets_from_manifest(
-        'global360blocks/test-hero',
-        array( 'style' => false )
-    );
-
-    $page_title = get_the_title();
-    
-    $output = '<div class="wp-block-global360blocks-simple-hero">';
-    $output .= '<div class="simple-hero-content">';
-    $output .= '<h1>' . esc_html($page_title) . '</h1>';
-    $output .= '</div>';
-    $output .= '</div>';
-    
-    return $output;
-}
-
 add_action( 'init', 'global360blocks_register_blocks' );
 
 /**
@@ -1965,12 +1970,6 @@ function global360blocks_get_frontend_asset_manifest() {
     }
 
     $manifest = array(
-        'global360blocks/test-hero'         => array(
-            'style' => array(
-                'handle' => 'global360blocks-simple-hero-style-frontend',
-                'file'   => 'blocks/simple-hero/build/style-index.css',
-            ),
-        ),
         'global360blocks/full-hero'         => array(
             'style' => array(
                 'handle' => 'global360blocks-full-hero-style-frontend',
@@ -2178,6 +2177,10 @@ function global360blocks_enqueue_block_assets_from_manifest( $block_name, $args 
             'script' => true,
         )
     );
+
+    if ( global360blocks_use_sitewide_style_bundle() ) {
+        $args['style'] = false;
+    }
 
     $block_type = null;
     if ( class_exists( 'WP_Block_Type_Registry' ) ) {
@@ -2479,7 +2482,7 @@ function global360blocks_enqueue_block_styles_for_request() {
         }
     }
 }
-add_action( 'wp_enqueue_scripts', 'global360blocks_enqueue_block_styles_for_request', 20 );
+// Styles are bundled site-wide; do not enqueue per-block styles.
 
 /**
  * Preload critical hero block assets before markup renders to avoid FOUC.
@@ -2500,7 +2503,6 @@ function global360blocks_preload_above_fold_assets() {
     }
 
     $critical_blocks = array(
-        'global360blocks/test-hero',
         'global360blocks/full-hero',
     );
 

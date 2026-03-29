@@ -26,7 +26,10 @@
 	min-width: 0;
 }
 
-.wp-block-global360blocks-two-column-text .block-editor-inner-blocks > .block-editor-block-list__layout > .block-editor-block-list__block {
+.wp-block-global360blocks-two-column-text
+	.block-editor-inner-blocks
+	> .block-editor-block-list__layout
+	> .block-editor-block-list__block {
 	flex: 1 1 50%;
 	max-width: 50%;
 	min-width: 0;
@@ -90,7 +93,10 @@
 		flex-wrap: wrap;
 	}
 
-	.wp-block-global360blocks-two-column-text .block-editor-inner-blocks > .block-editor-block-list__layout > .block-editor-block-list__block {
+	.wp-block-global360blocks-two-column-text
+		.block-editor-inner-blocks
+		> .block-editor-block-list__layout
+		> .block-editor-block-list__block {
 		flex-basis: 100%;
 		max-width: 100%;
 	}

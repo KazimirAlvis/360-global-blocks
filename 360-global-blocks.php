@@ -1480,7 +1480,31 @@ function global360blocks_render_video_two_column_block( $attributes, $content ) 
     $output .= '</div>';
     $output .= '</div>';
     $output .= '</div>';
-    
+
+    // VideoObject JSON-LD schema
+    if ( $video_url ) {
+        $schema_is_youtube = global360blocks_is_youtube_url( $video_url );
+        $schema_video_id   = $schema_is_youtube ? global360blocks_get_youtube_video_id( $video_url ) : '';
+        if ( $schema_is_youtube && $schema_video_id ) {
+            $schema_embed_url = global360blocks_get_youtube_embed_url( $video_url );
+            $schema_thumb     = global360blocks_get_youtube_thumbnail_url( $schema_video_id );
+            $schema_name      = $video_title
+                ? wp_strip_all_tags( $video_title )
+                : ( $heading ? wp_strip_all_tags( $heading ) : __( 'Video', 'global360blocks' ) );
+            $schema = array(
+                '@context'   => 'https://schema.org',
+                '@type'      => 'VideoObject',
+                'name'       => $schema_name,
+                'embedUrl'   => esc_url_raw( $schema_embed_url ),
+                'uploadDate' => get_the_date( 'c' ),
+            );
+            if ( $schema_thumb ) {
+                $schema['thumbnailUrl'] = $schema_thumb;
+            }
+            $output .= '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>';
+        }
+    }
+
     return $output;
 }
 

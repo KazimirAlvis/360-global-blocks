@@ -109,6 +109,34 @@ if ( ! function_exists( 'global360blocks_render_faq_accordion_block' ) ) {
 		</div>
 		<?php
 
-		return ob_get_clean();
+		$output = ob_get_clean();
+
+		if ( ! empty( $items ) ) {
+			$schema_items = array();
+			foreach ( $items as $item ) {
+				$q = isset( $item['question'] ) ? trim( wp_strip_all_tags( $item['question'] ) ) : '';
+				$a = isset( $item['answer'] ) ? trim( wp_strip_all_tags( $item['answer'] ) ) : '';
+				if ( $q && $a ) {
+					$schema_items[] = array(
+						'@type'          => 'Question',
+						'name'           => $q,
+						'acceptedAnswer' => array(
+							'@type' => 'Answer',
+							'text'  => $a,
+						),
+					);
+				}
+			}
+			if ( ! empty( $schema_items ) ) {
+				$schema = array(
+					'@context'   => 'https://schema.org',
+					'@type'      => 'FAQPage',
+					'mainEntity' => $schema_items,
+				);
+				$output .= '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>';
+			}
+		}
+
+		return $output;
 	}
 }

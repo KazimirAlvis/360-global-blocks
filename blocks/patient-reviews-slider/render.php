@@ -128,6 +128,42 @@ if ( ! function_exists( 'global360blocks_render_patient_reviews_slider_block' ) 
 		</div>
 		<?php
 
-		return ob_get_clean();
+		$output = ob_get_clean();
+
+		if ( ! empty( $clean_reviews ) ) {
+			$schema_items = array();
+			foreach ( $clean_reviews as $index => $review ) {
+				$review_text = trim( wp_strip_all_tags( $review['review'] ) );
+				if ( '' === $review_text ) {
+					continue;
+				}
+				$item = array(
+					'@type'        => 'Review',
+					'position'     => $index + 1,
+					'reviewBody'   => $review_text,
+					'itemReviewed' => array(
+						'@type' => 'MedicalOrganization',
+						'name'  => get_bloginfo( 'name' ),
+					),
+				);
+				if ( $review['name'] ) {
+					$item['author'] = array(
+						'@type' => 'Person',
+						'name'  => $review['name'],
+					);
+				}
+				$schema_items[] = $item;
+			}
+			if ( ! empty( $schema_items ) ) {
+				$schema = array(
+					'@context'        => 'https://schema.org',
+					'@type'           => 'ItemList',
+					'itemListElement' => $schema_items,
+				);
+				$output .= '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>';
+			}
+		}
+
+		return $output;
 	}
 }

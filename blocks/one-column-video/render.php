@@ -109,6 +109,34 @@ if ( ! function_exists( 'global360blocks_render_one_column_video_block' ) ) {
 			</div>
 		</div>
 		<?php
-		return ob_get_clean();
+
+		$output = ob_get_clean();
+
+		if ( $embed_url ) {
+			$parts      = wp_parse_url( $embed_url );
+			$segments   = ( $parts && isset( $parts['path'] ) ) ? explode( '/', trim( $parts['path'], '/' ) ) : array();
+			$raw_id     = end( $segments );
+			$youtube_id = $raw_id ? preg_replace( '/[^a-zA-Z0-9_-]/', '', (string) $raw_id ) : '';
+
+			$schema_name = '' !== trim( wp_strip_all_tags( $heading ) )
+				? trim( wp_strip_all_tags( $heading ) )
+				: get_the_title();
+
+			$schema = array(
+				'@context'   => 'https://schema.org',
+				'@type'      => 'VideoObject',
+				'name'       => $schema_name ?: __( 'Video', 'global360blocks' ),
+				'embedUrl'   => esc_url_raw( $embed_url ),
+				'uploadDate' => get_the_date( 'c' ),
+			);
+
+			if ( $youtube_id ) {
+				$schema['thumbnailUrl'] = 'https://img.youtube.com/vi/' . $youtube_id . '/maxresdefault.jpg';
+			}
+
+			$output .= '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>';
+		}
+
+		return $output;
 	}
 }

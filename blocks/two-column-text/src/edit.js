@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { registerBlockType, createBlock } from '@wordpress/blocks';
+import { registerBlockType } from '@wordpress/blocks';
 import {
 	InnerBlocks,
 	InspectorControls,
@@ -7,8 +7,6 @@ import {
 	useBlockProps,
 	useInnerBlocksProps,
 } from '@wordpress/block-editor';
-import { useDispatch, useSelect } from '@wordpress/data';
-import { useCallback } from '@wordpress/element';
 import { PanelBody, TextControl } from '@wordpress/components';
 import metadata from '../block.json';
 import columnMetadata from '../column/block.json';
@@ -60,16 +58,6 @@ registerBlockType(columnMetadata, {
 				? __('Left Column', 'global360blocks')
 				: __('Column', 'global360blocks');
 
-		const { removeBlock, insertBlocks } = useDispatch('core/block-editor');
-		const { getBlock, getBlockRootClientId, getBlocks } = useSelect((select) => {
-			const editor = select('core/block-editor');
-			return {
-				getBlock: editor.getBlock,
-				getBlocks: editor.getBlocks,
-				getBlockRootClientId: editor.getBlockRootClientId,
-			};
-		}, []);
-
 		const columnClasses = ['two-column-text__column'];
 		if (columnKey) {
 			columnClasses.push(`two-column-text__column--${columnKey}`);
@@ -83,38 +71,6 @@ registerBlockType(columnMetadata, {
 			},
 		});
 
-		const handleTransformParagraphToList = useCallback(
-			({ blockClientId, headingContent }) => {
-				if (!blockClientId) {
-					return;
-				}
-
-				const block = getBlock(blockClientId);
-				if (!block || block.name !== 'core/paragraph') {
-					return;
-				}
-
-				const rootClientId = getBlockRootClientId(blockClientId);
-				const siblingBlocks = getBlocks(rootClientId);
-
-				const paragraphIndex = siblingBlocks.findIndex((item) => item.clientId === blockClientId);
-				if (paragraphIndex === -1) {
-					return;
-				}
-
-				// Use the paragraph selection to create a list block directly.
-				// This avoids Gutenberg's default behavior of wrapping the whole column.
-				const newListBlock = createBlock('core/list', {
-					ordered: false,
-					values: `<li>${headingContent}</li>`,
-				});
-
-				removeBlock(blockClientId, false);
-				insertBlocks(newListBlock, paragraphIndex, rootClientId, false);
-			},
-			[getBlock, getBlockRootClientId, getBlocks, removeBlock, insertBlocks]
-		);
-
 		const innerBlocksProps = useInnerBlocksProps(
 			{
 				className: 'two-column-text__column-inner',
@@ -124,7 +80,6 @@ registerBlockType(columnMetadata, {
 				template: COLUMN_TEMPLATE,
 				templateInsertUpdatesSelection: true,
 				orientation: 'vertical',
-				onTransform: handleTransformParagraphToList,
 			}
 		);
 
@@ -193,8 +148,9 @@ registerBlockType(metadata, {
 		return (
 			<div {...blockProps}>
 				<InnerBlocks
-					allowedBlocks={[]}
+					allowedBlocks={['global360blocks/two-column-text-column']}
 					template={COLUMNS_TEMPLATE}
+					templateLock="all"
 					renderAppender={false}
 				/>
 			</div>

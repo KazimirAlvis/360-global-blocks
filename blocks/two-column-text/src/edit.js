@@ -171,7 +171,6 @@ registerBlockType(metadata, {
 				<InnerBlocks
 					allowedBlocks={['global360blocks/two-column-text-column']}
 					template={COLUMNS_TEMPLATE}
-					templateLock="all"
 					renderAppender={false}
 				/>
 			</div>

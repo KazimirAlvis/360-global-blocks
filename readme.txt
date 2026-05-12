@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.75
+Stable tag: 1.3.76
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,11 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.76 =
+* Hardened Two Column Text editor behavior by removing destructive transform handling that could replace content unexpectedly.
+* Locked parent Two Column Text structure and improved editor styling parity with frontend spacing/alignment.
+* Added safer custom color handling for Two Column Text editor background input.
 
 = 1.3.75 =
 * Added JSON-LD schema output to FAQ Accordion (FAQPage), One Column Video (VideoObject), Video Two Column (VideoObject), and Patient Reviews Slider (Review/ItemList) blocks for improved SEO structured data.

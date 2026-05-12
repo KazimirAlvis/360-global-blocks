@@ -15,6 +15,25 @@ import './editor.scss';
 
 const ALLOWED_COLUMN_BLOCKS = ['core/heading', 'core/paragraph', 'core/list', 'core/quote', 'core/buttons'];
 
+const normalizeColorValue = (value) => {
+	const raw = typeof value === 'string' ? value.trim() : '';
+	if (!raw) {
+		return '';
+	}
+
+	if (/^var\(--[a-zA-Z0-9_-]+\)$/.test(raw)) {
+		return raw;
+	}
+
+	if (typeof window !== 'undefined' && window.CSS && typeof window.CSS.supports === 'function') {
+		if (window.CSS.supports('color', raw)) {
+			return raw;
+		}
+	}
+
+	return '';
+};
+
 const COLUMN_TEMPLATE = [
 	['core/heading', { placeholder: __('Add heading…', 'global360blocks') }],
 	['core/paragraph', { placeholder: __('Add supporting copy…', 'global360blocks') }],
@@ -50,7 +69,8 @@ const COLUMNS_TEMPLATE = [
 registerBlockType(columnMetadata, {
 	edit({ attributes, setAttributes }) {
 		const { columnKey = '', backgroundColor = '' } = attributes;
-		const resolvedBackground = backgroundColor || (columnKey === 'right' ? '#ffffff' : '#f6f7fb');
+		const safeBackgroundColor = normalizeColorValue(backgroundColor);
+		const resolvedBackground = safeBackgroundColor || (columnKey === 'right' ? '#ffffff' : '#f6f7fb');
 		const label =
 			columnKey === 'right'
 				? __('Right Column', 'global360blocks')
@@ -92,8 +112,8 @@ registerBlockType(columnMetadata, {
 						colorSettings={[
 							{
 								label: __('Background color', 'global360blocks'),
-								value: backgroundColor,
-								onChange: (value) => setAttributes({ backgroundColor: value || '' }),
+								value: safeBackgroundColor,
+								onChange: (value) => setAttributes({ backgroundColor: normalizeColorValue(value) }),
 								fallbackValue: resolvedBackground,
 							},
 						]}
@@ -108,6 +128,7 @@ registerBlockType(columnMetadata, {
 							placeholder={resolvedBackground}
 							value={backgroundColor}
 							onChange={(value) => setAttributes({ backgroundColor: value })}
+							onBlur={(event) => setAttributes({ backgroundColor: normalizeColorValue(event?.target?.value) })}
 						/>
 					</PanelBody>
 				</InspectorControls>

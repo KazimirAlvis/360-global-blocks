@@ -17,6 +17,12 @@
 	z-index: 0;
 }
 
+.full-hero-media picture {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
 .full-hero-media img {
 	display: block;
 	width: 100%;

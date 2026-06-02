@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.77
+ * Version: 1.3.78
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.77' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.78' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -1945,19 +1945,17 @@ function global360blocks_render_full_hero_block( $attributes, $content ) {
     $global_settings = get_option('360_global_settings', []);
     $assess_id = isset($global_settings['assessment_id']) ? $global_settings['assessment_id'] : '';
     
-    $image_id    = isset( $attributes['bgImageId'] ) ? absint( $attributes['bgImageId'] ) : 0;
-    $raw_image   = '';
-    $image_width = 0;
-    $image_height = 0;
-    $image_alt   = '';
+    $image_id          = isset( $attributes['bgImageId'] ) ? absint( $attributes['bgImageId'] ) : 0;
+    $mobile_image_id   = isset( $attributes['mobileBgImageId'] ) ? absint( $attributes['mobileBgImageId'] ) : 0;
+    $raw_image         = '';
+    $raw_mobile_image  = '';
+    $image_alt         = '';
 
     if ( $image_id ) {
         $image_details = wp_get_attachment_image_src( $image_id, 'full' );
 
         if ( is_array( $image_details ) && ! empty( $image_details[0] ) ) {
-            $raw_image   = $image_details[0];
-            $image_width = isset( $image_details[1] ) ? (int) $image_details[1] : 0;
-            $image_height = isset( $image_details[2] ) ? (int) $image_details[2] : 0;
+            $raw_image = $image_details[0];
         }
 
         $maybe_alt = get_post_meta( $image_id, '_wp_attachment_image_alt', true );
@@ -1966,11 +1964,24 @@ function global360blocks_render_full_hero_block( $attributes, $content ) {
         }
     }
 
+    if ( $mobile_image_id ) {
+        $mobile_image_details = wp_get_attachment_image_src( $mobile_image_id, 'full' );
+        if ( is_array( $mobile_image_details ) && ! empty( $mobile_image_details[0] ) ) {
+            $raw_mobile_image = $mobile_image_details[0];
+        }
+    }
+
     if ( ! $raw_image && ! empty( $attributes['bgImageUrl'] ) ) {
         $raw_image = $attributes['bgImageUrl'];
     }
 
+    if ( ! $raw_mobile_image && ! empty( $attributes['mobileBgImageUrl'] ) ) {
+        $raw_mobile_image = $attributes['mobileBgImageUrl'];
+    }
+
     $image_url            = $raw_image ? esc_url( $raw_image ) : '';
+    $mobile_image_url     = $raw_mobile_image ? esc_url( $raw_mobile_image ) : '';
+    $hero_image_url       = $image_url ? $image_url : $mobile_image_url;
     $heading              = ! empty( $attributes['heading'] ) ? wp_kses_post( $attributes['heading'] ) : '';
     $subheading           = ! empty( $attributes['subheading'] ) ? wp_kses_post( $attributes['subheading'] ) : '';
     $high_priority_image  = array_key_exists( 'highPriorityImage', $attributes ) ? (bool) $attributes['highPriorityImage'] : true;
@@ -1985,33 +1996,60 @@ function global360blocks_render_full_hero_block( $attributes, $content ) {
     $heading = global360blocks_wrap_trademark_symbols( $heading );
     $subheading = global360blocks_wrap_trademark_symbols( $subheading );
     $output = '<div class="full-hero-block">';
-    if ( $image_url ) {
+    if ( $hero_image_url ) {
         $output .= '<div class="full-hero-media">';
 
-        $image_html = wp_get_attachment_image(
-            $image_id,
-            'full',
-            false,
-            array(
-                'class'         => 'full-hero-image',
-                'fetchpriority' => $fetchpriority_attr,
-                'loading'       => $loading_attr,
-                'decoding'      => 'async',
-            )
-        );
+        $desktop_image_html = '';
+        if ( $image_id ) {
+            $desktop_image_html = wp_get_attachment_image(
+                $image_id,
+                'full',
+                false,
+                array(
+                    'class'         => 'full-hero-image',
+                    'fetchpriority' => $fetchpriority_attr,
+                    'loading'       => $loading_attr,
+                    'decoding'      => 'async',
+                )
+            );
+        }
 
-        if ( $image_html ) {
-            $output .= $image_html;
-        } else {
-            // Fallback for when wp_get_attachment_image fails but we have a URL
-            $output .= sprintf(
+        if ( ! $desktop_image_html && $mobile_image_id ) {
+            $desktop_image_html = wp_get_attachment_image(
+                $mobile_image_id,
+                'full',
+                false,
+                array(
+                    'class'         => 'full-hero-image',
+                    'fetchpriority' => $fetchpriority_attr,
+                    'loading'       => $loading_attr,
+                    'decoding'      => 'async',
+                )
+            );
+        }
+
+        if ( ! $desktop_image_html ) {
+            $desktop_image_html = sprintf(
                 '<img src="%s" alt="%s" class="full-hero-image" fetchpriority="%s" loading="%s" decoding="async" />',
-                esc_url( $image_url ),
+                esc_url( $hero_image_url ),
                 esc_attr( $image_alt ),
                 esc_attr( $fetchpriority_attr ),
                 esc_attr( $loading_attr )
             );
         }
+
+        if ( $mobile_image_url ) {
+            $output .= '<picture>';
+            $output .= sprintf(
+                '<source media="(max-width: 768px)" srcset="%s" />',
+                esc_url( $mobile_image_url )
+            );
+            $output .= $desktop_image_html;
+            $output .= '</picture>';
+        } else {
+            $output .= $desktop_image_html;
+        }
+
         $output .= '</div>';
     }
     $output .= '<div class="full-hero-content">';

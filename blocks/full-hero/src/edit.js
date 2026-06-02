@@ -7,11 +7,15 @@ export default function Edit({ attributes, setAttributes }) {
 	const {
 		bgImageUrl,
 		bgImageId,
+		mobileBgImageUrl,
+		mobileBgImageId,
 		heading,
 		subheading,
 		highPriorityImage = true,
 	} = attributes;
 	const blockProps = useBlockProps({ className: 'full-hero-block' });
+	const desktopOrFallbackImage = bgImageUrl || mobileBgImageUrl;
+	const mobileOrFallbackImage = mobileBgImageUrl || bgImageUrl;
 
 	return (
 		<>
@@ -28,12 +32,49 @@ export default function Edit({ attributes, setAttributes }) {
 									isSecondary
 								>
 									{bgImageUrl
-										? __('Change Image', 'global360blocks')
-										: __('Select Image', 'global360blocks')}
+										? __('Change Desktop Image', 'global360blocks')
+										: __('Select Desktop Image', 'global360blocks')}
 								</Button>
 							)}
 						/>
 					</MediaUploadCheck>
+					{bgImageUrl && (
+						<Button
+							onClick={() => setAttributes({ bgImageUrl: '', bgImageId: 0 })}
+							variant="link"
+							isDestructive
+						>
+							{__('Remove Desktop Image', 'global360blocks')}
+						</Button>
+					)}
+					<MediaUploadCheck>
+						<MediaUpload
+							onSelect={(media) =>
+								setAttributes({ mobileBgImageUrl: media.url, mobileBgImageId: media.id })
+							}
+							allowedTypes={['image']}
+							value={mobileBgImageId}
+							render={({ open }) => (
+								<Button
+									onClick={open}
+									isSecondary
+								>
+									{mobileBgImageUrl
+										? __('Change Mobile Image', 'global360blocks')
+										: __('Select Mobile Image', 'global360blocks')}
+								</Button>
+							)}
+						/>
+					</MediaUploadCheck>
+					{mobileBgImageUrl && (
+						<Button
+							onClick={() => setAttributes({ mobileBgImageUrl: '', mobileBgImageId: 0 })}
+							variant="link"
+							isDestructive
+						>
+							{__('Remove Mobile Image', 'global360blocks')}
+						</Button>
+					)}
 					<ToggleControl
 						label={__('High priority image (hero / above the fold)', 'global360blocks')}
 						checked={!!highPriorityImage}
@@ -42,18 +83,26 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 			</InspectorControls>
 			<div {...blockProps}>
-				{bgImageUrl && (
+				{desktopOrFallbackImage && (
 					<div className="full-hero-media">
-						<img
-							src={bgImageUrl}
-							alt=""
-							loading={highPriorityImage ? 'eager' : 'lazy'}
-							fetchpriority={highPriorityImage ? 'high' : 'auto'}
-							decoding="async"
-						/>
+						<picture>
+							{mobileOrFallbackImage && (
+								<source
+									media="(max-width: 768px)"
+									srcSet={mobileOrFallbackImage}
+								/>
+							)}
+							<img
+								src={desktopOrFallbackImage}
+								alt=""
+								loading={highPriorityImage ? 'eager' : 'lazy'}
+								fetchpriority={highPriorityImage ? 'high' : 'auto'}
+								decoding="async"
+							/>
+						</picture>
 					</div>
 				)}
-				{!bgImageUrl && (
+				{!desktopOrFallbackImage && (
 					<div className="full-hero-placeholder">
 						<MediaUploadCheck>
 							<MediaUpload

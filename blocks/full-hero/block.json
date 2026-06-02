@@ -17,6 +17,14 @@
 			"type": "number",
 			"default": 0
 		},
+		"mobileBgImageUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"mobileBgImageId": {
+			"type": "number",
+			"default": 0
+		},
 		"heading": {
 			"type": "string",
 			"default": ""

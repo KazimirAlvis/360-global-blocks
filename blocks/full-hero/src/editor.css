@@ -40,6 +40,12 @@
 	pointer-events: none;
 }
 
+.full-hero-media picture {
+	display: block !important;
+	width: 100% !important;
+	height: 100% !important;
+}
+
 .full-hero-media img {
 	display: block !important;
 	width: 100% !important;

@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.78
+ * Version: 1.3.79
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.78' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.79' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -208,6 +208,37 @@ function global360blocks_get_brand_primary_color() {
     }
 
     $cached = apply_filters( 'global360blocks_brand_primary_color', $color );
+
+    return $cached;
+}
+
+/**
+ * Resolve the default assessment button label from global settings.
+ *
+ * @return string
+ */
+function global360blocks_get_assessment_button_text() {
+    static $cached = null;
+
+    if ( null !== $cached ) {
+        return $cached;
+    }
+
+    $button_text = '';
+    $settings    = get_option( '360_global_settings', array() );
+
+    if ( is_array( $settings ) && isset( $settings['assessment_button_text'] ) ) {
+        $raw = is_scalar( $settings['assessment_button_text'] )
+            ? (string) $settings['assessment_button_text']
+            : '';
+        $button_text = trim( sanitize_text_field( $raw ) );
+    }
+
+    if ( '' === $button_text ) {
+        $button_text = 'Take Risk Assessment Now';
+    }
+
+    $cached = apply_filters( 'global360blocks_assessment_button_text', $button_text );
 
     return $cached;
 }
@@ -1149,7 +1180,11 @@ function global360blocks_render_two_column_cta_block($attributes, $content) {
     );
 
     $heading = !empty($attributes['heading']) ? wp_kses_post($attributes['heading']) : '';
-    $button_text = !empty($attributes['buttonText']) ? esc_html($attributes['buttonText']) : 'Take Risk Assessment Now';
+    $default_button_text = global360blocks_get_assessment_button_text();
+    $raw_button_text = isset($attributes['buttonText']) ? trim((string) $attributes['buttonText']) : '';
+    $button_text = ($raw_button_text !== '' && $raw_button_text !== 'Take Risk Assessment Now')
+        ? esc_html($raw_button_text)
+        : esc_html($default_button_text);
     $button_url = !empty($attributes['buttonUrl']) ? esc_url($attributes['buttonUrl']) : '';
     $background_color = !empty($attributes['backgroundColor']) ? esc_attr($attributes['backgroundColor']) : '';
 
@@ -1380,6 +1415,7 @@ function global360blocks_render_video_two_column_block( $attributes, $content ) 
     $global_settings = get_option('360_global_settings', []);
     $assess_id = isset($global_settings['assessment_id']) ? $global_settings['assessment_id'] : '';
     
+    $assessment_button_text = global360blocks_get_assessment_button_text();
     $video_url = !empty($attributes['videoUrl']) ? esc_url($attributes['videoUrl']) : '';
     $heading = !empty($attributes['heading']) ? wp_kses_post($attributes['heading']) : '';
     $legacy_body_text = !empty($attributes['bodyText']) ? wp_kses_post($attributes['bodyText']) : '';
@@ -1473,7 +1509,7 @@ function global360blocks_render_video_two_column_block( $attributes, $content ) 
         global360blocks_enqueue_global_shared_style();
 
         $output .= '<div class="video-two-column-button">';
-        $output .= '<pr360-questionnaire url="wss://app.patientreach360.com/socket" site-id="' . esc_attr($assess_id) . '">Take Risk Assessment Now</pr360-questionnaire>';
+        $output .= '<pr360-questionnaire url="wss://app.patientreach360.com/socket" site-id="' . esc_attr($assess_id) . '">' . esc_html( $assessment_button_text ) . '</pr360-questionnaire>';
         $output .= '</div>';
     }
     
@@ -1729,6 +1765,7 @@ function global360blocks_render_cta_block( $attributes, $content ) {
     $global_settings = get_option('360_global_settings', []);
     $assess_id = isset($global_settings['assessment_id']) ? $global_settings['assessment_id'] : '';
     
+    $assessment_button_text = global360blocks_get_assessment_button_text();
     $image_url = !empty($attributes['imageUrl']) ? esc_url($attributes['imageUrl']) : '';
     $heading = !empty($attributes['heading']) ? wp_kses_post($attributes['heading']) : '';
 
@@ -1741,7 +1778,7 @@ function global360blocks_render_cta_block( $attributes, $content ) {
         $output .= '<h2 class="cta-heading">' . $heading . '</h2>';
     }
     $output .= '<div class="cta-button">';
-    $output .= '<pr360-questionnaire url="wss://app.patientreach360.com/socket" site-id="' . esc_attr($assess_id) . '">Take Risk Assessment Now</pr360-questionnaire>';
+    $output .= '<pr360-questionnaire url="wss://app.patientreach360.com/socket" site-id="' . esc_attr($assess_id) . '">' . esc_html( $assessment_button_text ) . '</pr360-questionnaire>';
     $output .= '</div>';
     $output .= '</div></div></div>';
     return $output;
@@ -1783,6 +1820,7 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
     $global_settings = get_option('360_global_settings', []);
     $assess_id = isset($global_settings['assessment_id']) ? $global_settings['assessment_id'] : '';
     
+    $assessment_button_text = global360blocks_get_assessment_button_text();
     $raw_image_url    = ! empty( $attributes['imageUrl'] ) ? esc_url_raw( $attributes['imageUrl'] ) : '';
     $heading          = ! empty( $attributes['heading'] ) ? wp_kses_post( $attributes['heading'] ) : '';
     $legacy_body_text = ! empty( $attributes['bodyText'] ) ? wp_kses_post( $attributes['bodyText'] ) : '';
@@ -1914,7 +1952,7 @@ function global360blocks_render_two_column_block( $attributes, $content, $block 
     }
 
     $content_column .= '<div class="two-column-button">';
-    $content_column .= '<pr360-questionnaire url="wss://app.patientreach360.com/socket" site-id="' . esc_attr($assess_id) . '">Take Risk Assessment Now</pr360-questionnaire>';
+    $content_column .= '<pr360-questionnaire url="wss://app.patientreach360.com/socket" site-id="' . esc_attr($assess_id) . '">' . esc_html( $assessment_button_text ) . '</pr360-questionnaire>';
     $content_column .= '</div>';
     $content_column .= '</div>';
     $content_column .= '</div>';
@@ -1945,6 +1983,7 @@ function global360blocks_render_full_hero_block( $attributes, $content ) {
     $global_settings = get_option('360_global_settings', []);
     $assess_id = isset($global_settings['assessment_id']) ? $global_settings['assessment_id'] : '';
     
+    $assessment_button_text = global360blocks_get_assessment_button_text();
     $image_id          = isset( $attributes['bgImageId'] ) ? absint( $attributes['bgImageId'] ) : 0;
     $mobile_image_id   = isset( $attributes['mobileBgImageId'] ) ? absint( $attributes['mobileBgImageId'] ) : 0;
     $raw_image         = '';
@@ -2060,7 +2099,7 @@ function global360blocks_render_full_hero_block( $attributes, $content ) {
         $output .= '<p class="full-hero-subheading">' . $subheading . '</p>';
     }
     global360blocks_enqueue_global_shared_style();
-    $output .= '<pr360-questionnaire url="wss://app.patientreach360.com/socket" site-id="' . esc_attr($assess_id) . '">Take Risk Assessment Now</pr360-questionnaire>';
+    $output .= '<pr360-questionnaire url="wss://app.patientreach360.com/socket" site-id="' . esc_attr($assess_id) . '">' . esc_html( $assessment_button_text ) . '</pr360-questionnaire>';
     $output .= '</div></div>';
     return $output;
 }

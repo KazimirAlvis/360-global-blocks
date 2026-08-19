@@ -17,6 +17,8 @@ define(
 
 require_once plugin_dir_path( __FILE__ ) . 'inc/class-sb-global-blocks-updater.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/class-global360blocks-image-collector.php';
+require_once plugin_dir_path( __FILE__ ) . 'src/Brand/SiteContextAdapter.php';
+require_once plugin_dir_path( __FILE__ ) . 'src/Media/YouTube.php';
 
 /**
  * Load the shared CSS bundle used by questionnaire buttons and hero utilities.
@@ -25,7 +27,10 @@ require_once plugin_dir_path( __FILE__ ) . 'inc/class-global360blocks-image-coll
  * duplicate `wp_enqueue_style()` calls.
  */
 function global360blocks_enqueue_global_shared_style() {
-    global360blocks_enqueue_sitewide_style_bundle();
+    global360blocks_enqueue_style_asset(
+        'global360blocks-shared-primitives',
+        'assets/css/global-shared.min.css'
+    );
 }
 
 /**
@@ -49,9 +54,7 @@ function global360blocks_enqueue_sitewide_style_bundle() {
  * @return bool
  */
 function global360blocks_use_sitewide_style_bundle() {
-    $bundle_path = plugin_dir_path( __FILE__ ) . 'assets/css/360-blocks-bundle.css';
-
-    $enabled = file_exists( $bundle_path );
+    $enabled = false;
 
     /**
      * Filter whether the site-wide CSS bundle should be used.
@@ -60,10 +63,6 @@ function global360blocks_use_sitewide_style_bundle() {
      */
     return (bool) apply_filters( 'global360blocks_use_sitewide_style_bundle', $enabled );
 }
-
-add_action( 'wp_enqueue_scripts', 'global360blocks_enqueue_sitewide_style_bundle', 5 );
-// Use enqueue_block_assets so styles load inside the block editor iframe.
-add_action( 'enqueue_block_assets', 'global360blocks_enqueue_sitewide_style_bundle', 5 );
 
 /**
  * Ensure the site-wide CSS bundle loads inside the block editor iframe.
@@ -172,7 +171,7 @@ function global360blocks_get_brand_primary_color() {
     }
 
     $color    = '';
-    $settings = get_option( '360_global_settings', array() );
+    $settings = \Global360Blocks\Brand\SiteContextAdapter::all();
 
     if ( is_array( $settings ) ) {
         $candidates = array(
@@ -225,7 +224,7 @@ function global360blocks_get_assessment_button_text() {
     }
 
     $button_text = '';
-    $settings    = get_option( '360_global_settings', array() );
+    $settings    = \Global360Blocks\Brand\SiteContextAdapter::all();
 
     if ( is_array( $settings ) && isset( $settings['assessment_button_text'] ) ) {
         $raw = is_scalar( $settings['assessment_button_text'] )
@@ -927,101 +926,6 @@ function handle_get_health_icon_ajax() {
         wp_send_json_success($svg_content);
     } else {
         wp_send_json_error('Icon not found');
-    }
-}
-
-// Extract a YouTube video ID from a URL.
-if ( ! function_exists( 'global360blocks_get_youtube_video_id' ) ) {
-    function global360blocks_get_youtube_video_id( $url ) {
-        if ( empty( $url ) ) {
-            return '';
-        }
-
-        $parsed = wp_parse_url( $url );
-        if ( empty( $parsed['host'] ) ) {
-            return '';
-        }
-
-        $host = strtolower( $parsed['host'] );
-        $candidate = '';
-
-        if ( false !== strpos( $host, 'youtube.com' ) ) {
-            if ( ! empty( $parsed['query'] ) ) {
-                parse_str( $parsed['query'], $query_vars );
-                if ( ! empty( $query_vars['v'] ) ) {
-                    $candidate = $query_vars['v'];
-                }
-            }
-
-            if ( ! $candidate && ! empty( $parsed['path'] ) ) {
-                $path_segments = array_values( array_filter( explode( '/', $parsed['path'] ) ) );
-                if ( ! empty( $path_segments ) ) {
-                    $patterns = array( 'embed', 'shorts', 'live' );
-                    if ( in_array( $path_segments[0], $patterns, true ) && isset( $path_segments[1] ) ) {
-                        $candidate = $path_segments[1];
-                    } else {
-                        $candidate = end( $path_segments );
-                    }
-                }
-            }
-        } elseif ( false !== strpos( $host, 'youtu.be' ) ) {
-            if ( ! empty( $parsed['path'] ) ) {
-                $candidate = trim( $parsed['path'], '/' );
-            }
-        }
-
-        if ( ! $candidate ) {
-            return '';
-        }
-
-        if ( preg_match( '/([A-Za-z0-9_-]{11})/', $candidate, $matches ) ) {
-            return $matches[1];
-        }
-
-        return '';
-    }
-}
-
-// Helper function to get YouTube embed URL
-if ( ! function_exists( 'global360blocks_get_youtube_embed_url' ) ) {
-    function global360blocks_get_youtube_embed_url( $url ) {
-        if ( empty( $url ) ) {
-            return '';
-        }
-
-        $video_id = global360blocks_get_youtube_video_id( $url );
-
-        if ( ! $video_id ) {
-            if ( false !== strpos( $url, 'youtube.com/embed/' ) ) {
-                return $url;
-            }
-
-            return $url;
-        }
-
-        $base = 'https://www.youtube.com/embed/' . $video_id;
-        $args = array(
-            'rel'            => 0,
-            'modestbranding' => 1,
-            'playsinline'    => 1,
-        );
-
-        return add_query_arg( $args, $base );
-    }
-}
-
-// Helper function to derive a YouTube thumbnail URL.
-if ( ! function_exists( 'global360blocks_get_youtube_thumbnail_url' ) ) {
-    function global360blocks_get_youtube_thumbnail_url( $video_id, $quality = 'hqdefault' ) {
-        if ( empty( $video_id ) ) {
-            return '';
-        }
-
-        $quality = in_array( $quality, array( 'maxresdefault', 'hqdefault', 'mqdefault', 'sddefault' ), true )
-            ? $quality
-            : 'hqdefault';
-
-        return sprintf( 'https://i.ytimg.com/vi/%1$s/%2$s.jpg', rawurlencode( $video_id ), $quality );
     }
 }
 

@@ -2,6 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "global360blocks/patient-reviews-slider",
+	"style": "file:./build/style-index.css",
 	"version": "0.1.0",
 	"title": "Patient Reviews Slider",
 	"category": "360-blocks",

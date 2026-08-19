@@ -2,6 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "global360blocks/full-hero",
+	"style": "file:./build/style-index.css",
 	"title": "Full Page Hero",
 	"category": "360-blocks",
 	"icon": "admin-page",

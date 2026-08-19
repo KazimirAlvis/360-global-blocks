@@ -2,6 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "global360blocks/two-column-text",
+	"style": "file:./build/style-index.css",
 	"title": "Two Column Text",
 	"category": "360-blocks",
 	"description": "Two text columns with independent background colors.",

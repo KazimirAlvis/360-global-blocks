@@ -626,65 +626,7 @@ function sb_global_blocks_bootstrap_updater() {
 }
 add_action( 'plugins_loaded', 'sb_global_blocks_bootstrap_updater', 5 );
 
-function sb_global_blocks_rename_github_package( $source, $remote_source, $upgrader, $hook_extra ) {
-    $source_path  = untrailingslashit( $source );
-    $source_dir   = basename( $source_path );
-    $expected_dir = '360-global-blocks';
-
-    $is_target = false;
-
-    if ( isset( $hook_extra['plugin'] ) && strcasecmp( $hook_extra['plugin'], '360-Global-Blocks/360-global-blocks.php' ) === 0 ) {
-        $is_target = true;
-    }
-
-    if ( isset( $hook_extra['slug'] ) && '360-global-blocks' === $hook_extra['slug'] ) {
-        $is_target = true;
-    }
-
-    if ( ! $is_target && false !== stripos( $source_dir, '360-global-blocks' ) ) {
-        $is_target = true;
-    }
-
-    if ( ! $is_target ) {
-        return $source;
-    }
-
-    $desired_path = trailingslashit( dirname( $source_path ) ) . $expected_dir;
-
-    if ( strcasecmp( $source_dir, $expected_dir ) === 0 ) {
-        return trailingslashit( $source_path );
-    }
-
-    global $wp_filesystem;
-
-    if ( ! $wp_filesystem && defined( 'ABSPATH' ) ) {
-        if ( ! function_exists( 'WP_Filesystem' ) ) {
-            require_once ABSPATH . 'wp-admin/includes/file.php';
-        }
-        WP_Filesystem();
-    }
-
-    if ( $wp_filesystem && $wp_filesystem->exists( $desired_path ) ) {
-        $wp_filesystem->delete( $desired_path, true );
-    }
-
-    $moved = false;
-
-    if ( $wp_filesystem && $wp_filesystem->move( trailingslashit( $source_path ), trailingslashit( $desired_path ), true ) ) {
-        $moved = true;
-    }
-
-    if ( ! $moved && @rename( $source_path, $desired_path ) ) {
-        $moved = true;
-    }
-
-    if ( $moved ) {
-        return trailingslashit( $desired_path );
-    }
-
-    return $source;
-}
-add_filter( 'upgrader_source_selection', 'sb_global_blocks_rename_github_package', 10, 4 );
+require_once plugin_dir_path( __FILE__ ) . 'inc/updater-source-selection.php';
 
 function sb_global_blocks_ensure_install_location( $response, $hook_extra, $result ) {
     $expected_dir = '360-global-blocks';

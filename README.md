@@ -173,6 +173,11 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.80
+
+-   Integrated Platform Core site-context consumers while retaining compatibility fallbacks.
+-   Scoped frontend assets per block, extracted shared YouTube handling, and isolated updater source selection from unrelated plugin installs.
+
 ### 1.3.61
 
 -   Preserve legacy HTML when migrating Two Column body copy to InnerBlocks by falling back to a core HTML block, so existing list wrappers and custom classes remain intact.

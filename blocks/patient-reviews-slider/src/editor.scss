@@ -1,29 +1,37 @@
 .patient-reviews-slider {
 	background: var(--reviews-background, transparent);
-	padding: clamp(24px, 4vw, 56px);
 
 	.patient-reviews-slider-inner {
-		max-width: 1140px;
+		max-width: 1400px;
 		margin-left: auto;
 		margin-right: auto;
+		padding: 60px 20px;
 	}
 
 	.patient-reviews-slider-heading {
 		text-align: center;
 		max-width: 780px;
-		margin: 0 auto clamp(20px, 3vw, 40px);
+		margin: 0 auto 50px;
 
 		h2 {
 			margin: 0;
 		}
 	}
 
+	.patient-reviews-slider-editor-list {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 40px;
+	}
+
 	.patient-review-editor-item {
 		background: var(--wp--preset--color--white, #fff);
-		border: 1px solid rgba(0, 0, 0, 0.1);
+		border: 1px solid #ddd;
 		border-radius: 12px;
-		padding: 12px;
-		margin-bottom: 12px;
+		padding: 40px 20px;
+		margin-bottom: 0;
+		min-width: 0;
+		overflow-wrap: anywhere;
 	}
 
 	.patient-review-editor-actions {
@@ -53,9 +61,25 @@
 	.patient-review-editor-name,
 	.patient-review-editor-clinic {
 		margin: 0;
+		line-height: 1.7;
 	}
 
 	.patient-reviews-add {
 		margin-top: 8px;
+	}
+}
+
+@media (max-width: 900px) {
+	.patient-reviews-slider .patient-reviews-slider-inner {
+		padding: 40px 15px;
+	}
+
+	.patient-reviews-slider .patient-review-editor-item {
+		padding: 30px 20px;
+	}
+
+	.patient-reviews-slider .patient-reviews-slider-editor-list {
+		grid-template-columns: 1fr;
+		gap: 20px;
 	}
 }

@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.80
+ * Version: 1.3.81
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.80' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.81' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -1461,7 +1461,9 @@ require_once plugin_dir_path(__FILE__) . 'blocks/faq-accordion/render.php';
 require_once plugin_dir_path(__FILE__) . 'blocks/comparison-table/render.php';
 
 // Patient reviews slider render callback
+require_once plugin_dir_path(__FILE__) . 'inc/review-slider.php';
 require_once plugin_dir_path(__FILE__) . 'blocks/patient-reviews-slider/render.php';
+require_once plugin_dir_path(__FILE__) . 'blocks/patient-submitted-reviews/render.php';
 
 // One column video render callback
 require_once plugin_dir_path(__FILE__) . 'blocks/one-column-video/render.php';
@@ -1470,6 +1472,7 @@ require_once plugin_dir_path(__FILE__) . 'blocks/one-column-video/render.php';
 
 // Register block
 function global360blocks_register_blocks() {
+    register_block_type( __DIR__ . '/blocks/patient-submitted-reviews', array( 'render_callback' => 'global360blocks_render_patient_submitted_reviews' ) );
     register_block_type(
         __DIR__ . '/blocks/full-hero',
         array(

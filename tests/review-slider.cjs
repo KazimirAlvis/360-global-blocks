@@ -1,0 +1,15 @@
+const {JSDOM}=require('jsdom');const fs=require('fs');const assert=require('node:assert/strict');
+const markup=(submitted,count)=>`<div class="patient-reviews-slider ${submitted?'patient-submitted-reviews':''}"><div class="patient-reviews-slider-container"><div class="patient-reviews-slider-track">${Array.from({length:count},(_,i)=>`<div class="patient-reviews-slide"><div class="patient-reviews-slide-grid"><div class="patient-review-card"><a href="#">Review ${i}</a></div></div></div>`).join('')}</div></div><div class="patient-reviews-slider-controls"><button class="patient-reviews-slider-nav prev"></button><div class="patient-reviews-slider-dots"></div><button class="patient-reviews-slider-nav next"></button></div></div>`;
+const legacy=`<div class="patient-reviews-slider"><div class="patient-reviews-slider-container"><div class="patient-reviews-slider-track"><div class="patient-reviews-slide"><div class="patient-reviews-slide-grid"><div class="patient-review-card">Cached manual review</div></div></div></div></div></div>`;
+const dom=new JSDOM(markup(true,7)+markup(true,4)+markup(false,2)+legacy,{runScripts:'outside-only'});const media=[];dom.window.matchMedia=()=>{const m={matches:false,addEventListener:(e,fn)=>m.change=fn};media.push(m);return m;};
+dom.window.eval(fs.readFileSync(require('path').join(__dirname,'../blocks/patient-reviews-slider/build/view.js'),'utf8'));dom.window.document.dispatchEvent(new dom.window.Event('DOMContentLoaded'));
+const roots=dom.window.document.querySelectorAll('.patient-reviews-slider');
+assert.equal(roots[0].querySelectorAll('.patient-reviews-slide').length,3);
+roots[0].querySelector('.next').click();assert.equal(roots[0].querySelector('.patient-reviews-slider-container').dataset.currentSlide,'1');assert.equal(roots[1].querySelector('.patient-reviews-slider-container').dataset.currentSlide,'0');
+assert.equal(roots[0].querySelector('.patient-reviews-slide').inert,true);
+assert.equal(roots[0].querySelector('[aria-current="true"]').getAttribute('aria-label'),'Go to slide 2');
+media[0].matches=true;media[0].change();assert.equal(roots[0].querySelectorAll('.patient-reviews-slide').length,7);roots[0].querySelector('.prev').click();assert.equal(roots[0].querySelector('.patient-reviews-slider-container').dataset.currentSlide,'6');
+assert.equal(roots[2].querySelectorAll('.patient-reviews-slide').length,1);assert.equal(roots[2].querySelector('.patient-reviews-slider-controls').hidden,true);
+media[2].matches=true;media[2].change();assert.equal(roots[2].querySelectorAll('.patient-reviews-slide').length,2);roots[2].querySelector('.next').click();assert.equal(roots[2].querySelector('.patient-reviews-slider-container').dataset.currentSlide,'1');
+assert.equal(roots[3].textContent.includes('Cached manual review'),true);
+console.log('PASS multiple instances, independent controls, both sliders desktop/mobile regrouping, wraparound, inactive focus, aria state, legacy manual markup fallback');

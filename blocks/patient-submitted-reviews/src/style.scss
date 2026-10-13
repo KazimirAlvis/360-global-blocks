@@ -1,0 +1,38 @@
+.patient-submitted-reviews {
+ box-sizing: border-box;
+ .patient-review-card { min-width: 0; overflow-wrap: anywhere; }
+ .patient-review-rating { font-weight: 600; }
+ .patient-review-doctor { margin: 4px 0 0; }
+ .patient-review-clinic a,
+ .patient-review-doctor a { color: var(--reviews-accent); text-decoration: none; }
+ .patient-review-clinic a:hover,
+ .patient-review-doctor a:hover { text-decoration: underline; }
+ button:focus-visible, a:focus-visible { outline: 3px solid var(--reviews-accent); outline-offset: 3px; }
+ .patient-reviews-slider-controls[hidden] { display: none; }
+ .patient-reviews-slider-dots { flex-wrap: wrap; min-width: 0; }
+ .patient-reviews-slider-nav { flex-shrink: 0; min-width: 44px; min-height: 44px; }
+ .patient-reviews-slider-dot {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+ }
+ .patient-reviews-slider-dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 50%;
+  background: transparent;
+ }
+ .patient-reviews-slider-dot.active { background: transparent; border-color: transparent; }
+ .patient-reviews-slider-dot.active::before { background: var(--reviews-accent); border-color: var(--reviews-accent); }
+ .patient-reviews-slider-action { margin-top: 24px; text-align: center; }
+ .patient-reviews-slider-button:hover { background-color: rgb(41, 38, 38); }
+ @media (prefers-reduced-motion: reduce) { .patient-reviews-slider-track { transition: none; } }
+}

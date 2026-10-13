@@ -1,0 +1,61 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "global360blocks/patient-submitted-reviews",
+	"style": [
+		"file:../patient-reviews-slider/build/style-index.css",
+		"file:./build/style-index.css"
+	],
+	"version": "0.1.0",
+	"title": "Patient-Submitted Reviews",
+	"category": "360-blocks",
+	"icon": "format-quote",
+	"description": "Approved patient-submitted reviews, filtered by clinic and doctor.",
+	"keywords": [
+		"reviews",
+		"testimonials",
+		"slider"
+	],
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": [
+			"wide",
+			"full"
+		],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"heading": {
+			"type": "string",
+			"default": ""
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": ""
+		},
+		"buttonText": {
+			"type": "string",
+			"default": "View All Reviews"
+		},
+		"clinicId": {
+			"type": "number",
+			"default": 0
+		},
+		"doctorId": {
+			"type": "number",
+			"default": 0
+		},
+		"reviewCount": {
+			"type": "number",
+			"default": 9
+		}
+	},
+	"textdomain": "global360blocks",
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/index.css",
+	"viewScript": "file:../patient-reviews-slider/build/view.js"
+}

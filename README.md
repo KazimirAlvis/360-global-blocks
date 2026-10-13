@@ -173,6 +173,13 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.81
+
+-   Added the privacy-safe Patient-Submitted Reviews block backed by Platform Core 1.1.0 or newer.
+-   Matched both review sliders to the Why Choose Us card presentation with responsive, accessible navigation.
+-   Added a section background control, Primary Color entity links, and an editable View All Reviews action.
+-   Fixed regular-slider data disappearing when legacy or cached markup omits navigation controls.
+
 ### 1.3.80
 
 -   Integrated Platform Core site-context consumers while retaining compatibility fallbacks.

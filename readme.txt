@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.79
+Stable tag: 1.3.81
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -17,12 +17,13 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 
 == Release Workflow ==
 1. Update `360-global-blocks.php`, `readme.txt`, and `plugin-manifest.json` with the new version, changelog, and compatibility data.
-2. Commit and push to `main`—the manifest points to the `main` branch zip, so no manual release or asset upload is required.
-3. In any WordPress install, visit Tools → 360 Blocks Updates and click "Force Update Check Now" to confirm the site sees the new version.
-4. From the Plugins screen (or Dashboard → Updates) click "Update now" to install the branch build.
+2. Build a production ZIP with a top-level `360-global-blocks/` folder and no development-only source, tests, or dependencies.
+3. Commit and push to `main`, tag the release, and attach the production ZIP named in `plugin-manifest.json`.
+4. In any WordPress install, visit Tools → 360 Blocks Updates and click "Force Update Check Now" to confirm the site sees the new version.
+5. From the Plugins screen (or Dashboard → Updates) click "Update now" to install the release build.
 
 == Updater Notes ==
-* Since version 1.3.7 the plugin auto-updater delivers the `main` branch archive from GitHub (`plugin-manifest.json` → `download_url`).
+* The plugin auto-updater follows `plugin-manifest.json` → `download_url`; current releases use a curated GitHub release ZIP so development-only files are not installed.
 * The function `sb_global_blocks_rename_github_package()` (in `360-global-blocks.php`) renames GitHub's extracted folder to `360-global-blocks/` via the `upgrader_source_selection` filter so WordPress recognizes the plugin after extraction.
 * Version 1.3.9 hardens that rename logic to ensure branch archives never leave a `-main` suffix in the plugin directory.
 * Diagnostics remain available under Tools → 360 Blocks Updates for checking detected versions, manifest URL, and errors.
@@ -33,6 +34,12 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.81 =
+* Added the Patient-Submitted Reviews block for approved Platform Core reviews, with clinic/doctor filtering and privacy-safe dynamic rendering.
+* Restyled both review sliders with responsive white cards, accessible navigation, and matching editor previews.
+* Added submitted-slider section background selection, Primary Color links, and an editable View All Reviews button.
+* Fixed regular sliders disappearing when cached or rendered without navigation controls.
 
 = 1.3.79 =
 * Added a shared global assessment button text resolver for runtime render callbacks.

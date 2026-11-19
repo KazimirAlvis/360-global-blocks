@@ -173,6 +173,11 @@ For support and feature requests, please create an issue on GitHub.
 
 ## Changelog
 
+### 1.3.82
+
+-   Added SEOPress-aware Open Graph and Twitter image fallbacks for image-bearing Global Blocks.
+-   Preserved explicit SEOPress, featured, and configured default social images as authoritative.
+
 ### 1.3.81
 
 -   Added the privacy-safe Patient-Submitted Reviews block backed by Platform Core 1.1.0 or newer.

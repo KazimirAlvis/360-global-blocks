@@ -2,13 +2,13 @@
 /*
 Plugin Name: 360 Global Blocks
 Description: Custom Gutenberg blocks for the 360 network. 
- * Version: 1.3.81
+ * Version: 1.3.82
 Author: Kaz Alvis
 */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.81' );
+define( 'SB_GLOBAL_BLOCKS_VERSION', '1.3.82' );
 define( 'SB_GLOBAL_BLOCKS_PLUGIN_FILE', __FILE__ );
 define(
     'SB_GLOBAL_BLOCKS_MANIFEST_URL',
@@ -17,6 +17,7 @@ define(
 
 require_once plugin_dir_path( __FILE__ ) . 'inc/class-sb-global-blocks-updater.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/class-global360blocks-image-collector.php';
+require_once plugin_dir_path( __FILE__ ) . 'inc/seopress-image-integration.php';
 require_once plugin_dir_path( __FILE__ ) . 'src/Brand/SiteContextAdapter.php';
 require_once plugin_dir_path( __FILE__ ) . 'src/Media/YouTube.php';
 

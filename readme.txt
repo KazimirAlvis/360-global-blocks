@@ -3,7 +3,7 @@ Contributors: kazalvis
 Tags: gutenberg, blocks, healthcare, patientreach360
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.81
+Stable tag: 1.3.82
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,6 +34,10 @@ Custom Gutenberg blocks tailored for the 360 network. Includes hero layouts, CTA
 No. The updater fetches a JSON manifest over HTTPS. Keep the repository public or host the manifest on an accessible URL. If you make it private, proxy the manifest and ZIP download through an authenticated endpoint.
 
 == Changelog ==
+
+= 1.3.82 =
+* Added SEOPress-aware Open Graph and Twitter image fallbacks for image-bearing Global Blocks.
+* Preserved explicit SEOPress, featured, and configured default social images as authoritative.
 
 = 1.3.81 =
 * Added the Patient-Submitted Reviews block for approved Platform Core reviews, with clinic/doctor filtering and privacy-safe dynamic rendering.
